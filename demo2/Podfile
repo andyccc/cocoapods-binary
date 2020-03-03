@@ -1,0 +1,84 @@
+#http://guides.cocoapods.org/syntax/podfile.html#project
+#source 'https://github.com/CocoaPods/Specs.git'
+# git clone https://gitclub.cn/CocoaPods/Specs.git ~/.cocoapods/repos/master
+
+$LOAD_PATH << '.'
+require 'PodStatic'
+
+plugin 'cocoapods-binary'
+
+
+install! 'cocoapods', :deterministic_uuids => false
+
+
+# Uncomment the next line to define a global platform for your project
+platform :ios, '8.0'
+
+target 'testpodFramework' do
+  # Comment the next line if you don't want to use dynamic frameworks
+#    use_frameworks!
+    all_binary!
+
+    # 保留源码
+    keep_source_for_prebuilt!
+    # 开放framework 的private header
+#    public_headers_for_prebuilt!
+    
+#    pod 'FTPopOverMenu'#, :path => './FTPopOverMenu'
+#    pod 'MPNotificationView'
+#    pod 'Masonry'
+    pod 'TestEngineService/Core', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
+    pod 'TestEngineService/ST', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
+#    pod 'TestEngineService/CV', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
+
+#    pod 'TestEngineService', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
+
+    
+    pod 'Bugly'
+    pod 'PDBotKit' #智能客服
+
+end
+
+
+# gem build ./cocoapods-binary/cocoapods-binary && sudo gem install ./cocoapods-binary/cocoapods-binary && rm -R -f ./Pods && clear && pod install --verbose
+
+# cd ./cocoapods-binary && gem build cocoapods-binary && sudo gem install cocoapods-binary && cd .. && rm -R -f ./Pods && clear && pod install --verbose
+
+# clear && gem build cocoapods-binary && sudo gem install cocoapods-binary
+# rm -R -f ./Pods && clear && pod install --verbose
+# rm -R -f ./Pods && clear && pod update --verbose
+
+
+#https://www.rubydoc.info/github/CocoaPods/Core/master/Pod/Specification/Consumer
+#https://www.runoob.com/ruby/ruby-command-line-options.html
+#https://docs.fission.io/docs/spec/podspec/
+#https://rubydoc.info/gems/cocoapods/Pod/Sandbox/HeadersStore
+#https://github.com/CocoaPods/CocoaPods/blob/7b246db45e414ef05a38d7ff25a9e453fce12ffb/lib/cocoapods/sandbox/file_accessor.rb
+
+
+
+
+post_install do |installer|
+
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['SWIFT_VERSION'] = '3.3'
+            config.build_settings['ENABLE_BITCODE'] = 'NO'
+            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '8.0'
+        end
+    end
+
+    PodStatic.enableStaticLib(false)
+    PodStatic.forceBuild(false)
+    PodStatic.simulatorSupport(true)
+    PodStatic.autoValidArchs(true)
+    # 和use_frameworks!对应起来
+    # PodStatic.useFrameworks(false)
+
+                            
+    PodStatic.run(installer, [
+                  'MPNotificationView',
+                  'FTPopOverMenu',
+                  ])
+end
+

@@ -18,7 +18,7 @@ module Pod
         end
         
         def generate_framework_path
-            self.root + "GeneratedFrameworks"
+            self.root + "Generated"
         end
 
         # @param name [String] pass the target.name (may containing platform suffix)
@@ -45,6 +45,7 @@ module Pod
             return unless folder.exist?
             flag_file_path = folder + "#{target.pod_name}.pod_name"
             File.write(flag_file_path.to_s, "")
+            
         end
 
 

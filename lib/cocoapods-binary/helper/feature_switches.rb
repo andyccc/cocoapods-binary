@@ -67,11 +67,16 @@ module Pod
         end
         
         old_method = instance_method(:print_post_install_message)
-        define_method(:print_post_install_message) do 
+        define_method(:print_post_install_message) do
+        
+            Pod::UI.puts "🚀4  Prebuild frameworks -- mark-- -3333- "
+
             if @@disable_install_complete_message
                 return
             end
             old_method.bind(self).()
+
+            Pod::UI.puts "🚀4  Prebuild frameworks -- mark-- -3333- print_post_install_message"
         end
     end
 

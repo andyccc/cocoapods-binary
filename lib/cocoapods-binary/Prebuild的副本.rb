@@ -38,6 +38,7 @@ module Pod
         # check if need to prebuild
         def have_exact_prebuild_cache?
 
+            
             # check if need build frameworks
             return false if local_manifest == nil
             
@@ -116,26 +117,6 @@ module Pod
                 targets = targets.reject {|pod_target| sandbox.local?(pod_target.pod_name) }
             end
             
-            def config_umbrella_header(output_path, target_name, headers)
-                umbrella_header = "#{output_path}/#{target_name}.framework/Headers/#{target_name}-umbrella.h"
-                umbrella_content = File.read(umbrella_header)
-                
-                private_header = ""
-                headers.each do |header|
-                    name = header.basename.to_s
-                    private_header.concat("\n#import \"#{name}\"") if not umbrella_content.include? name
-                end
-                
-                if not private_header.empty?
-                    umbrella_content.concat("\n/// private headers begin")
-                    umbrella_content.concat(private_header)
-                    umbrella_content.concat("\n/// private headers end")
-                end
-
-                File.write(umbrella_header, umbrella_content)
-            end
-            
-            
             # build!
             Pod::UI.puts "Prebuild frameworks (total #{targets.count})"
             Pod::Prebuild.remove_build_dir(sandbox_path)
@@ -144,23 +125,11 @@ module Pod
                     UI.puts "Prebuilding #{target.label}"
                     next
                 end
-                target_name = target.name
-                output_path = sandbox.framework_folder_path_for_target_name(target_name)
+
+                output_path = sandbox.framework_folder_path_for_target_name(target.name)
                 output_path.mkpath unless output_path.exist?
                 
                 Pod::Prebuild.build(sandbox_path, target, output_path, bitcode_enabled, Podfile::DSL.custom_build_options, Podfile::DSL.custom_build_options_simulator)
-                             
-                
-                # public private headers
-                if Podfile::DSL.allow_public_headers and target.build_as_framework?
-                    headers = []
-                    target.file_accessors.each do |fa|
-                        headers += fa.headers || []
-                    end
-
-                    config_umbrella_header(output_path, target_name, headers)
-                end
-
                 
                 #  ...
                 #target.static_framework
@@ -170,7 +139,10 @@ module Pod
                 # save the resource paths for later installing
                 if !target.resource_paths.empty? #and target.build_as_dynamic?
                     framework_path = output_path
-                    framework_path = framework_path + target.framework_name if target.build_as_framework?
+                    
+                    if target.build_as_framework?
+                        framework_path = framework_path + target.framework_name
+                    end
                     
                     standard_sandbox_path = sandbox.standard_sanbox_path
 
@@ -197,7 +169,7 @@ module Pod
                         object
                     end
                     # 标记 Generated 目录下的哪些资源文件后面要同步到 Pods/TestEngineService 目录下
-                    Prebuild::Passer.resources_to_copy_for_static_framework[target_name] = path_objects
+                    Prebuild::Passer.resources_to_copy_for_static_framework[target.name] = path_objects
                     
                     Logger(1000, "path_objects", path_objects)
                     Logger(1001, "target.name", target.name)
@@ -250,32 +222,12 @@ module Pod
 
                     #add frameworks
                     lib_paths += file_accessor.vendored_frameworks || []
-                    
-                    if Pod::VERSION.start_with? "1.9"
-                        lib_paths += file_accessor.vendored_xcframeworks || [] # cocoapods version 1.9.0+
-                    end
-                    
                     #add libraries
                     lib_paths += file_accessor.vendored_libraries || []
-                    #add headers
-                    lib_paths += file_accessor.headers || []
-                    
-                    lib_paths += file_accessor.docs || []
-
                     #add resources
                     lib_paths += file_accessor.resources || []
-                    resource_bundles = file_accessor.resource_bundles || {}
-                    
-                    lib_paths += resource_bundles.values || []
-                    lib_paths += file_accessor.resource_bundle_files || []
-
-                    #add license
-                    lib_paths += [file_accessor.license || {}]
-                    lib_paths += [file_accessor.spec_license || {}]
-
-                    #add readme
-                    lib_paths += [file_accessor.readme || {}]
-                    
+                    #add headers
+                    lib_paths += file_accessor.headers || []
 
                     #developer_files ⇒ Array<Pathname> Paths to include for local pods to assist in development.
                     
@@ -288,9 +240,9 @@ module Pod
                     copy_vendered_files(lib_paths, root_path, target_folder)
                     
                     # framework 路径不一样
-                    if Podfile::DSL.allow_public_headers and target.build_as_framework?
+                    if not Podfile::DSL.allow_public_headers
                         headers = file_accessor.headers || []
-                        copy_vendered_headers(headers, "#{target_folder}/#{target.framework_name}/Headers")
+                        copy_vendered_headers(headers, "#{target_folder}/#{target.name}.framework/Headers")
                     end
                 end
             end
@@ -317,7 +269,7 @@ module Pod
             end
             
             
-            if not Podfile::DSL.dont_remove_source_code
+            if not Podfile::DSL.dont_remove_source_code 
                 # only keep manifest.lock and framework folder in _Prebuild
                 to_remain_files = ["Manifest.lock", File.basename(existed_framework_folder)]
                 to_delete_files = sandbox_path.children.select do |file|

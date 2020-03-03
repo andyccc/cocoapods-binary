@@ -20,7 +20,7 @@ def build_for_iosish_platform(sandbox,
                               custom_build_options = [], # Array<String>
                               custom_build_options_simulator = [] # Array<String>
                               )
-
+                              
   deployment_target = target.platform.deployment_target.to_s
   
   target_label = target.label # name with platform if it's used in multiple platforms
@@ -40,70 +40,138 @@ def build_for_iosish_platform(sandbox,
   # paths
   target_name = target.name # equals target.label, like "AFNeworking-iOS" when AFNetworking is used in multiple platforms.
   module_name = target.product_module_name
-  device_framework_path = "#{build_dir}/#{CONFIGURATION}-#{device}/#{target_name}/#{module_name}.framework"
-  simulator_framework_path = "#{build_dir}/#{CONFIGURATION}-#{simulator}/#{target_name}/#{module_name}.framework"
-
-  device_binary = device_framework_path + "/#{module_name}"
-  simulator_binary = simulator_framework_path + "/#{module_name}"
+  
+  device_framework_path = get_framework_path(build_dir, device, target)
+  simulator_framework_path = get_framework_path(build_dir, simulator, target)
+  
+  if target.build_as_framework?
+      device_binary = device_framework_path + "/#{module_name}"
+      simulator_binary = simulator_framework_path + "/#{module_name}"
+  else
+      device_binary = device_framework_path
+      simulator_binary = simulator_framework_path
+  end
+  
   return unless File.file?(device_binary) && File.file?(simulator_binary)
   
+  # copy header to first folder
+#  public_headers_path = "#{sandbox.public_headers.root}/#{target_name}"
+#  ps = Pathname.new(public_headers_path)
+#  if ps.directory?
+#      ps.children.each do |child|
+#          Pod::UI.puts "Prebuilding mark -0225- cp_r #{child}, #{output_path}"
+#          FileUtils.cp_r(child, output_path, :remove_destination => false, :verbose => true)
+#      end
+#  end
+  
+
   # the device_lib path is the final output file path
   # combine the binaries
-  tmp_lipoed_binary_path = "#{build_dir}/#{target_name}"
-  lipo_log = `lipo -create -output #{tmp_lipoed_binary_path} #{device_binary} #{simulator_binary}`
-  puts lipo_log unless File.exist?(tmp_lipoed_binary_path)
-  FileUtils.mv tmp_lipoed_binary_path, device_binary, :force => true
+  combine_the_binaries(build_dir, target_name, device_binary, simulator_binary)
+
+
+  if target.build_as_framework?
+      # collect the swiftmodule file for various archs.
+      collect_swiftmodule(module_name, device_framework_path, simulator_framework_path)
+
+      # combine the generated swift headers
+      # (In xcode 10.2, the generated swift headers vary for each archs)
+      # https://github.com/leavez/cocoapods-binary/issues/58
+      combine_the_generated_swift_headers(module_name, device_framework_path, simulator_framework_path)
+  end
   
-  # collect the swiftmodule file for various archs.
-  device_swiftmodule_path = device_framework_path + "/Modules/#{module_name}.swiftmodule"
-  simulator_swiftmodule_path = simulator_framework_path + "/Modules/#{module_name}.swiftmodule"
-  if File.exist?(device_swiftmodule_path)
-    FileUtils.cp_r simulator_swiftmodule_path + "/.", device_swiftmodule_path
-  end
-
-  # combine the generated swift headers
-  # (In xcode 10.2, the generated swift headers vary for each archs)
-  # https://github.com/leavez/cocoapods-binary/issues/58
-  simulator_generated_swift_header_path = simulator_framework_path + "/Headers/#{module_name}-Swift.h"
-  device_generated_swift_header_path = device_framework_path + "/Headers/#{module_name}-Swift.h"
-  if File.exist? simulator_generated_swift_header_path
-    device_header = File.read(device_generated_swift_header_path)
-    simulator_header = File.read(simulator_generated_swift_header_path)
-    # https://github.com/Carthage/Carthage/issues/2718#issuecomment-473870461
-    combined_header_content = %Q{
-#if TARGET_OS_SIMULATOR // merged by cocoapods-binary
-
-#{simulator_header}
-
-#else // merged by cocoapods-binary
-
-#{device_header}
-
-#endif // merged by cocoapods-binary
-}
-    File.write(device_generated_swift_header_path, combined_header_content.strip)
-  end
-
   # handle the dSYM files
-  device_dsym = "#{device_framework_path}.dSYM"
-  if File.exist? device_dsym
-    # lipo the simulator dsym
-    simulator_dsym = "#{simulator_framework_path}.dSYM"
-    if File.exist? simulator_dsym
-      tmp_lipoed_binary_path = "#{output_path}/#{module_name}.draft"
-      lipo_log = `lipo -create -output #{tmp_lipoed_binary_path} #{device_dsym}/Contents/Resources/DWARF/#{module_name} #{simulator_dsym}/Contents/Resources/DWARF/#{module_name}`
-      puts lipo_log unless File.exist?(tmp_lipoed_binary_path)
-      FileUtils.mv tmp_lipoed_binary_path, "#{device_framework_path}.dSYM/Contents/Resources/DWARF/#{module_name}", :force => true
-    end
-    # move
-    FileUtils.mv device_dsym, output_path, :force => true
-  end
-
+  handle_the_dSYM(output_path, module_name, device_framework_path, simulator_framework_path)
+  
   # output
   output_path.mkpath unless output_path.exist?
-  FileUtils.mv device_framework_path, output_path, :force => true
+  FileUtils.mv device_framework_path, output_path, :force => true, :verbose => true
 
+  
 end
+
+def handle_the_dSYM(output_path, module_name, device_framework_path, simulator_framework_path)
+    device_dsym = "#{device_framework_path}.dSYM"
+    if File.exist? device_dsym
+        # lipo the simulator dsym
+        simulator_dsym = "#{simulator_framework_path}.dSYM"
+        if File.exist? simulator_dsym
+            tmp_lipoed_binary_path = "#{output_path}/#{module_name}.draft"
+            lipo_log = `lipo -create -output #{tmp_lipoed_binary_path} #{device_dsym}/Contents/Resources/DWARF/#{module_name} #{simulator_dsym}/Contents/Resources/DWARF/#{module_name}`
+            puts lipo_log unless File.exist?(tmp_lipoed_binary_path)
+            FileUtils.mv tmp_lipoed_binary_path, "#{device_framework_path}.dSYM/Contents/Resources/DWARF/#{module_name}", :force => true, :verbose => true
+        end
+        # move
+        FileUtils.mv device_dsym, output_path, :force => true, :verbose => true
+    end
+end
+
+def collect_the_generated_headers(module_name, device_framework_path, simulator_framework_path)
+
+    
+end
+
+def combine_the_generated_swift_headers(module_name, device_framework_path, simulator_framework_path)
+    simulator_generated_swift_header_path = simulator_framework_path + "/Headers/#{module_name}-Swift.h"
+    device_generated_swift_header_path = device_framework_path + "/Headers/#{module_name}-Swift.h"
+    if File.exist? simulator_generated_swift_header_path
+        device_header = File.read(device_generated_swift_header_path)
+        simulator_header = File.read(simulator_generated_swift_header_path)
+        # https://github.com/Carthage/Carthage/issues/2718#issuecomment-473870461
+        combined_header_content = %Q{
+        #if TARGET_OS_SIMULATOR // merged by cocoapods-binary
+
+        #{simulator_header}
+
+        #else // merged by cocoapods-binary
+
+        #{device_header}
+
+        #endif // merged by cocoapods-binary
+        }
+        File.write(device_generated_swift_header_path, combined_header_content.strip)
+    end
+end
+
+def combine_the_binaries(build_dir, target_name, device_binary, simulator_binary)
+    tmp_lipoed_binary_path = "#{build_dir}/#{target_name}"
+    lipo_log = `lipo -create -output #{tmp_lipoed_binary_path} #{device_binary} #{simulator_binary}`
+    puts lipo_log unless File.exist?(tmp_lipoed_binary_path)
+    FileUtils.mv tmp_lipoed_binary_path, device_binary, :force => true, :verbose => true
+end
+
+def collect_swiftmodule(module_name, device_framework_path, simulator_framework_path)
+    device_swiftmodule_path = device_framework_path + "/Modules/#{module_name}.swiftmodule"
+    simulator_swiftmodule_path = simulator_framework_path + "/Modules/#{module_name}.swiftmodule"
+    if File.exist?(device_swiftmodule_path)
+      FileUtils.cp_r simulator_swiftmodule_path + "/.", device_swiftmodule_path
+    end
+end
+
+def get_framework_path(build_dir, device, target)
+    framework_name = get_framework_name(target)
+    return framework_path = "#{build_dir}/#{CONFIGURATION}-#{device}/#{target.name}/#{framework_name}"
+end
+
+def get_framework_name(target)
+    module_name = target.product_module_name
+    framework_name = ""
+    if target.build_as_framework?
+        framework_name = "#{module_name}.framework"
+    else
+        framework_name = "lib#{module_name}.a"
+    end
+    
+    # 待定
+#    if target.build_as_framework?
+#        framework_file_path = target.framework_name
+#    else
+#        framework_file_path = target.static_library_name
+#    end
+    
+    return framework_name
+end
+
 
 def xcodebuild(sandbox, target, sdk='macosx', deployment_target=nil, other_options=[])
   args = %W(-project #{sandbox.project_path.realdirpath} -scheme #{target} -configuration #{CONFIGURATION} -sdk #{sdk} )
@@ -181,7 +249,7 @@ module Pod
     
       # frameworks.each do |framework|
       #   FileUtils.mkdir_p destination
-      #   FileUtils.cp_r framework, destination, :remove_destination => true
+      #   FileUtils.cp_r framework, destination, :remove_destination => true, :verbose => true
       # end
       # build_dir.rmtree if build_dir.directory?
     end

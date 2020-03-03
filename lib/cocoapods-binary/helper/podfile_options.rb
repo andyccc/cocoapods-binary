@@ -55,6 +55,7 @@ module Pod
         old_method = instance_method(:parse_inhibit_warnings)
 
         define_method(:parse_inhibit_warnings) do |name, requirements|
+
           parse_prebuild_framework(name, requirements)
           old_method.bind(self).(name, requirements)
         end
@@ -89,9 +90,13 @@ module Pod
                 targets = targets.reject { |pod_target| explict_should_not_names.include?(pod_target.pod_name) } 
 
                 all += targets
-            end
 
-            all = all.reject {|pod_target| sandbox.local?(pod_target.pod_name) }
+            end
+            
+            if not Podfile::DSL.allow_local_pod
+                all = all.reject {|pod_target| sandbox.local?(pod_target.pod_name) }
+            end
+            
             all.uniq
             )
         end

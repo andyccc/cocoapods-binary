@@ -5,11 +5,16 @@ require_relative 'tool/tool'
 module Pod    
     class Podfile
         module DSL
-            
+
+        
             # Enable prebuiding for all pods
             # it has a lower priority to other binary settings
             def all_binary!
                 DSL.prebuild_all = true
+            end
+            
+            def allow_local!
+                DSL.allow_local_pod = true
             end
 
             # Enable bitcode for prebuilt frameworks
@@ -20,9 +25,14 @@ module Pod
             # Don't remove source code of prebuilt pods
             # It may speed up the pod install if git didn't 
             # include the `Pods` folder
-            def keep_source_code_for_prebuilt_frameworks!
+            def keep_source_for_prebuilt!
                 DSL.dont_remove_source_code = true
             end
+            
+            def public_headers_for_prebuilt!
+                DSL.allow_public_headers = true
+            end
+
 
             # Add custom xcodebuild option to the prebuilding action
             #
@@ -64,6 +74,15 @@ module Pod
 
             class_attr_accessor :dont_remove_source_code
             dont_remove_source_code = false
+            
+            class_attr_accessor :allow_public_headers
+            allow_public_headers = true
+            
+            class_attr_accessor :uses_frameworks_off
+            uses_frameworks_off = false
+            
+            class_attr_accessor :allow_local_pod
+            allow_local_pod = false
 
             class_attr_accessor :custom_build_options
             class_attr_accessor :custom_build_options_simulator
@@ -86,8 +105,9 @@ Pod::HooksManager.register('cocoapods-binary', :pre_install) do |installer_conte
     podfile.target_definition_list.each do |target_definition|
         next if target_definition.prebuild_framework_pod_names.empty?
         if not target_definition.uses_frameworks?
-            STDERR.puts "[!] Cocoapods-binary requires `use_frameworks!`".red
-            exit
+#            STDERR.puts "[!] Cocoapods-binary requires `use_frameworks!`".red
+#            exit
+            Pod::Podfile::DSL.uses_frameworks_off = true
         end
     end
     
@@ -99,7 +119,7 @@ Pod::HooksManager.register('cocoapods-binary', :pre_install) do |installer_conte
     require_relative 'Prebuild'
     
     Pod::UI.puts "🚀  Prebuild frameworks"
-    
+
     # Fetch original installer (which is running this pre-install hook) options,
     # then pass them to our installer to perform update if needed
     # Looks like this is the most appropriate way to figure out that something should be updated
@@ -124,13 +144,15 @@ Pod::HooksManager.register('cocoapods-binary', :pre_install) do |installer_conte
     standard_sandbox = installer_context.sandbox
     prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(standard_sandbox)
     
+    Pod::UI.puts "🚀3  Prebuild frameworks -- mark-- -111- #{prebuild_sandbox} "
+    
     # get the podfile for prebuild
     prebuild_podfile = Pod::Podfile.from_ruby(podfile.defined_in_file)
-    
+
     # install
     lockfile = installer_context.lockfile
     binary_installer = Pod::Installer.new(prebuild_sandbox, prebuild_podfile, lockfile)
-    
+
     if binary_installer.have_exact_prebuild_cache? && !update
         binary_installer.install_when_cache_hit!
     else

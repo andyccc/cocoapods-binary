@@ -3,19 +3,22 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		259BE43B23FFB37200F92D1C /* Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 259BE43A23FFB37200F92D1C /* Test.m */; };
 		2E1AEA2ADE0B2C6D0E8CB73C /* BDWebImage_demo.m in Sources */ = {isa = PBXBuildFile; fileRef = 89A7B09D8E1B9A5928206B3D /* BDWebImage_demo.m */; };
-		7ADC04F6B6AD86B4711FC662 /* Pods_demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0282097ED33E34DF2FB40193 /* Pods_demo.framework */; };
 		8BC2E4C8225F2B8600EC0609 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC2E4C7225F2B8600EC0609 /* AppDelegate.swift */; };
 		8BC2E4CA225F2B8600EC0609 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC2E4C9225F2B8600EC0609 /* ViewController.swift */; };
 		8BC2E4D2225F2B8700EC0609 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BC2E4D0225F2B8700EC0609 /* LaunchScreen.storyboard */; };
+		E94D7C337C1EAA620B9DF6C9 /* libPods-demo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C96662C51E5FC5335DC0BB /* libPods-demo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0282097ED33E34DF2FB40193 /* Pods_demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		01C96662C51E5FC5335DC0BB /* libPods-demo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-demo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		259BE43923FFB37200F92D1C /* Test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Test.h; sourceTree = "<group>"; };
+		259BE43A23FFB37200F92D1C /* Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test.m; sourceTree = "<group>"; };
 		6F9AD13F2ED88EAB7A9128D7 /* libPods-demoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-demoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89A7B09D8E1B9A5928206B3D /* BDWebImage_demo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = BDWebImage_demo.m; sourceTree = "<group>"; };
 		8BC2E4C4225F2B8600EC0609 /* demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7ADC04F6B6AD86B4711FC662 /* Pods_demo.framework in Frameworks */,
+				E94D7C337C1EAA620B9DF6C9 /* libPods-demo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,7 +48,7 @@
 			isa = PBXGroup;
 			children = (
 				6F9AD13F2ED88EAB7A9128D7 /* libPods-demoTests.a */,
-				0282097ED33E34DF2FB40193 /* Pods_demo.framework */,
+				01C96662C51E5FC5335DC0BB /* libPods-demo.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -85,6 +88,8 @@
 				8BC2E4D0225F2B8700EC0609 /* LaunchScreen.storyboard */,
 				8BC2E4D3225F2B8700EC0609 /* Info.plist */,
 				48064E0CABFB2B206E032E3B /* demos */,
+				259BE43923FFB37200F92D1C /* Test.h */,
+				259BE43A23FFB37200F92D1C /* Test.m */,
 			);
 			path = demo;
 			sourceTree = "<group>";
@@ -111,7 +116,6 @@
 				8BC2E4C0225F2B8600EC0609 /* Sources */,
 				8BC2E4C1225F2B8600EC0609 /* Frameworks */,
 				8BC2E4C2225F2B8600EC0609 /* Resources */,
-				27E132FE722A29856F619A3D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -167,30 +171,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		27E132FE722A29856F619A3D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-demo/Pods-demo-frameworks.sh",
-				"${PODS_ROOT}/Masonry/Masonry.framework",
-				"${PODS_ROOT}/Masonry/Masonry.framework.dSYM",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
-				"${DWARF_DSYM_FOLDER_PATH}/Masonry.framework.dSYM",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-demo/Pods-demo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4A7278B702427200DBDC45CB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -221,6 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BC2E4CA225F2B8600EC0609 /* ViewController.swift in Sources */,
+				259BE43B23FFB37200F92D1C /* Test.m in Sources */,
 				8BC2E4C8225F2B8600EC0609 /* AppDelegate.swift in Sources */,
 				2E1AEA2ADE0B2C6D0E8CB73C /* BDWebImage_demo.m in Sources */,
 			);
@@ -361,6 +342,8 @@
 			baseConfigurationReference = F8A8B289BFEAE54B0D540472 /* Pods-demo.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V93R8NZ9GM;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -378,6 +361,8 @@
 			baseConfigurationReference = E9C2707150376AA5D63E8BAE /* Pods-demo.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V93R8NZ9GM;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -1,0 +1,5 @@
+${PODS_ROOT}/Target Support Files/Pods-testpodFramework/Pods-testpodFramework-resources.sh
+${PODS_ROOT}/PDBotKit/PDBotKit.bundle
+${PODS_ROOT}/PDBotKit/zh-Hans.lproj
+${PODS_ROOT}/PDBotKit/en.lproj
+${PODS_ROOT}/TestEngineService/TestEngineService/ST/SDK/STKouyuEngine.bundle

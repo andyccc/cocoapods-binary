@@ -361,6 +361,7 @@ module Pod
                     empty_source_files(spec) if target.build_as_framework?
 
                     Pod::UI.puts "Prebuilding mark -11502- #{target.root_spec}"
+                    Pod::UI.puts "Prebuilding mark -115023- #{target.root_spec.to_s}"
                     Pod::UI.puts "Prebuilding mark -11503- #{target.sandbox}, #{target.pod_name}"
                     
 #                    prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(sandbox)

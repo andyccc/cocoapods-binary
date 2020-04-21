@@ -196,7 +196,7 @@ module Pod
                         
                         object
                     end
-                    # 标记 Generated 目录下的哪些资源文件后面要同步到 Pods/TestEngineService 目录下
+                    # mark Generated files to Pods/xx
                     Prebuild::Passer.resources_to_copy_for_static_framework[target_name] = path_objects
                     
                     Logger(1000, "path_objects", path_objects)
@@ -206,7 +206,7 @@ module Pod
 
             end
             
-            # 删除build 目录
+            # remove build path
             Pod::Prebuild.remove_build_dir(sandbox_path)
             
             def copy_vendered_files(lib_paths, root_path, target_folder)
@@ -242,7 +242,7 @@ module Pod
                 Logger(10032, "dependencies", target.dependencies)
 
                 
-                # 将相关文件拷贝到 Generated 目录里
+                # copy to Generated
                 target.spec_consumers.each do |consumer|
                     file_accessor = Sandbox::FileAccessor.new(root_path, consumer)
                     
@@ -287,7 +287,7 @@ module Pod
 
                     copy_vendered_files(lib_paths, root_path, target_folder)
                     
-                    # framework 路径不一样
+                    # framework not same
                     if Podfile::DSL.allow_public_headers and target.build_as_framework?
                         headers = file_accessor.headers || []
                         copy_vendered_headers(headers, "#{target_folder}/#{target.framework_name}/Headers")

@@ -1,5 +1,6 @@
 #http://guides.cocoapods.org/syntax/podfile.html#project
-#source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/CocoaPods/Specs.git'
+# source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 # git clone https://gitclub.cn/CocoaPods/Specs.git ~/.cocoapods/repos/master
 
 $LOAD_PATH << '.'

@@ -35,8 +35,8 @@ target 'testpodFramework' do
 #    pod 'TestEngineService', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
 
     
-    pod 'Bugly'
-    pod 'PDBotKit' #智能客服
+#    pod 'Bugly'
+#    pod 'PDBotKit' #智能客服
 
 end
 

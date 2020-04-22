@@ -269,7 +269,7 @@ module Pod
             def find_vendered_headers(target, name, platform, spec, sandbox)
                 files = get_file_patterns(target, name, platform, spec, sandbox, "public_header_files") || []
 
-                # 有些不规范的库可能没有设置 public_header_files
+                # some lib maybe not set public_header_files
                 if Podfile::DSL.allow_public_headers or files.empty?
                     files += get_file_patterns(target, name, platform, spec, sandbox, "source_files")
                 end
@@ -361,7 +361,7 @@ module Pod
                     empty_source_files(spec) if target.build_as_framework?
 
                     Pod::UI.puts "Prebuilding mark -11502- #{target.root_spec}"
-                    Pod::UI.puts "Prebuilding mark -115023- #{target.root_spec.to_s}"
+                    Pod::UI.puts "Prebuilding mark -115023- #{target.root_spec.version}"
                     Pod::UI.puts "Prebuilding mark -11503- #{target.sandbox}, #{target.pod_name}"
                     
 #                    prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(sandbox)

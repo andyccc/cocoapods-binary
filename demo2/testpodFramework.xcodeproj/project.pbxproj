@@ -10,6 +10,8 @@
 		0A17400B8498C1A8A20864E0 /* libPods-testpodFramework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDC8C9B0576A1F75C1D1929 /* libPods-testpodFramework.a */; };
 		257C5E4A241673C700B0DC38 /* prebuild_sandbox_fetch.rb in Resources */ = {isa = PBXBuildFile; fileRef = 257C5E49241673C700B0DC38 /* prebuild_sandbox_fetch.rb */; };
 		257C5E4C2416741800B0DC38 /* prebuild_sandbox_sync.rb in Resources */ = {isa = PBXBuildFile; fileRef = 257C5E4B2416741800B0DC38 /* prebuild_sandbox_sync.rb */; };
+		25808C06244ED90600066DBF /* ftp_tool.rb in Resources */ = {isa = PBXBuildFile; fileRef = 25808C05244ED90600066DBF /* ftp_tool.rb */; };
+		25808C08244EDBC900066DBF /* ftp_sync.rb in Resources */ = {isa = PBXBuildFile; fileRef = 25808C07244EDBC900066DBF /* ftp_sync.rb */; };
 		25F05A77235EE76C003F4B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 25F05A76235EE76C003F4B9A /* AppDelegate.m */; };
 		25F05A7A235EE76C003F4B9A /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 25F05A79235EE76C003F4B9A /* SceneDelegate.m */; };
 		25F05A7D235EE76C003F4B9A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25F05A7C235EE76C003F4B9A /* ViewController.m */; };
@@ -37,6 +39,8 @@
 		250C553223FA771400D1D606 /* tool.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = tool.rb; sourceTree = "<group>"; };
 		257C5E49241673C700B0DC38 /* prebuild_sandbox_fetch.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = prebuild_sandbox_fetch.rb; sourceTree = "<group>"; };
 		257C5E4B2416741800B0DC38 /* prebuild_sandbox_sync.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = prebuild_sandbox_sync.rb; sourceTree = "<group>"; };
+		25808C05244ED90600066DBF /* ftp_tool.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = ftp_tool.rb; sourceTree = "<group>"; };
+		25808C07244EDBC900066DBF /* ftp_sync.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = ftp_sync.rb; sourceTree = "<group>"; };
 		25A8C66E23617EDA007DEFA3 /* Podfile.lock */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile.lock; sourceTree = "<group>"; };
 		25F05A72235EE76C003F4B9A /* testpodFramework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testpodFramework.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25F05A75235EE76C003F4B9A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -107,11 +111,11 @@
 				250C552B23FA771400D1D606 /* passer.rb */,
 				250C552C23FA771400D1D606 /* podfile_options.rb */,
 				250C552D23FA771400D1D606 /* names.rb */,
-				250C552E23FA771400D1D606 /* target_checker.rb */,
-				250C552F23FA771400D1D606 /* prebuild_sandbox.rb */,
 				250C553023FA771400D1D606 /* feature_switches.rb */,
+				250C552F23FA771400D1D606 /* prebuild_sandbox.rb */,
 				257C5E49241673C700B0DC38 /* prebuild_sandbox_fetch.rb */,
 				257C5E4B2416741800B0DC38 /* prebuild_sandbox_sync.rb */,
+				250C552E23FA771400D1D606 /* target_checker.rb */,
 			);
 			path = helper;
 			sourceTree = "<group>";
@@ -120,6 +124,8 @@
 			isa = PBXGroup;
 			children = (
 				250C553223FA771400D1D606 /* tool.rb */,
+				25808C05244ED90600066DBF /* ftp_tool.rb */,
+				25808C07244EDBC900066DBF /* ftp_sync.rb */,
 			);
 			path = tool;
 			sourceTree = "<group>";
@@ -242,6 +248,8 @@
 			files = (
 				25F05A85235EE76F003F4B9A /* LaunchScreen.storyboard in Resources */,
 				257C5E4C2416741800B0DC38 /* prebuild_sandbox_sync.rb in Resources */,
+				25808C06244ED90600066DBF /* ftp_tool.rb in Resources */,
+				25808C08244EDBC900066DBF /* ftp_sync.rb in Resources */,
 				257C5E4A241673C700B0DC38 /* prebuild_sandbox_fetch.rb in Resources */,
 				25F05A82235EE76F003F4B9A /* Assets.xcassets in Resources */,
 				25F05A80235EE76C003F4B9A /* Main.storyboard in Resources */,

@@ -1,8 +1,8 @@
-require_relative 'rome/build_framework'
 require_relative 'helper/passer'
 require_relative 'helper/target_checker'
-
-
+require_relative 'helper/prebuild_sandbox_fetch'
+require_relative 'rome/build_framework'
+require_relative 'tool/ftp_sync'
 
 # patch prebuild ability
 module Pod
@@ -139,6 +139,11 @@ module Pod
             # build!
             Pod::UI.puts "Prebuild frameworks (total #{targets.count})"
             Pod::Prebuild.remove_build_dir(sandbox_path)
+            
+            ftp_service = FtpSync.new "192.168.0.248", "hzty", "hzty"
+            ftp_service.verbose = true
+            ftp_service.passive = true
+            
             targets.each do |target|
                 if !target.should_build?
                     UI.puts "Prebuilding #{target.label}"
@@ -147,6 +152,16 @@ module Pod
                 target_name = target.name
                 output_path = sandbox.framework_folder_path_for_target_name(target_name)
                 output_path.mkpath unless output_path.exist?
+                
+                # check server file
+
+                zip_framework_name = Pod::PrebuildFetch.zip_framework_name(target)
+                UI.puts "Prebuilding --- mark -zip_framework_name-   #{zip_framework_name} "
+
+                exist_remote_framework = Pod::PrebuildFetch.fetch_remote_framework_for_target(target, ftp_service)
+                if not exist_remote_framework?
+                    UI.puts "Prebuilding --- mark -111111-  not exist_remote_framework "
+                end
                 
                 Pod::Prebuild.build(sandbox_path, target, output_path, bitcode_enabled, Podfile::DSL.custom_build_options, Podfile::DSL.custom_build_options_simulator)
                              

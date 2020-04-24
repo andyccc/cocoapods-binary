@@ -4,6 +4,8 @@ require_relative 'helper/prebuild_sandbox'
 require_relative 'helper/passer'
 require_relative 'helper/names'
 require_relative 'helper/target_checker'
+require_relative 'helper/prebuild_sandbox_fetch'
+require_relative 'tool/tool'
 
 require 'find'
 
@@ -63,22 +65,11 @@ module Pod
                     return list + HEADER_FILE_EXTNAMES
                 end
                 
-                Pod::UI.puts "Prebuilding mark -11220- target_names : #{target_names}"
-                
-                #test /Users/yans/workplace/eclipse/testpodFramework/Pods/_Prebuild/Generated/MPNotificationView/MPNotificationView.h
-#                f1 = Pathname.new("/Users/yans/workplace/eclipse/testpodFramework/Pods/_Prebuild/Generated/MPNotificationView/MPNotificationView/MPNotificationView.h")
-#                f2 = Pathname.new("/Users/yans/workplace/eclipse/testpodFramework/Pods/_Prebuild/Generated/MPNotificationView/MPNotificationView.h")
-#                f2.parent.mkpath unless f2.parent.exist?
-#                FileUtils.cp_r(f1, f2, :remove_destination => true, :verbose => true)
-
-                
                 target_names.each do |name|
 
                     # symbol link copy all substructure
                     real_file_folder = prebuild_sandbox.framework_folder_path_for_target_name(name)
                     
-                    Pod::UI.puts "Prebuilding mark -11221- real_file_folder : #{real_file_folder}"
-
                     
                     # If have only one platform, just place int the root folder of this pod.
                     # If have multiple paths, we use a sperated folder to store different
@@ -87,7 +78,6 @@ module Pod
                     target_folder = standard_sanbox.pod_dir(self.name)
                     target_folder += real_file_folder.basename if target_names.count > 1
 
-                    Pod::UI.puts "Prebuilding mark -11222- target_folder : #{target_folder}"
                     
                     target_folder.rmtree if target_folder.exist?
                     target_folder.mkpath
@@ -95,7 +85,6 @@ module Pod
                     path = real_file_folder
                     walk(path) do |child|
                         source = child
-                        Pod::UI.puts "Prebuilding mark -11229- walk : #{source}, #{child.extname}"
                         
                         # only make symlink to file and `.framework` folder
                         if child.directory? and library_file_format().include? child.extname
@@ -121,10 +110,6 @@ module Pod
                             # linking file bugs, first check exist.
                             make_link(object.real_file_path, object.target_file_path) unless target_file.exist?
                         end
-                    end
-                    
-                    Pathname.new(target_folder).children.each do |child|
-                        Pod::UI.puts "Prebuilding mark -11223- child : #{child}"
                     end
                     
                 end # of for each
@@ -211,12 +196,12 @@ module Pod
                 vendored_items = [vendored_items] if vendored_items.kind_of?(String)
 
                 vendored_items += item_path
-                Pod::UI.puts "Prebuilding mark -11500- #{spec}, #{platform}, #{item_path}, #{item_type}"
                 
                 spec.attributes_hash[platform][item_type] = vendored_items
             end
             
             def empty_source_files(spec)
+
                 spec.attributes_hash["source_files"] = []
                 #spec.attributes_hash["public_header_files"] = []
                 ["ios", "watchos", "tvos", "osx"].each do |plat|
@@ -317,10 +302,7 @@ module Pod
             dependencies_specs = dependencies_specs.flatten.uniq
     
             prebuilt_specs.each do |spec|
-                Pod::UI.puts "Prebuilding mark -1122- #{spec.name}, #{spec.to_json}"
-                Pod::UI.puts "Prebuilding mark -1222- #{spec.name}, #{spec.parent.to_json}"
-
-#                all_resources = spec.attributes_hash["resource"] || []
+                Pod::UI.puts "Prebuilding injection spec : #{spec.name}, #{spec.to_json}, #{spec.parent.to_json}"
 
                 # Use the prebuild framworks as vendered frameworks
                 # get_corresponding_targets
@@ -341,90 +323,20 @@ module Pod
                         item_path = target.static_library_name
                     end
 
-                    Pod::UI.puts "Prebuilding mark -11489 - #{item_path}"
-                    Pod::UI.puts "Prebuilding mark -12302 - #{target.name}, #{target.pod_name}"
+                    Pod::UI.puts "Prebuilding injection target : #{target.name}, #{item_path}, #{target.pod_name}"
 
                     item_path = target_name + "/" + item_path if targets.count > 1
                     add_vendered_items(spec, platform, [item_path], item_type) if not dependencies_specs.include?(spec.name)
                     
                     find_vendered_headers(target, target_name, platform, spec, self.sandbox)
-                    # find_vendored_libraries(target, target_name, platform, spec, self.sandbox)
-                    # find_vendored_frameworks(target, target_name, platform, spec, self.sandbox)
-                    # find_vendored_resources(target, target_name, platform, spec, self.sandbox)
-
-                    Pod::UI.puts "Prebuilding mark -1146-#{spec},#{spec.name}, #{platform}, #{item_path}, #{item_type}, #{targets.count}"
-
-
-                    Pod::UI.puts "Prebuilding mark -1150- #{item_path}"
-                    Pod::UI.puts "Prebuilding mark -11501- #{self.sandbox.root}"
+#                    find_vendored_libraries(target, target_name, platform, spec, self.sandbox)
+#                    find_vendored_frameworks(target, target_name, platform, spec, self.sandbox)
+#                    find_vendored_resources(target, target_name, platform, spec, self.sandbox)
 
                     empty_source_files(spec) if target.build_as_framework?
-
-                    Pod::UI.puts "Prebuilding mark -11502- #{target.root_spec}"
-                    Pod::UI.puts "Prebuilding mark -115023- #{target.root_spec.version}"
-                    Pod::UI.puts "Prebuilding mark -11503- #{target.sandbox}, #{target.pod_name}"
-                    
-#                    prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(sandbox)
-#                    real_file_folder = prebuild_sandbox.framework_folder_path_for_target_name(target.name)
-#
-#                    consumer = target.root_spec.consumer(target.platform.name)
-#                    pod_path = self.sandbox.pod_dir(target.pod_name);
-#                    Pod::UI.puts "Prebuilding mark -11505- #{target.pod_name}, #{target.name}, #{pod_path}, #{prebuild_sandbox}"
-#
-#                    file_accessor = Pod::Sandbox::FileAccessor.new(real_file_folder, consumer)
-#                    resources = file_accessor.resources || []
-#                    Pod::UI.puts "Prebuilding mark -11504- #{target.name}, #{resources}"
-#                    resources += spec.attributes_hash["resource"] || []
-#                    Pod::UI.puts "Prebuilding mark -11506- #{target.name}, #{resources}"
-
-
-#                    rs = spec.attributes_hash["resource"]
-#                    Pod::UI.puts "Prebuilding mark -11505-  #{rs}"
-#                    Pod::UI.puts "Prebuilding mark -11506- #{spec.root}"
-#                    Pod::UI.puts "Prebuilding mark -11507- #{target.resource_paths}"
-                    
-#                    target.resource_paths.values.each do |resource|
-#                        all_resources += resource if resource.count > 0
-#                    end
-
-                        # spec 中添加 resources
-#                    hash = Prebuild::Passer.resources_to_copy_for_static_framework || {}
-#                    Pod::UI.puts "Prebuilding mark -3330- #{hash}"
-#                    path_objects = hash[target.name]
-#                    if path_objects != nil
-#                        path_objects.each do |object|
-#                            real_file_path = object.target_file_path #real_file_path target_file_path
-#                            resources = spec.attributes_hash["resources"] || []
-#                            resources = [resources] if resources.kind_of?(String)
-#                            resources += [real_file_path] if not resources.include?(real_file_path)
-#                            spec.attributes_hash["resources"] = resources
-#
-#                            Pod::UI.puts "Prebuilding mark -12501- spec resources #{resources}"
-#                        end
-#                    end
-
                 end
 
-                Pod::UI.puts "Prebuilding mark -12300 -  spec json: #{spec.to_json}"
-
-
-
-
-                # add resource files
-#                prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(self.sandbox)
-#                standard_sandbox_path = prebuild_sandbox.standard_sanbox_path
-#
-#                all_resources = all_resources.flatten.uniq || []
-#                all_resources = all_resources.map{|path|
-#                    path = path.gsub("${PODS_ROOT}", standard_sandbox_path.to_s) if path.start_with? "${PODS_ROOT}"
-#                }
-#                # spec.attributes_hash["resource"] = all_resources
-#                Pod::UI.puts "Prebuilding mark -11507- #{all_resources}"
-
-
-
-
-
+                
                 # Clean the source files
                 # we just add the prebuilt framework to specific platform and set no source files 
                 # for all platform, so it doesn't support the sence that 'a pod perbuild for one
@@ -445,12 +357,33 @@ module Pod
                 end
 
                 # to avoid the warning of missing license
-                spec_parent = spec.parent
+                if spec.parent != nil
+                    spec_parent = spec.parent
+                else
+                    spec_parent = spec
+                end
+                
                 license = spec_parent.attributes_hash["license"] || {} if spec_parent != nil
                 spec.attributes_hash["license"] = license || {}
                 
                 license = spec.attributes_hash["license"]
-                Pod::UI.puts "Prebuilding mark -12301 -  license: #{license}"
+                
+                # 这个位置是全量保存咱不用
+                total_backup = false
+                if total_backup
+                    prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(self.sandbox)
+                    generate_path = prebuild_sandbox.generate_framework_path.to_s
+                    build_name = spec.root.name
+                    builded = Podfile::DSL.builded_list.include?build_name
+                    if builded #and spec.root.name == spec.name
+                        rsync_server_url = Podfile::DSL.rsync_server_url
+                        Pod::PrebuildFetch.sync_prebuild_framework_to_server(build_name, spec_parent.version, generate_path, rsync_server_url)
+                        Podfile::DSL.builded_list.delete(build_name)
+                    end
+                end
+                
+                Pod::UI.puts "Prebuilding injected spec : #{spec.to_json}"
+
             end
 
         end

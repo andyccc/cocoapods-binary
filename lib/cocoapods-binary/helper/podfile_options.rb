@@ -114,12 +114,12 @@ module Pod
             end.select do |k, v|
                 v.map{|t| t.platform.name }.count > 1
             end
-
+            
             multi_targets_pods = multi_targets_pods.reject do |name, targets|
                 contained = targets.map{|t| self.prebuild_pod_targets.include? t }
                 contained.uniq.count == 1 # all equal
             end
-
+            
             return if multi_targets_pods.empty?
 
             warnings = "One pod can only be prebuilt or not prebuilt. These pod have different forms in multiple targets:\n"

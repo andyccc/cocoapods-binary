@@ -14,3 +14,31 @@ end
 def Logger(tag, name, value)
     Pod::UI.puts "🚀  Prebuild --Logger-- #{tag}, #{name}:#{value}"
 end
+
+def rsync_file(spath, dpath)
+    begin
+        ret = `rsync -az #{spath} #{dpath}`
+        
+        Pod::UI.puts "🚀  rsync => #{spath}, #{dpath}, #{ret}"
+
+        if ret.empty?
+            return true
+        end
+        rescue
+        return false
+    end
+    
+    return false
+end
+
+def zip_file(spath, dpath, file_name)
+    Pod::UI.puts "🚀  zip_file => #{spath}, #{dpath}, #{file_name}"
+    
+    `cd #{spath} && zip -qr #{dpath} #{file_name}`
+end
+
+def unzip_file(spath, dpath)
+    Pod::UI.puts "🚀  unzip_file => #{spath}, #{dpath}"
+
+    `unzip -oq #{spath} -d #{dpath}`
+end

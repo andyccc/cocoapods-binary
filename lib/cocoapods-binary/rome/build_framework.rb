@@ -24,7 +24,7 @@ def build_for_iosish_platform(sandbox,
   deployment_target = target.platform.deployment_target.to_s
   
   target_label = target.label # name with platform if it's used in multiple platforms
-  Pod::UI.puts "Prebuilding #{target_label}..."
+  Pod::UI.puts "Prebuilding build -> #{target_label}..."
   
   other_options = []
   # bitcode enabled
@@ -59,7 +59,7 @@ def build_for_iosish_platform(sandbox,
 #  ps = Pathname.new(public_headers_path)
 #  if ps.directory?
 #      ps.children.each do |child|
-#          Pod::UI.puts "Prebuilding mark -0225- cp_r #{child}, #{output_path}"
+#          Pod::UI.puts "Prebuilding copy header, #{child}, #{output_path}"
 #          FileUtils.cp_r(child, output_path, :remove_destination => false, :verbose => true)
 #      end
 #  end
@@ -98,7 +98,7 @@ def handle_the_dSYM(output_path, module_name, device_framework_path, simulator_f
         if File.exist? simulator_dsym
             tmp_lipoed_binary_path = "#{output_path}/#{module_name}.draft"
             lipo_log = `lipo -create -output #{tmp_lipoed_binary_path} #{device_dsym}/Contents/Resources/DWARF/#{module_name} #{simulator_dsym}/Contents/Resources/DWARF/#{module_name}`
-            puts lipo_log unless File.exist?(tmp_lipoed_binary_path)
+            Pod::UI.puts lipo_log unless File.exist?(tmp_lipoed_binary_path)
             FileUtils.mv tmp_lipoed_binary_path, "#{device_framework_path}.dSYM/Contents/Resources/DWARF/#{module_name}", :force => true, :verbose => true
         end
         # move
@@ -136,7 +136,7 @@ end
 def combine_the_binaries(build_dir, target_name, device_binary, simulator_binary)
     tmp_lipoed_binary_path = "#{build_dir}/#{target_name}"
     lipo_log = `lipo -create -output #{tmp_lipoed_binary_path} #{device_binary} #{simulator_binary}`
-    puts lipo_log unless File.exist?(tmp_lipoed_binary_path)
+    Pod::UI.puts lipo_log unless File.exist?(tmp_lipoed_binary_path)
     FileUtils.mv tmp_lipoed_binary_path, device_binary, :force => true, :verbose => true
 end
 

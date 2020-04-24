@@ -6,6 +6,15 @@ module Pod
     class Podfile
         module DSL
 
+            def set_rsync_server_url(url)
+                DSL.rsync_server_url = url
+            end
+            
+            def set_file_cache(t)
+                DSL.cache_file = t
+            end
+            
+            
         
             # Enable prebuiding for all pods
             # it has a lower priority to other binary settings
@@ -65,7 +74,29 @@ module Pod
                 end
             end
 
+            def set_build_list(name)
+                DSL.builded_list.push(name) unless name.nil?
+            end
+            
+            def get_build_list
+                return DSL.builded_list
+            end
+            
+            def exist_build_list(name)
+                return DSL.builded_list.include?name
+            end
+            
             private
+            
+            class_attr_accessor :cache_file
+            cache_file = true
+            
+            class_attr_accessor :builded_list
+            self.builded_list = []
+            
+            class_attr_accessor :rsync_server_url
+            rsync_server_url = ""
+
             class_attr_accessor :prebuild_all
             prebuild_all = false
 
@@ -118,7 +149,7 @@ Pod::HooksManager.register('cocoapods-binary', :pre_install) do |installer_conte
     require_relative 'helper/prebuild_sandbox'
     require_relative 'Prebuild'
     
-    Pod::UI.puts "🚀  Prebuild frameworks"
+    Pod::UI.puts "🚀  Prebuild frameworks".blue
 
     # Fetch original installer (which is running this pre-install hook) options,
     # then pass them to our installer to perform update if needed
@@ -143,8 +174,6 @@ Pod::HooksManager.register('cocoapods-binary', :pre_install) do |installer_conte
     # make another custom sandbox
     standard_sandbox = installer_context.sandbox
     prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(standard_sandbox)
-    
-    Pod::UI.puts "🚀3  Prebuild frameworks -- mark-- -111- #{prebuild_sandbox} "
     
     # get the podfile for prebuild
     prebuild_podfile = Pod::Podfile.from_ruby(podfile.defined_in_file)

@@ -2,7 +2,6 @@ require_relative 'helper/passer'
 require_relative 'helper/target_checker'
 require_relative 'helper/prebuild_sandbox_fetch'
 require_relative 'rome/build_framework'
-require_relative 'tool/ftp_sync'
 
 # patch prebuild ability
 module Pod
@@ -61,7 +60,7 @@ module Pod
         def install_when_cache_hit!
             # just print log
             self.sandbox.exsited_framework_target_names.each do |name|
-                UI.puts "Using #{name}"
+                Pod::UI.puts "🚀  Using cache #{name}".blue
             end
         end
     
@@ -137,34 +136,40 @@ module Pod
             
             
             # build!
-            Pod::UI.puts "Prebuild frameworks (total #{targets.count})"
+            Pod::UI.puts "🚀  Prebuild files (total #{targets.count})"
             Pod::Prebuild.remove_build_dir(sandbox_path)
-            
-            ftp_service = FtpSync.new "192.168.0.248", "hzty", "hzty"
-            ftp_service.verbose = true
-            ftp_service.passive = true
             
             targets.each do |target|
                 if !target.should_build?
-                    UI.puts "Prebuilding #{target.label}"
+                    Pod::UI.puts "Prebuilding #{target.label}"
                     next
                 end
+                
                 target_name = target.name
                 output_path = sandbox.framework_folder_path_for_target_name(target_name)
                 output_path.mkpath unless output_path.exist?
                 
                 # check server file
+                if Podfile::DSL.cache_file
+                    generate_path = sandbox.generate_framework_path.to_s
 
-                zip_framework_name = Pod::PrebuildFetch.zip_framework_name(target)
-                UI.puts "Prebuilding --- mark -zip_framework_name-   #{zip_framework_name} "
-
-                exist_remote_framework = Pod::PrebuildFetch.fetch_remote_framework_for_target(target, ftp_service)
-                if not exist_remote_framework?
-                    UI.puts "Prebuilding --- mark -111111-  not exist_remote_framework "
+                    spec = target.root_spec
+                    rsync_server_url = Podfile::DSL.rsync_server_url
+                    exist_remote_framework = Pod::PrebuildFetch.fetch_remote_framework_for_target(spec.name, spec.version, generate_path, rsync_server_url)
+                    if exist_remote_framework
+                        Pod::UI.puts "Prebuilding exist remote cache, #{target_name}"
+                    else
+                        Pod::UI.puts "Prebuilding non exist remote cache, #{target_name}"
+                        Pod::Prebuild.build(sandbox_path, target, output_path, bitcode_enabled, Podfile::DSL.custom_build_options, Podfile::DSL.custom_build_options_simulator)
+                        
+                        Podfile::DSL.builded_list.push(target_name)
+                        
+                        Pod::PrebuildFetch.sync_prebuild_framework_to_server(spec.name, spec.version, generate_path, rsync_server_url)
+                    end
+                else
+                    Pod::Prebuild.build(sandbox_path, target, output_path, bitcode_enabled, Podfile::DSL.custom_build_options, Podfile::DSL.custom_build_options_simulator)
                 end
                 
-                Pod::Prebuild.build(sandbox_path, target, output_path, bitcode_enabled, Podfile::DSL.custom_build_options, Podfile::DSL.custom_build_options_simulator)
-                             
                 
                 # public private headers
                 if Podfile::DSL.allow_public_headers and target.build_as_framework?
@@ -279,29 +284,22 @@ module Pod
 
                     #add resources
                     lib_paths += file_accessor.resources || []
-                    resource_bundles = file_accessor.resource_bundles || {}
                     
-                    lib_paths += resource_bundles.values || []
+                    lib_paths += file_accessor.resource_bundles.values if not file_accessor.resource_bundles.nil?
                     lib_paths += file_accessor.resource_bundle_files || []
 
                     #add license
-                    lib_paths += [file_accessor.license || {}]
-                    lib_paths += [file_accessor.spec_license || {}]
+                    lib_paths += [file_accessor.license] if not file_accessor.license.nil?
+                    lib_paths += [file_accessor.spec_license] if not file_accessor.spec_license.nil?
 
                     #add readme
-                    lib_paths += [file_accessor.readme || {}]
+                    lib_paths += [file_accessor.readme] if not file_accessor.readme.nil?
                     
 
                     #developer_files ⇒ Array<Pathname> Paths to include for local pods to assist in development.
-                    
-                    Logger(10031, "lib_paths", file_accessor.to_json)
-
-                    
-                    Logger(1003, "start copy", root_path)
-                    Logger(1004, "start copy", target_folder)
 
                     copy_vendered_files(lib_paths, root_path, target_folder)
-                    
+
                     # framework not same
                     if Podfile::DSL.allow_public_headers and target.build_as_framework?
                         headers = file_accessor.headers || []
@@ -326,8 +324,6 @@ module Pod
             
             useless_target_names.each do |name|
                 path = sandbox.framework_folder_path_for_target_name(name)
-                Logger(1004, "rmtree path", path)
-
                 path.rmtree if path.exist?
             end
             
@@ -340,13 +336,11 @@ module Pod
                     not to_remain_files.include?(filename)
                 end
                 to_delete_files.each do |path|
-                    Logger(1005, "rmtree path", path)
                     path.rmtree if path.exist?
                 end
             else 
                 # just remove the tmp files
                 path = sandbox.root + 'Manifest.lock.tmp'
-                Logger(1006, "rmtree path", path)
                 path.rmtree if path.exist?
             end
 

@@ -1,0 +1,83 @@
+{
+  "name": "YSTableView",
+  "version": "0.2.3",
+  "summary": "A short description of YSTableView.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/478356182@qq.com/YSTableView",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "478356182@qq.com": "478356182@qq.com"
+  },
+  "source": {
+    "git": "https://bitbucket.org/tytto/ystableview.git",
+    "tag": "0.2.3"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "requires_arc": true,
+  "subspecs": [
+    {
+      "name": "TableView",
+      "source_files": "YSTableView/*.{h,m}",
+      "frameworks": [
+        "UIKit",
+        "Foundation"
+      ]
+    },
+    {
+      "name": "PullPushRefresh",
+      "source_files": "YSTableView/PullPushRefresh/*.{h,m}",
+      "dependencies": {
+        "MJRefresh": [
+          "~> 3.0.8"
+        ],
+        "YSTableView/TableView": [
+
+        ]
+      }
+    },
+    {
+      "name": "MouseHeader",
+      "source_files": "YSTableView/MouseHeader/*.{h,m}",
+      "resources": "YSTableView/MouseHeader/_loading/*.png",
+      "dependencies": {
+        "YSTableView/PullPushRefresh": [
+
+        ]
+      }
+    },
+    {
+      "name": "EyemanHeader",
+      "source_files": "YSTableView/EyemanHeader/*.{h,m}",
+      "resources": "YSTableView/EyemanHeader/_loading/*.png",
+      "dependencies": {
+        "YSTableView/PullPushRefresh": [
+
+        ]
+      }
+    },
+    {
+      "name": "IndicatorFooter",
+      "source_files": "YSTableView/IndicatorFooter/*.{h,m}",
+      "dependencies": {
+        "YSTableView/PullPushRefresh": [
+
+        ]
+      }
+    },
+    {
+      "name": "ChickenBreakHeader",
+      "source_files": "YSTableView/ChickenBreakHeader/*.{h,m}",
+      "resources": "YSTableView/ChickenBreakHeader/_loading/*.png",
+      "dependencies": {
+        "YSTableView/PullPushRefresh": [
+
+        ]
+      }
+    }
+  ]
+}

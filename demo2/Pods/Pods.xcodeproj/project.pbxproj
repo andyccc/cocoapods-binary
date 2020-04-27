@@ -7,97 +7,50 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		42810E4DC964C5352918E3A06EFE90A9 /* PDBotKit */ = {
+		C8F0160878995836BDBF7591C9B9714A /* FTPopOverMenu */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 46EB2E000002E0 /* Build configuration list for PBXAggregateTarget "PDBotKit" */;
+			buildConfigurationList = 46EB2E00000150 /* Build configuration list for PBXAggregateTarget "FTPopOverMenu" */;
 			buildPhases = (
 			);
 			dependencies = (
 			);
-			name = PDBotKit;
-		};
-		4A68CFD979D413A619DF631BB121D98F /* Bugly */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 46EB2E00000270 /* Build configuration list for PBXAggregateTarget "Bugly" */;
-			buildPhases = (
-			);
-			dependencies = (
-			);
-			name = Bugly;
-		};
-		D8137F77A77B5F0596A7A010BBE78F2E /* TestEngineService */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 46EB2E00000350 /* Build configuration list for PBXAggregateTarget "TestEngineService" */;
-			buildPhases = (
-			);
-			dependencies = (
-			);
-			name = TestEngineService;
+			name = FTPopOverMenu;
 		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		46EB2E000004A0 /* Pods-testpodFramework-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E00000490 /* Pods-testpodFramework-dummy.m */; };
+		46EB2E00000290 /* Pods-testpodFramework-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E00000280 /* Pods-testpodFramework-dummy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		46EB2E000004B0 /* PBXContainerItemProxy */ = {
+		46EB2E000002A0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 46EB2E00000000 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 4A68CFD979D413A619DF631BB121D98F;
-			remoteInfo = Bugly;
-		};
-		46EB2E000004D0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 46EB2E00000000 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 42810E4DC964C5352918E3A06EFE90A9;
-			remoteInfo = PDBotKit;
-		};
-		46EB2E000004F0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 46EB2E00000000 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D8137F77A77B5F0596A7A010BBE78F2E;
-			remoteInfo = TestEngineService;
+			remoteGlobalIDString = C8F0160878995836BDBF7591C9B9714A;
+			remoteInfo = FTPopOverMenu;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		46EB2E000000E0 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E00000100 /* TestEngineService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TestEngineService.h; path = ../_Prebuild/Generated/TestEngineService/TestEngineService/TestEngineService.h; sourceTree = "<group>"; };
-		46EB2E00000110 /* TSJSON.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TSJSON.h; path = ../_Prebuild/Generated/TestEngineService/TestEngineService/TSJSON.h; sourceTree = "<group>"; };
-		46EB2E00000130 /* skegn.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = skegn.h; path = ../_Prebuild/Generated/TestEngineService/TestEngineService/ST/SDK/skegn.h; sourceTree = "<group>"; };
-		46EB2E00000140 /* STTestEngineService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = STTestEngineService.h; path = ../_Prebuild/Generated/TestEngineService/TestEngineService/ST/STTestEngineService.h; sourceTree = "<group>"; };
-		46EB2E00000160 /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bugly.framework; path = ../_Prebuild/Generated/Bugly/Bugly.framework; sourceTree = "<group>"; };
-		46EB2E00000180 /* PDBotLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDBotLib.framework; path = ../_Prebuild/Generated/PDBotKit/PDBotLib.framework; sourceTree = "<group>"; };
-		46EB2E00000190 /* PDBotKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDBotKit.framework; path = ../_Prebuild/Generated/PDBotKit/PDBotKit.framework; sourceTree = "<group>"; };
-		46EB2E000001B0 /* STKouyuEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = STKouyuEngine.framework; path = ../_Prebuild/Generated/TestEngineService/TestEngineService/ST/SDK/STKouyuEngine.framework; sourceTree = "<group>"; };
-		46EB2E000001D0 /* libTestEngineService.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libTestEngineService.a; path = ../_Prebuild/Generated/TestEngineService/libTestEngineService.a; sourceTree = "<group>"; };
-		46EB2E000001E0 /* libopus.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libopus.a; path = ../_Prebuild/Generated/TestEngineService/TestEngineService/ST/SDK/libopus.a; sourceTree = "<group>"; };
-		46EB2E000001F0 /* libskegn.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libskegn.a; path = ../_Prebuild/Generated/TestEngineService/TestEngineService/ST/SDK/libskegn.a; sourceTree = "<group>"; };
-		46EB2E00000210 /* PDBotKit.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = PDBotKit.bundle; path = ../_Prebuild/Generated/PDBotKit/PDBotKit.bundle; sourceTree = "<group>"; };
-		46EB2E00000220 /* zh-Hans.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
-		46EB2E00000230 /* en.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = en.lproj; sourceTree = "<group>"; };
-		46EB2E00000250 /* STKouyuEngine.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = STKouyuEngine.bundle; path = ../_Prebuild/Generated/TestEngineService/TestEngineService/ST/SDK/STKouyuEngine.bundle; sourceTree = "<group>"; };
-		46EB2E000002B0 /* Bugly.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Bugly.debug.xcconfig; sourceTree = "<group>"; };
-		46EB2E000002C0 /* Bugly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Bugly.release.xcconfig; sourceTree = "<group>"; };
-		46EB2E00000320 /* PDBotKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PDBotKit.debug.xcconfig; sourceTree = "<group>"; };
-		46EB2E00000330 /* PDBotKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PDBotKit.release.xcconfig; sourceTree = "<group>"; };
-		46EB2E00000390 /* TestEngineService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TestEngineService.debug.xcconfig; sourceTree = "<group>"; };
-		46EB2E000003A0 /* TestEngineService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = TestEngineService.release.xcconfig; sourceTree = "<group>"; };
-		46EB2E00000440 /* Pods-testpodFramework.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-testpodFramework.release.xcconfig"; sourceTree = "<group>"; };
-		46EB2E00000450 /* Pods-testpodFramework.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-testpodFramework.debug.xcconfig"; sourceTree = "<group>"; };
-		46EB2E00000460 /* Pods-testpodFramework-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-testpodFramework-resources.sh"; sourceTree = "<group>"; };
-		46EB2E00000470 /* Pods-testpodFramework-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-testpodFramework-acknowledgements.plist"; sourceTree = "<group>"; };
-		46EB2E00000480 /* Pods-testpodFramework-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-testpodFramework-acknowledgements.markdown"; sourceTree = "<group>"; };
-		46EB2E00000490 /* Pods-testpodFramework-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-testpodFramework-dummy.m"; sourceTree = "<group>"; };
+		46EB2E000000C0 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E000000D0 /* FTPopOverMenu.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FTPopOverMenu.h; path = ../Pods/_Prebuild/Generated/FTPopOverMenu/FTPopOverMenu/FTPopOverMenu.h; sourceTree = "<group>"; };
+		46EB2E000000F0 /* libFTPopOverMenu.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libFTPopOverMenu.a; path = ../Pods/_Prebuild/Generated/FTPopOverMenu/libFTPopOverMenu.a; sourceTree = "<group>"; };
+		46EB2E00000110 /* FTPopOverMenu.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = FTPopOverMenu.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E00000120 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		46EB2E00000130 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		46EB2E00000190 /* FTPopOverMenu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FTPopOverMenu.debug.xcconfig; sourceTree = "<group>"; };
+		46EB2E000001A0 /* FTPopOverMenu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FTPopOverMenu.release.xcconfig; sourceTree = "<group>"; };
+		46EB2E00000240 /* Pods-testpodFramework.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-testpodFramework.release.xcconfig"; sourceTree = "<group>"; };
+		46EB2E00000250 /* Pods-testpodFramework.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-testpodFramework.debug.xcconfig"; sourceTree = "<group>"; };
+		46EB2E00000260 /* Pods-testpodFramework-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-testpodFramework-acknowledgements.plist"; sourceTree = "<group>"; };
+		46EB2E00000270 /* Pods-testpodFramework-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-testpodFramework-acknowledgements.markdown"; sourceTree = "<group>"; };
+		46EB2E00000280 /* Pods-testpodFramework-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-testpodFramework-dummy.m"; sourceTree = "<group>"; };
 		9742422619F555CE844D1A932033284E /* libPods-testpodFramework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-testpodFramework.a"; path = "libPods-testpodFramework.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		46EB2E00000420 /* Frameworks */ = {
+		46EB2E00000220 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -110,9 +63,9 @@
 		46EB2E00000010 = {
 			isa = PBXGroup;
 			children = (
-				46EB2E000000E0 /* Podfile */,
+				46EB2E000000C0 /* Podfile */,
+				46EB2E00000090 /* Development Pods */,
 				46EB2E00000060 /* Frameworks */,
-				46EB2E00000080 /* Pods */,
 				46EB2E00000020 /* Products */,
 				46EB2E00000070 /* Targets Support Files */,
 			);
@@ -136,166 +89,67 @@
 		46EB2E00000070 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				46EB2E00000430 /* Pods-testpodFramework */,
+				46EB2E00000230 /* Pods-testpodFramework */,
 			);
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		46EB2E00000080 /* Pods */ = {
+		46EB2E00000090 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				46EB2E000000B0 /* Bugly */,
-				46EB2E000000C0 /* PDBotKit */,
-				46EB2E000000D0 /* TestEngineService */,
+				46EB2E000000B0 /* FTPopOverMenu */,
 			);
-			name = Pods;
+			name = "Development Pods";
 			sourceTree = "<group>";
 		};
-		46EB2E000000B0 /* Bugly */ = {
+		46EB2E000000B0 /* FTPopOverMenu */ = {
 			isa = PBXGroup;
 			children = (
-				46EB2E00000150 /* Frameworks */,
-				46EB2E000002A0 /* Support Files */,
+				46EB2E000000D0 /* FTPopOverMenu.h */,
+				46EB2E000000E0 /* Frameworks */,
+				46EB2E00000100 /* Pod */,
+				46EB2E00000180 /* Support Files */,
 			);
-			name = Bugly;
-			path = Bugly;
+			name = FTPopOverMenu;
+			path = ../FTPopOverMenu;
 			sourceTree = "<group>";
 		};
-		46EB2E000000C0 /* PDBotKit */ = {
+		46EB2E000000E0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				46EB2E00000170 /* Frameworks */,
-				46EB2E00000200 /* Resources */,
-				46EB2E00000310 /* Support Files */,
-			);
-			name = PDBotKit;
-			path = PDBotKit;
-			sourceTree = "<group>";
-		};
-		46EB2E000000D0 /* TestEngineService */ = {
-			isa = PBXGroup;
-			children = (
-				46EB2E000000F0 /* Core */,
-				46EB2E00000120 /* ST */,
-				46EB2E00000380 /* Support Files */,
-			);
-			name = TestEngineService;
-			path = TestEngineService;
-			sourceTree = "<group>";
-		};
-		46EB2E000000F0 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				46EB2E00000100 /* TestEngineService.h */,
-				46EB2E00000110 /* TSJSON.h */,
-				46EB2E000001C0 /* Frameworks */,
-			);
-			name = Core;
-			sourceTree = "<group>";
-		};
-		46EB2E00000120 /* ST */ = {
-			isa = PBXGroup;
-			children = (
-				46EB2E00000130 /* skegn.h */,
-				46EB2E00000140 /* STTestEngineService.h */,
-				46EB2E000001A0 /* Frameworks */,
-				46EB2E00000240 /* Resources */,
-			);
-			name = ST;
-			sourceTree = "<group>";
-		};
-		46EB2E00000150 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				46EB2E00000160 /* Bugly.framework */,
+				46EB2E000000F0 /* libFTPopOverMenu.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		46EB2E00000170 /* Frameworks */ = {
+		46EB2E00000100 /* Pod */ = {
 			isa = PBXGroup;
 			children = (
-				46EB2E00000190 /* PDBotKit.framework */,
-				46EB2E00000180 /* PDBotLib.framework */,
+				46EB2E00000110 /* FTPopOverMenu.podspec */,
+				46EB2E00000120 /* LICENSE */,
+				46EB2E00000130 /* README.md */,
 			);
-			name = Frameworks;
+			name = Pod;
 			sourceTree = "<group>";
 		};
-		46EB2E000001A0 /* Frameworks */ = {
+		46EB2E00000180 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				46EB2E000001E0 /* libopus.a */,
-				46EB2E000001F0 /* libskegn.a */,
-				46EB2E000001B0 /* STKouyuEngine.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		46EB2E000001C0 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				46EB2E000001D0 /* libTestEngineService.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		46EB2E00000200 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				46EB2E00000230 /* en.lproj */,
-				46EB2E00000210 /* PDBotKit.bundle */,
-				46EB2E00000220 /* zh-Hans.lproj */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		46EB2E00000240 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				46EB2E00000250 /* STKouyuEngine.bundle */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		46EB2E000002A0 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				46EB2E000002B0 /* Bugly.debug.xcconfig */,
-				46EB2E000002C0 /* Bugly.release.xcconfig */,
+				46EB2E00000190 /* FTPopOverMenu.debug.xcconfig */,
+				46EB2E000001A0 /* FTPopOverMenu.release.xcconfig */,
 			);
 			name = "Support Files";
-			path = "../Target Support Files/Bugly";
+			path = "../Pods/Target Support Files/FTPopOverMenu";
 			sourceTree = "<group>";
 		};
-		46EB2E00000310 /* Support Files */ = {
+		46EB2E00000230 /* Pods-testpodFramework */ = {
 			isa = PBXGroup;
 			children = (
-				46EB2E00000320 /* PDBotKit.debug.xcconfig */,
-				46EB2E00000330 /* PDBotKit.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/PDBotKit";
-			sourceTree = "<group>";
-		};
-		46EB2E00000380 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				46EB2E00000390 /* TestEngineService.debug.xcconfig */,
-				46EB2E000003A0 /* TestEngineService.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/TestEngineService";
-			sourceTree = "<group>";
-		};
-		46EB2E00000430 /* Pods-testpodFramework */ = {
-			isa = PBXGroup;
-			children = (
-				46EB2E00000480 /* Pods-testpodFramework-acknowledgements.markdown */,
-				46EB2E00000470 /* Pods-testpodFramework-acknowledgements.plist */,
-				46EB2E00000490 /* Pods-testpodFramework-dummy.m */,
-				46EB2E00000460 /* Pods-testpodFramework-resources.sh */,
-				46EB2E00000450 /* Pods-testpodFramework.debug.xcconfig */,
-				46EB2E00000440 /* Pods-testpodFramework.release.xcconfig */,
+				46EB2E00000270 /* Pods-testpodFramework-acknowledgements.markdown */,
+				46EB2E00000260 /* Pods-testpodFramework-acknowledgements.plist */,
+				46EB2E00000280 /* Pods-testpodFramework-dummy.m */,
+				46EB2E00000250 /* Pods-testpodFramework.debug.xcconfig */,
+				46EB2E00000240 /* Pods-testpodFramework.release.xcconfig */,
 			);
 			name = "Pods-testpodFramework";
 			path = "Target Support Files/Pods-testpodFramework";
@@ -304,7 +158,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		46EB2E00000400 /* Headers */ = {
+		46EB2E00000200 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -316,18 +170,16 @@
 /* Begin PBXNativeTarget section */
 		81DFE0B82E3C3BD071B2660282FB33DA /* Pods-testpodFramework */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 46EB2E000003C0 /* Build configuration list for PBXNativeTarget "Pods-testpodFramework" */;
+			buildConfigurationList = 46EB2E000001C0 /* Build configuration list for PBXNativeTarget "Pods-testpodFramework" */;
 			buildPhases = (
-				46EB2E00000400 /* Headers */,
-				46EB2E00000410 /* Sources */,
-				46EB2E00000420 /* Frameworks */,
+				46EB2E00000200 /* Headers */,
+				46EB2E00000210 /* Sources */,
+				46EB2E00000220 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				46EB2E000004C0 /* PBXTargetDependency */,
-				46EB2E000004E0 /* PBXTargetDependency */,
-				46EB2E00000500 /* PBXTargetDependency */,
+				46EB2E000002B0 /* PBXTargetDependency */,
 			);
 			name = "Pods-testpodFramework";
 			productName = "Pods-testpodFramework";
@@ -356,43 +208,29 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4A68CFD979D413A619DF631BB121D98F /* Bugly */,
-				42810E4DC964C5352918E3A06EFE90A9 /* PDBotKit */,
+				C8F0160878995836BDBF7591C9B9714A /* FTPopOverMenu */,
 				81DFE0B82E3C3BD071B2660282FB33DA /* Pods-testpodFramework */,
-				D8137F77A77B5F0596A7A010BBE78F2E /* TestEngineService */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		46EB2E00000410 /* Sources */ = {
+		46EB2E00000210 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46EB2E000004A0 /* Pods-testpodFramework-dummy.m in Sources */,
+				46EB2E00000290 /* Pods-testpodFramework-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		46EB2E000004C0 /* PBXTargetDependency */ = {
+		46EB2E000002B0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = Bugly;
-			target = 4A68CFD979D413A619DF631BB121D98F /* Bugly */;
-			targetProxy = 46EB2E000004B0 /* PBXContainerItemProxy */;
-		};
-		46EB2E000004E0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = PDBotKit;
-			target = 42810E4DC964C5352918E3A06EFE90A9 /* PDBotKit */;
-			targetProxy = 46EB2E000004D0 /* PBXContainerItemProxy */;
-		};
-		46EB2E00000500 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = TestEngineService;
-			target = D8137F77A77B5F0596A7A010BBE78F2E /* TestEngineService */;
-			targetProxy = 46EB2E000004F0 /* PBXContainerItemProxy */;
+			name = FTPopOverMenu;
+			target = C8F0160878995836BDBF7591C9B9714A /* FTPopOverMenu */;
+			targetProxy = 46EB2E000002A0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -521,11 +359,12 @@
 			};
 			name = Release;
 		};
-		46EB2E00000280 /* Release */ = {
+		46EB2E00000160 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46EB2E000002C0 /* Bugly.release.xcconfig */;
+			baseConfigurationReference = 46EB2E000001A0 /* FTPopOverMenu.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -540,11 +379,12 @@
 			};
 			name = Release;
 		};
-		46EB2E00000290 /* Debug */ = {
+		46EB2E00000170 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46EB2E000002B0 /* Bugly.debug.xcconfig */;
+			baseConfigurationReference = 46EB2E00000190 /* FTPopOverMenu.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -558,83 +398,9 @@
 			};
 			name = Debug;
 		};
-		46EB2E000002F0 /* Release */ = {
+		46EB2E000001D0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46EB2E00000330 /* PDBotKit.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_BITCODE = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.3;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		46EB2E00000300 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46EB2E00000320 /* PDBotKit.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_BITCODE = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.3;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		46EB2E00000360 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46EB2E000003A0 /* TestEngineService.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_BITCODE = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.3;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		46EB2E00000370 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46EB2E00000390 /* TestEngineService.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				ENABLE_BITCODE = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.3;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		46EB2E000003D0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46EB2E00000440 /* Pods-testpodFramework.release.xcconfig */;
+			baseConfigurationReference = 46EB2E00000240 /* Pods-testpodFramework.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -656,9 +422,9 @@
 			};
 			name = Release;
 		};
-		46EB2E000003E0 /* Debug */ = {
+		46EB2E000001E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46EB2E00000450 /* Pods-testpodFramework.debug.xcconfig */;
+			baseConfigurationReference = 46EB2E00000250 /* Pods-testpodFramework.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -691,38 +457,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		46EB2E00000270 /* Build configuration list for PBXAggregateTarget "Bugly" */ = {
+		46EB2E00000150 /* Build configuration list for PBXAggregateTarget "FTPopOverMenu" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				46EB2E00000290 /* Debug */,
-				46EB2E00000280 /* Release */,
+				46EB2E00000170 /* Debug */,
+				46EB2E00000160 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		46EB2E000002E0 /* Build configuration list for PBXAggregateTarget "PDBotKit" */ = {
+		46EB2E000001C0 /* Build configuration list for PBXNativeTarget "Pods-testpodFramework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				46EB2E00000300 /* Debug */,
-				46EB2E000002F0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		46EB2E00000350 /* Build configuration list for PBXAggregateTarget "TestEngineService" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				46EB2E00000370 /* Debug */,
-				46EB2E00000360 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		46EB2E000003C0 /* Build configuration list for PBXNativeTarget "Pods-testpodFramework" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				46EB2E000003E0 /* Debug */,
-				46EB2E000003D0 /* Release */,
+				46EB2E000001E0 /* Debug */,
+				46EB2E000001D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

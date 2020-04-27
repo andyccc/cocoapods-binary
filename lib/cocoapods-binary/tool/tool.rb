@@ -15,11 +15,11 @@ def Logger(tag, name, value)
     Pod::UI.puts "🚀  Prebuild --Logger-- #{tag}, #{name}:#{value}"
 end
 
-def rsync_file(spath, dpath)
+def rsync_file(type, spath, dpath)
     begin
         ret = `rsync -az #{spath} #{dpath}`
         
-        Pod::UI.puts "🚀  rsync => #{spath}, #{dpath}, #{ret}"
+        Pod::UI.puts "🚀  #{type} rsync => #{spath}, #{dpath}, #{ret}"
 
         if ret.empty?
             return true

@@ -12,9 +12,8 @@ module Pod
         ## --- option for setting using prebuild framework ---
         def parse_prebuild_framework(name, requirements)
             should_prebuild = Pod::Podfile::DSL.prebuild_all
-
             options = requirements.last
-            if options.is_a?(Hash) && options[Pod::Prebuild.keyword] != nil 
+            if options.is_a?(Hash) && options[Pod::Prebuild.keyword] != nil
                 should_prebuild = options.delete(Pod::Prebuild.keyword)
                 requirements.pop if options.empty?
             end
@@ -24,7 +23,6 @@ module Pod
         end
         
         def set_prebuild_for_pod(pod_name, should_prebuild)
-            
             if should_prebuild == true
                 @prebuild_framework_pod_names ||= []
                 @prebuild_framework_pod_names.push pod_name
@@ -93,10 +91,10 @@ module Pod
 
             end
             
+                                       
             if not Podfile::DSL.allow_local_pod
                 all = all.reject {|pod_target| sandbox.local?(pod_target.pod_name) }
             end
-            
             all.uniq
             )
         end

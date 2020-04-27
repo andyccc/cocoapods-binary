@@ -1,36 +1,16 @@
 PODS:
-  - Bugly (2.5.2)
-  - PDBotKit (2.6.0)
-  - TestEngineService/Core (0.4.7)
-  - TestEngineService/ST (0.4.7):
-    - TestEngineService/Core
+  - FTPopOverMenu (2.0.9)
 
 DEPENDENCIES:
-  - Bugly
-  - PDBotKit
-  - TestEngineService/Core (from `https://bitbucket.org/tytto/testengineservice.git`, tag `0.4.7`)
-  - TestEngineService/ST (from `https://bitbucket.org/tytto/testengineservice.git`, tag `0.4.7`)
-
-SPEC REPOS:
-  trunk:
-    - Bugly
-    - PDBotKit
+  - FTPopOverMenu (from `./FTPopOverMenu`)
 
 EXTERNAL SOURCES:
-  TestEngineService:
-    :git: https://bitbucket.org/tytto/testengineservice.git
-    :tag: 0.4.7
-
-CHECKOUT OPTIONS:
-  TestEngineService:
-    :git: https://bitbucket.org/tytto/testengineservice.git
-    :tag: 0.4.7
+  FTPopOverMenu:
+    :path: "./FTPopOverMenu"
 
 SPEC CHECKSUMS:
-  Bugly: dbac48b55ad469a97cc4321045cd50df8f63d44f
-  PDBotKit: a5e3d80f3cecf5dcaeab1043fff2ed5fd45649bd
-  TestEngineService: 26bb56eee5f7d3eb864ea50eeaa07971d6c4b96f
+  FTPopOverMenu: 82782ddb42712fcd7747d072afd8f5e8cb2303eb
 
-PODFILE CHECKSUM: f29bd34775cacfb4a230daf850327e48da6f1f7d
+PODFILE CHECKSUM: 8d7565716e7bd615ee7d774c0cf3e4763fb96828
 
 COCOAPODS: 1.9.1

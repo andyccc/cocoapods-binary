@@ -1,0 +1,160 @@
+{
+  "name": "YSBeeFramework",
+  "version": "1.3.1",
+  "summary": "-",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "yans": "aoyan2010@live.cn"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "homepage": "https://bitbucket.org/tytto/ysbeeframework.git",
+  "source": {
+    "git": "https://bitbucket.org/tytto/ysbeeframework.git",
+    "tag": "1.3.1"
+  },
+  "frameworks": [
+    "CoreMedia",
+    "CoreVideo",
+    "AVFoundation",
+    "Security",
+    "SystemConfiguration",
+    "QuartzCore",
+    "MobileCoreServices",
+    "CFNetwork"
+  ],
+  "libraries": [
+    "z",
+    "xml2",
+    "sqlite3"
+  ],
+  "requires_arc": false,
+  "subspecs": [
+    {
+      "name": "Vendors",
+      "subspecs": [
+        {
+          "name": "JSONKit",
+          "source_files": "YSBeeFramework/vendors/JSONKit/JSONKit.{h,m}",
+          "requires_arc": false
+        },
+        {
+          "name": "ASI",
+          "source_files": "YSBeeFramework/vendors/ASI/*.{h,m}",
+          "requires_arc": false
+        }
+      ]
+    },
+    {
+      "name": "Core",
+      "source_files": "YSBeeFramework/core/**/*.{h,m,mm}",
+      "exclude_files": "YSBeeFramework/core/system/network/http/server/**/*",
+      "xcconfig": {
+        "HEADER_SEARCH_PATHS": "\"$(SDKROOT)/usr/include/libz\" \"$(SDKROOT)/usr/include/libxml2\"",
+        "CLANG_WARN_DIRECT_OBJC_ISA_USAGE": "YES",
+        "ENABLE_STRICT_OBJC_MSGSEND": "NO"
+      },
+      "requires_arc": false,
+      "dependencies": {
+        "FMDB": [
+
+        ],
+        "TouchXML": [
+
+        ],
+        "ZipArchive": [
+
+        ],
+        "Reachability": [
+
+        ],
+        "DACircularProgress": [
+
+        ],
+        "YSBeeFramework/Vendors": [
+
+        ]
+      }
+    },
+    {
+      "name": "Common",
+      "requires_arc": true,
+      "source_files": "YSBeeFramework/common/*.{h,m,mm}",
+      "dependencies": {
+        "YSBeeFramework/Core": [
+
+        ]
+      },
+      "resources": "YSBeeFramework/common/*.png",
+      "exclude_files": [
+        "YSBeeFramework/common/NavigationBar/*",
+        "YSBeeFramework/common/QWLoadable/*"
+      ],
+      "subspecs": [
+        {
+          "name": "NavigationBar",
+          "requires_arc": true,
+          "source_files": "YSBeeFramework/common/NavigationBar/*.{h,m,mm}"
+        },
+        {
+          "name": "QWLoadable",
+          "requires_arc": true,
+          "source_files": "YSBeeFramework/common/QWLoadable/*.{h,m,mm}"
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "subspecs": [
+        {
+          "name": "Location",
+          "requires_arc": false,
+          "dependencies": {
+            "YSBeeFramework/Core": [
+
+            ]
+          },
+          "source_files": "YSBeeFramework/services/bee.services.location/**/*.{h,m,mm}",
+          "resources": "YSBeeFramework/services/bee.services.location/**/*.{xml,bundle}"
+        },
+        {
+          "name": "Logger",
+          "requires_arc": false,
+          "dependencies": {
+            "YSBeeFramework/Core": [
+
+            ]
+          },
+          "source_files": "YSBeeFramework/services/bee.services.logger/**/*.{h,m,mm}",
+          "resources": "YSBeeFramework/services/bee.services.logger/**/*.{xml,bundle}"
+        },
+        {
+          "name": "Push",
+          "requires_arc": false,
+          "dependencies": {
+            "YSBeeFramework/Core": [
+
+            ]
+          },
+          "source_files": "YSBeeFramework/services/bee.services.push/**/*.{h,m,mm}",
+          "resources": "YSBeeFramework/services/bee.services.push/**/*.{xml,bundle}"
+        },
+        {
+          "name": "Wizard",
+          "requires_arc": false,
+          "dependencies": {
+            "YSBeeFramework/Core": [
+
+            ]
+          },
+          "source_files": "YSBeeFramework/services/bee.services.wizard/**/*.{h,m,mm}",
+          "resources": "YSBeeFramework/services/bee.services.wizard/**/*.{xml,bundle}"
+        }
+      ]
+    }
+  ]
+}

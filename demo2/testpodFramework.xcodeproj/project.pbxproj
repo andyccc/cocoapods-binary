@@ -9,9 +9,8 @@
 /* Begin PBXBuildFile section */
 		0A17400B8498C1A8A20864E0 /* libPods-testpodFramework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDC8C9B0576A1F75C1D1929 /* libPods-testpodFramework.a */; };
 		257C5E4A241673C700B0DC38 /* prebuild_sandbox_fetch.rb in Resources */ = {isa = PBXBuildFile; fileRef = 257C5E49241673C700B0DC38 /* prebuild_sandbox_fetch.rb */; };
-		257C5E4C2416741800B0DC38 /* prebuild_sandbox_sync.rb in Resources */ = {isa = PBXBuildFile; fileRef = 257C5E4B2416741800B0DC38 /* prebuild_sandbox_sync.rb */; };
-		25808C06244ED90600066DBF /* ftp_tool.rb in Resources */ = {isa = PBXBuildFile; fileRef = 25808C05244ED90600066DBF /* ftp_tool.rb */; };
 		25808C08244EDBC900066DBF /* ftp_sync.rb in Resources */ = {isa = PBXBuildFile; fileRef = 25808C07244EDBC900066DBF /* ftp_sync.rb */; };
+		25808C5C2456CE6A00066DBF /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 25808C5A2456C84600066DBF /* libc++.tbd */; };
 		25F05A77235EE76C003F4B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 25F05A76235EE76C003F4B9A /* AppDelegate.m */; };
 		25F05A7A235EE76C003F4B9A /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 25F05A79235EE76C003F4B9A /* SceneDelegate.m */; };
 		25F05A7D235EE76C003F4B9A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25F05A7C235EE76C003F4B9A /* ViewController.m */; };
@@ -38,9 +37,8 @@
 		250C553023FA771400D1D606 /* feature_switches.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = feature_switches.rb; sourceTree = "<group>"; };
 		250C553223FA771400D1D606 /* tool.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = tool.rb; sourceTree = "<group>"; };
 		257C5E49241673C700B0DC38 /* prebuild_sandbox_fetch.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = prebuild_sandbox_fetch.rb; sourceTree = "<group>"; };
-		257C5E4B2416741800B0DC38 /* prebuild_sandbox_sync.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = prebuild_sandbox_sync.rb; sourceTree = "<group>"; };
-		25808C05244ED90600066DBF /* ftp_tool.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = ftp_tool.rb; sourceTree = "<group>"; };
 		25808C07244EDBC900066DBF /* ftp_sync.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = ftp_sync.rb; sourceTree = "<group>"; };
+		25808C5A2456C84600066DBF /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		25A8C66E23617EDA007DEFA3 /* Podfile.lock */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile.lock; sourceTree = "<group>"; };
 		25F05A72235EE76C003F4B9A /* testpodFramework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testpodFramework.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25F05A75235EE76C003F4B9A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -65,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25808C5C2456CE6A00066DBF /* libc++.tbd in Frameworks */,
 				0A17400B8498C1A8A20864E0 /* libPods-testpodFramework.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -114,7 +113,6 @@
 				250C553023FA771400D1D606 /* feature_switches.rb */,
 				250C552F23FA771400D1D606 /* prebuild_sandbox.rb */,
 				257C5E49241673C700B0DC38 /* prebuild_sandbox_fetch.rb */,
-				257C5E4B2416741800B0DC38 /* prebuild_sandbox_sync.rb */,
 				250C552E23FA771400D1D606 /* target_checker.rb */,
 			);
 			path = helper;
@@ -124,7 +122,6 @@
 			isa = PBXGroup;
 			children = (
 				250C553223FA771400D1D606 /* tool.rb */,
-				25808C05244ED90600066DBF /* ftp_tool.rb */,
 				25808C07244EDBC900066DBF /* ftp_sync.rb */,
 			);
 			path = tool;
@@ -173,6 +170,7 @@
 		516203BE34D06EF6E27C1D13 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				25808C5A2456C84600066DBF /* libc++.tbd */,
 				6CDC8C9B0576A1F75C1D1929 /* libPods-testpodFramework.a */,
 			);
 			name = Frameworks;
@@ -198,7 +196,6 @@
 				25F05A6E235EE76C003F4B9A /* Sources */,
 				25F05A6F235EE76C003F4B9A /* Frameworks */,
 				25F05A70235EE76C003F4B9A /* Resources */,
-				8BC29D5F88C9E4C794264A23 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -247,8 +244,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				25F05A85235EE76F003F4B9A /* LaunchScreen.storyboard in Resources */,
-				257C5E4C2416741800B0DC38 /* prebuild_sandbox_sync.rb in Resources */,
-				25808C06244ED90600066DBF /* ftp_tool.rb in Resources */,
 				25808C08244EDBC900066DBF /* ftp_sync.rb in Resources */,
 				257C5E4A241673C700B0DC38 /* prebuild_sandbox_fetch.rb in Resources */,
 				25F05A82235EE76F003F4B9A /* Assets.xcassets in Resources */,
@@ -259,23 +254,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8BC29D5F88C9E4C794264A23 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testpodFramework/Pods-testpodFramework-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testpodFramework/Pods-testpodFramework-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-testpodFramework/Pods-testpodFramework-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B6C40E59D8D2983B99D26825 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -458,7 +436,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PODS_CONFIGURATION_BUILD_DIR = "${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				OTHER_LDFLAGS = "$(inherited)";
+				PODS_CONFIGURATION_BUILD_DIR = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = hzty.testpodFramework;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -479,6 +458,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited)";
+				PODS_CONFIGURATION_BUILD_DIR = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = hzty.testpodFramework;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";

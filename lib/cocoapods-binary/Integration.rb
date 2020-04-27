@@ -28,10 +28,9 @@ module Pod
         class PodSourceInstaller
 
             def install_for_prebuild!(standard_sanbox)
-                if not Podfile::DSL.allow_local_pod
-                    return if standard_sanbox.local? self.name
-                end
-
+                
+                return if standard_sanbox.local? self.name if not Podfile::DSL.allow_local_pod
+                
                 # make a symlink to target folder
                 prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(standard_sanbox)
                 # if spec used in multiple platforms, it may return multiple paths
@@ -52,7 +51,7 @@ module Pod
                     target.parent.mkpath unless target.parent.exist?
                     relative_source = source.relative_path_from(target.parent)
 
-                    FileUtils.ln_sf(relative_source, target, verbose: true)
+                    FileUtils.ln_sf(relative_source, target, :verbose => false)
                 end
                 def mirror_with_symlink(source, basefolder, target_folder)
                     target = target_folder + source.relative_path_from(basefolder)
@@ -61,7 +60,7 @@ module Pod
                 
                 def library_file_format
                     list = [".a" ,".framework", ".dSYM", ".bundle"]
-                    return list unless Pod::Podfile::DSL.uses_frameworks_off
+                    return list unless Pod::Podfile::DSL.use_frameworks_off
                     return list + HEADER_FILE_EXTNAMES
                 end
                 
@@ -78,10 +77,15 @@ module Pod
                     target_folder = standard_sanbox.pod_dir(self.name)
                     target_folder += real_file_folder.basename if target_names.count > 1
 
+                    # local pod need add to child path
+                    if standard_sanbox.local? name
+                        target_folder += Pod::PrebuildSandbox.generate_name
+                    end
                     
                     target_folder.rmtree if target_folder.exist?
                     target_folder.mkpath
 
+                    
                     path = real_file_folder
                     walk(path) do |child|
                         source = child
@@ -152,11 +156,11 @@ module Pod
                 # delete the cached files
                 target_path = self.sandbox.pod_dir(root_name)
                 target_path.rmtree if target_path.exist?
-                Logger(10010, "rmtree path", target_path)
+#                Logger(10010, "rmtree path", target_path)
 
                 support_path = sandbox.target_support_files_dir(root_name)
                 support_path.rmtree if support_path.exist?
-                Logger(10011, "rmtree path", support_path)
+#                Logger(10011, "rmtree path", support_path)
             end
 
         end
@@ -201,7 +205,6 @@ module Pod
             end
             
             def empty_source_files(spec)
-
                 spec.attributes_hash["source_files"] = []
                 #spec.attributes_hash["public_header_files"] = []
                 ["ios", "watchos", "tvos", "osx"].each do |plat|
@@ -226,7 +229,10 @@ module Pod
                 # sandbox.root valid ...
                 
                 prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(sandbox)
-                real_file_folder = prebuild_sandbox.framework_folder_path_for_target_name(name).to_s
+                prebuild_path = prebuild_sandbox.framework_folder_path_for_target_name(name)
+                prebuild_path.mkpath if not prebuild_path.exist?
+
+                real_file_folder = prebuild_path.to_s
                 
                 target_files = spec.attributes_hash[item_type] || []
                 target_files = [target_files]  if target_files.kind_of?(String)
@@ -238,11 +244,18 @@ module Pod
                     :exclude_patterns => false,
                 }
                 
+
                 path_list = path_list.glob(target_files, options).flatten.compact.uniq
                 files = []
                 path_list.each do |path|
                     file_path = path.realpath.to_s
                     file_path = file_path.gsub("#{real_file_folder}/", "") if file_path.start_with? real_file_folder
+                    
+                    if prebuild_sandbox.local? name
+                        file_path += Pod::PrebuildSandbox.generate_name
+                    end
+                    
+                    
                     files.push(file_path) if not file_path.include? ".framework" or item_type.eql?("vendored_frameworks")
                 end
 
@@ -302,7 +315,7 @@ module Pod
             dependencies_specs = dependencies_specs.flatten.uniq
     
             prebuilt_specs.each do |spec|
-                Pod::UI.puts "Prebuilding injection spec : #{spec.name}, #{spec.to_json}, #{spec.parent.to_json}"
+#                Pod::UI.puts "Prebuilding injection spec : #{spec.name}, #{spec.to_json}, #{spec.parent.to_json}"
 
                 # Use the prebuild framworks as vendered frameworks
                 # get_corresponding_targets
@@ -323,7 +336,7 @@ module Pod
                         item_path = target.static_library_name
                     end
 
-                    Pod::UI.puts "Prebuilding injection target : #{target.name}, #{item_path}, #{target.pod_name}"
+#                    Pod::UI.puts "Prebuilding injection target : #{target.name}, #{item_path}, #{target.pod_name}"
 
                     item_path = target_name + "/" + item_path if targets.count > 1
                     add_vendered_items(spec, platform, [item_path], item_type) if not dependencies_specs.include?(spec.name)
@@ -356,17 +369,12 @@ module Pod
                     spec.attributes_hash["resources"] += bundle_names.map{|n| n+".bundle"}
                 end
 
+                
                 # to avoid the warning of missing license
-                if spec.parent != nil
-                    spec_parent = spec.parent
-                else
-                    spec_parent = spec
-                end
-                
-                license = spec_parent.attributes_hash["license"] || {} if spec_parent != nil
+                root_spec = spec.root
+                license = root_spec.attributes_hash["license"]
                 spec.attributes_hash["license"] = license || {}
-                
-                license = spec.attributes_hash["license"]
+
                 
                 # 这个位置是全量保存咱不用
                 total_backup = false
@@ -382,8 +390,43 @@ module Pod
                     end
                 end
                 
-                Pod::UI.puts "Prebuilding injected spec : #{spec.to_json}"
+                
+                def add_path_prefix_plat(spec, plat)
+                    item_keys = ["source_files", "public_header_files", "vendored_libraries", "vendored_frameworks", "resources", "resource_bundles", "exclude_files"]
+                    if plat == nil
+                        item_keys.each do |key|
+                            path_list = add_path_prefix(spec.attributes_hash[key])
+                            spec.attributes_hash[key] = path_list if path_list != nil
+                        end
+                    else
+                        item = spec.attributes_hash[plat] if plat != nil
+                        if item != nil
+                            item_keys.each do |key|
+                                path_list = add_path_prefix(item[key])
+                                spec.attributes_hash[plat][key] = path_list if path_list != nil
+                            end
+                        end
+                    end
+                end
+                
 
+                def add_path_prefix(path_list)
+                    return if path_list == nil
+                    prefix = Pod::PrebuildSandbox.generate_name
+                    path_list = "#{prefix}/#{path_list}" if path_list.kind_of?(String)
+                    path_list = path_list.map{|n| "#{prefix}/#{n}"} if path_list.kind_of?(Array)
+                    path_list
+                end
+                
+                if self.sandbox.local? root_spec.name and Podfile::DSL.allow_local_pod
+                    ["ios", "watchos", "tvos", "osx"].each do |plat|
+                        add_path_prefix_plat(spec, plat)
+                    end
+                    
+                    add_path_prefix_plat(spec, nil)
+                end
+                
+#                Pod::UI.puts "Prebuilding injected spec : #{spec.to_json}"
             end
 
         end

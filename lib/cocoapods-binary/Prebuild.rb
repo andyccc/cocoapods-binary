@@ -52,6 +52,7 @@ module Pod
             end
 
             needed = (added + changed + deleted + missing)
+            
             return needed.empty?
         end
         
@@ -64,6 +65,24 @@ module Pod
             end
         end
     
+        def config_umbrella_header(output_path, target_name, headers)
+            umbrella_header = "#{output_path}/#{target_name}.framework/Headers/#{target_name}-umbrella.h"
+            umbrella_content = File.read(umbrella_header)
+            
+            private_header = ""
+            headers.each do |header|
+                name = header.basename.to_s
+                private_header.concat("\n#import \"#{name}\"") if not umbrella_content.include? name
+            end
+            
+            if not private_header.empty?
+                umbrella_content.concat("\n/// private headers begin")
+                umbrella_content.concat(private_header)
+                umbrella_content.concat("\n/// private headers end")
+            end
+
+            File.write(umbrella_header, umbrella_content)
+        end
 
         # Build the needed framework files
         def prebuild_frameworks! 
@@ -109,31 +128,20 @@ module Pod
             else
                 targets = self.pod_targets
             end
+            
+            # frameworks which mark binary true, should be filtered before prebuild
+            prebuild_framework_pod_names = []
+            podfile.target_definition_list.each do |target_definition|
+                next if target_definition.prebuild_framework_pod_names.empty?
+                prebuild_framework_pod_names += target_definition.prebuild_framework_pod_names
+            end
 
+            
             # filter local pods
-            if not Podfile::DSL.allow_local_pod
-                targets = targets.reject {|pod_target| sandbox.local?(pod_target.pod_name) }
-            end
-            
-            def config_umbrella_header(output_path, target_name, headers)
-                umbrella_header = "#{output_path}/#{target_name}.framework/Headers/#{target_name}-umbrella.h"
-                umbrella_content = File.read(umbrella_header)
-                
-                private_header = ""
-                headers.each do |header|
-                    name = header.basename.to_s
-                    private_header.concat("\n#import \"#{name}\"") if not umbrella_content.include? name
-                end
-                
-                if not private_header.empty?
-                    umbrella_content.concat("\n/// private headers begin")
-                    umbrella_content.concat(private_header)
-                    umbrella_content.concat("\n/// private headers end")
-                end
+            targets = targets.reject {|pod_target| sandbox.local?(pod_target.pod_name) } if not Podfile::DSL.allow_local_pod
 
-                File.write(umbrella_header, umbrella_content)
-            end
-            
+            # filter dependency
+            # targets = targets.select {|pod_target| prebuild_framework_pod_names.include?(pod_target.pod_name) }
             
             # build!
             Pod::UI.puts "🚀  Prebuild files (total #{targets.count})"
@@ -149,26 +157,50 @@ module Pod
                 output_path = sandbox.framework_folder_path_for_target_name(target_name)
                 output_path.mkpath unless output_path.exist?
                 
-                # check server file
-                if Podfile::DSL.cache_file
-                    generate_path = sandbox.generate_framework_path.to_s
+                need_pull = Podfile::DSL.binary_cache
+                need_push = false
+                need_build = false
 
-                    spec = target.root_spec
-                    rsync_server_url = Podfile::DSL.rsync_server_url
-                    exist_remote_framework = Pod::PrebuildFetch.fetch_remote_framework_for_target(spec.name, spec.version, generate_path, rsync_server_url)
-                    if exist_remote_framework
-                        Pod::UI.puts "Prebuilding exist remote cache, #{target_name}"
-                    else
-                        Pod::UI.puts "Prebuilding non exist remote cache, #{target_name}"
-                        Pod::Prebuild.build(sandbox_path, target, output_path, bitcode_enabled, Podfile::DSL.custom_build_options, Podfile::DSL.custom_build_options_simulator)
-                        
-                        Podfile::DSL.builded_list.push(target_name)
-                        
-                        Pod::PrebuildFetch.sync_prebuild_framework_to_server(spec.name, spec.version, generate_path, rsync_server_url)
+                generate_path = sandbox.generate_framework_path.to_s
+                rsync_server_url = Podfile::DSL.rsync_server_url
+                spec = target.root_spec
+                
+                
+                loop do
+                    if not need_pull
+                        need_build = true
+                        break
                     end
-                else
+                    
+                    if sandbox.local?target_name and not Podfile::DSL.local_binary_cache
+                        need_build = true
+                        break
+                    end
+                    
+                    exist_remote_framework = Pod::PrebuildFetch.fetch_remote_framework_for_target(spec.name, spec.version, generate_path, rsync_server_url)
+                    if not exist_remote_framework
+                        
+                        Pod::UI.puts "Prebuilding non exist remote cache, #{target_name}".blue
+                        
+                        need_build = true
+                        need_push = true
+                        break
+                    end
+                    
+                    Pod::UI.puts "Prebuilding exist remote cache, #{target_name}".green
+
+                    break
+                end
+
+                if need_build
                     Pod::Prebuild.build(sandbox_path, target, output_path, bitcode_enabled, Podfile::DSL.custom_build_options, Podfile::DSL.custom_build_options_simulator)
                 end
+                
+                if need_push
+                    Podfile::DSL.builded_list.push(target_name)
+                    Pod::PrebuildFetch.sync_prebuild_framework_to_server(spec.name, spec.version, generate_path, rsync_server_url)
+                end
+                
                 
                 
                 # public private headers
@@ -219,8 +251,8 @@ module Pod
                     # mark Generated files to Pods/xx
                     Prebuild::Passer.resources_to_copy_for_static_framework[target_name] = path_objects
                     
-                    Logger(1000, "path_objects", path_objects)
-                    Logger(1001, "target.name", target.name)
+#                    Logger(1000, "path_objects", path_objects)
+#                    Logger(1001, "target.name", target.name)
 
                 end
 
@@ -234,13 +266,13 @@ module Pod
                     relative = lib_path.relative_path_from(root_path)
                     destination = target_folder + relative
                     destination.dirname.mkpath unless destination.dirname.exist?
-                    FileUtils.cp_r(lib_path, destination, :remove_destination => true, :verbose => true)
+                    FileUtils.cp_r(lib_path, destination, :remove_destination => true, :verbose => false)
                 end
             end
             
             def copy_vendered_headers(lib_paths, root_path)
                 lib_paths.each do |lib_path|
-                    FileUtils.cp_r(lib_path, root_path, :remove_destination => true, :verbose => true)
+                    FileUtils.cp_r(lib_path, root_path, :remove_destination => true, :verbose => false)
                 end
             end
             
@@ -255,11 +287,11 @@ module Pod
                 if not target.should_build? 
                     Prebuild::Passer.target_names_to_skip_integration_framework << target.name
 
-                    FileUtils.cp_r(root_path, target_folder, :remove_destination => true, :verbose => true)
+                    FileUtils.cp_r(root_path, target_folder, :remove_destination => true, :verbose => false)
                     next
                 end
                 
-                Logger(10032, "dependencies", target.dependencies)
+#                Logger(10032, "dependencies", target.dependencies)
 
                 
                 # copy to Generated
@@ -354,7 +386,11 @@ module Pod
             old_method2.bind(self).()
             if Pod::is_prebuild_stage
 
+                UI.section '🚀  Prebuild Pods begin ...' do
+                end
+    
                 self.prebuild_frameworks!
+
             end
         end
 

@@ -17,8 +17,12 @@ module Pod
             self.root.parent
         end
         
+        def self.generate_name
+            return "Generated"
+        end
+        
         def generate_framework_path
-            self.root + "Generated"
+            self.root + PrebuildSandbox.generate_name
         end
 
         # @param name [String] pass the target.name (may containing platform suffix)

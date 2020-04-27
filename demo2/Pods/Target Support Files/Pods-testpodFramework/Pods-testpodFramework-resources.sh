@@ -97,16 +97,36 @@ EOM
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_resource "${PODS_ROOT}/PDBotKit/PDBotKit.bundle"
-  install_resource "${PODS_ROOT}/PDBotKit/zh-Hans.lproj"
-  install_resource "${PODS_ROOT}/PDBotKit/en.lproj"
+  install_resource "${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle"
   install_resource "${PODS_ROOT}/TestEngineService/TestEngineService/ST/SDK/STKouyuEngine.bundle"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/common/YSActionSheetBg_HL@2x.png"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/common/YSActionSheetBg_HL@3x.png"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/services/bee.services.logger/source/ServiceLogger_Board.xml"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/services/bee.services.logger/source/ServiceLogger_Cell.xml"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/services/bee.services.logger/source/ServiceLogger.bundle"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/services/bee.services.wizard/source/ServiceWizard_Board.xml"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/services/bee.services.wizard/source/ServiceWizard_PhotoCell.xml"
+  install_resource "${PODS_ROOT}/YSTableView/YSTableView/MouseHeader/_loading/_loading_1@2x.png"
+  install_resource "${PODS_ROOT}/YSTableView/YSTableView/MouseHeader/_loading/_loading_2@2x.png"
+  install_resource "${PODS_ROOT}/YSTableView/YSTableView/MouseHeader/_loading/_loading_3@2x.png"
+  install_resource "${PODS_ROOT}/YSTableView/YSTableView/MouseHeader/_loading/_loading_4@2x.png"
+  install_resource "${PODS_ROOT}/YSTableView/YSTableView/MouseHeader/_loading/_loading_5@2x.png"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_resource "${PODS_ROOT}/PDBotKit/PDBotKit.bundle"
-  install_resource "${PODS_ROOT}/PDBotKit/zh-Hans.lproj"
-  install_resource "${PODS_ROOT}/PDBotKit/en.lproj"
+  install_resource "${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle"
   install_resource "${PODS_ROOT}/TestEngineService/TestEngineService/ST/SDK/STKouyuEngine.bundle"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/common/YSActionSheetBg_HL@2x.png"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/common/YSActionSheetBg_HL@3x.png"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/services/bee.services.logger/source/ServiceLogger_Board.xml"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/services/bee.services.logger/source/ServiceLogger_Cell.xml"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/services/bee.services.logger/source/ServiceLogger.bundle"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/services/bee.services.wizard/source/ServiceWizard_Board.xml"
+  install_resource "${PODS_ROOT}/YSBeeFramework/YSBeeFramework/services/bee.services.wizard/source/ServiceWizard_PhotoCell.xml"
+  install_resource "${PODS_ROOT}/YSTableView/YSTableView/MouseHeader/_loading/_loading_1@2x.png"
+  install_resource "${PODS_ROOT}/YSTableView/YSTableView/MouseHeader/_loading/_loading_2@2x.png"
+  install_resource "${PODS_ROOT}/YSTableView/YSTableView/MouseHeader/_loading/_loading_3@2x.png"
+  install_resource "${PODS_ROOT}/YSTableView/YSTableView/MouseHeader/_loading/_loading_4@2x.png"
+  install_resource "${PODS_ROOT}/YSTableView/YSTableView/MouseHeader/_loading/_loading_5@2x.png"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

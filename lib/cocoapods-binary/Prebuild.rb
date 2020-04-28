@@ -148,14 +148,15 @@ module Pod
             Pod::Prebuild.remove_build_dir(sandbox_path)
             
             targets.each do |target|
-                if !target.should_build?
-                    Pod::UI.puts "Prebuilding #{target.label}"
-                    next
-                end
-                
-                target_name = target.name
                 
                 UI.section "🍭  Prebuild Ready to build #{target_name}".blue do
+                    
+                    if !target.should_build?
+                        Pod::UI.puts "🏇  Skipping #{target.label}"
+                        next
+                    end
+                    
+                    target_name = target.name
 
                     output_path = sandbox.framework_folder_path_for_target_name(target_name)
                     output_path.mkpath unless output_path.exist?

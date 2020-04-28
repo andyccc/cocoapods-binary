@@ -51,7 +51,7 @@ module Pod
                     target.parent.mkpath unless target.parent.exist?
                     relative_source = source.relative_path_from(target.parent)
 
-                    FileUtils.ln_sf(relative_source, target, :verbose => false)
+                    FileUtils.ln_sf(relative_source, target, :verbose => Pod::Podfile::DSL.verbose_log)
                 end
                 def mirror_with_symlink(source, basefolder, target_folder)
                     target = target_folder + source.relative_path_from(basefolder)
@@ -202,6 +202,8 @@ module Pod
                 vendored_items += item_path
                 
                 spec.attributes_hash[platform][item_type] = vendored_items
+                
+                Pod::UI.puts "Add vendered items #{spec}, #{platform}, #{item_type}, #{item_path}"
             end
             
             def empty_source_files(spec)
@@ -274,24 +276,24 @@ module Pod
 
                 files = files.flatten.uniq
                 
-                spec.attributes_hash["public_header_files"] = files
+                spec.attributes_hash["public_header_files"] = files if files.count > 0
                 spec.attributes_hash["source_files"] = files if not target.build_as_framework?
             end
             
             def find_vendored_libraries(target, name, platform, spec, sandbox)
                 files = get_file_patterns(target, name, platform, spec, sandbox, "vendored_libraries")
-                spec.attributes_hash["vendored_libraries"] = files
+                spec.attributes_hash["vendored_libraries"] = files if files.count > 0
             end
             
             def find_vendored_frameworks(target, name, platform, spec, sandbox)
                 target_files = spec.attributes_hash["vendored_frameworks"] || []
                 files = get_file_patterns(target, name, platform, spec, sandbox, "vendored_frameworks")
-                spec.attributes_hash["vendored_frameworks"] = files
+                spec.attributes_hash["vendored_frameworks"] = files if files.count > 0
             end
             
             def find_vendored_resources(target, name, platform, spec, sandbox)
                 files = get_file_patterns(target, name, platform, spec, sandbox, "resources")
-                spec.attributes_hash["resources"] = files
+                spec.attributes_hash["resources"] = files if files.count > 0
             end
             
             specs = self.analysis_result.specifications
@@ -313,120 +315,124 @@ module Pod
             end
         
             dependencies_specs = dependencies_specs.flatten.uniq
-    
-            prebuilt_specs.each do |spec|
-#                Pod::UI.puts "Prebuilding injection spec : #{spec.name}, #{spec.to_json}, #{spec.parent.to_json}"
 
-                # Use the prebuild framworks as vendered frameworks
-                # get_corresponding_targets
-                targets = Pod.fast_get_targets_for_pod_name(spec.root.name, self.pod_targets, cache)
-                targets.each do |target|
-                    # the item_path rule is decided when `install_for_prebuild`,
-                    # as to compitable with older version and be less wordy.
-                    item_path = ""
-                    item_type = ""
-                    target_name = target.name
-                    platform = target.platform.name.to_s
-                    
-                    if target.build_as_framework?
-                        item_type = "vendored_frameworks"
-                        item_path = target.framework_name
-                    else
-                        item_type = "vendored_libraries"
-                        item_path = target.static_library_name
-                    end
-
-#                    Pod::UI.puts "Prebuilding injection target : #{target.name}, #{item_path}, #{target.pod_name}"
-
-                    item_path = target_name + "/" + item_path if targets.count > 1
-                    add_vendered_items(spec, platform, [item_path], item_type) if not dependencies_specs.include?(spec.name)
-                    
-                    find_vendered_headers(target, target_name, platform, spec, self.sandbox)
-#                    find_vendored_libraries(target, target_name, platform, spec, self.sandbox)
-#                    find_vendored_frameworks(target, target_name, platform, spec, self.sandbox)
-#                    find_vendored_resources(target, target_name, platform, spec, self.sandbox)
-
-                    empty_source_files(spec) if target.build_as_framework?
-                end
-
+            UI.section '🔨  Integration spec ...' do
                 
-                # Clean the source files
-                # we just add the prebuilt framework to specific platform and set no source files 
-                # for all platform, so it doesn't support the sence that 'a pod perbuild for one
-                # platform and not for another platform.'
-                # empty_source_files(spec)
+                prebuilt_specs.each do |spec|
+                
+                    Pod::UI.puts "🎯  Before change, #{spec.name}, [#{self.pod_targets.count}], #{spec.to_json}"
 
-                # to remove the resurce bundle target. 
-                # When specify the "resource_bundles" in podspec, xcode will generate a bundle 
-                # target after pod install. But the bundle have already built when the prebuit
-                # phase and saved in the framework folder. We will treat it as a normal resource
-                # file.
-                # https://github.com/leavez/cocoapods-binary/issues/29
-                if spec.attributes_hash["resource_bundles"]
-                    bundle_names = spec.attributes_hash["resource_bundles"].keys
-                    spec.attributes_hash["resource_bundles"] = nil 
-                    spec.attributes_hash["resources"] ||= []
-                    spec.attributes_hash["resources"] += bundle_names.map{|n| n+".bundle"}
-                end
-
-                
-                # to avoid the warning of missing license
-                root_spec = spec.root
-                license = root_spec.attributes_hash["license"]
-                spec.attributes_hash["license"] = license || {}
-
-                
-                # 这个位置是全量保存咱不用
-                total_backup = false
-                if total_backup
-                    prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(self.sandbox)
-                    generate_path = prebuild_sandbox.generate_framework_path.to_s
-                    build_name = spec.root.name
-                    builded = Podfile::DSL.builded_list.include?build_name
-                    if builded #and spec.root.name == spec.name
-                        rsync_server_url = Podfile::DSL.rsync_server_url
-                        Pod::PrebuildFetch.sync_prebuild_framework_to_server(build_name, spec_parent.version, generate_path, rsync_server_url)
-                        Podfile::DSL.builded_list.delete(build_name)
-                    end
-                end
-                
-                
-                def add_path_prefix_plat(spec, plat)
-                    item_keys = ["source_files", "public_header_files", "vendored_libraries", "vendored_frameworks", "resources", "resource_bundles", "exclude_files"]
-                    if plat == nil
-                        item_keys.each do |key|
-                            path_list = add_path_prefix(spec.attributes_hash[key])
-                            spec.attributes_hash[key] = path_list if path_list != nil
+                    # Use the prebuild framworks as vendered frameworks
+                    # get_corresponding_targets
+                    targets = Pod.fast_get_targets_for_pod_name(spec.root.name, self.pod_targets, cache)
+                    targets.each do |target|
+                        # the item_path rule is decided when `install_for_prebuild`,
+                        # as to compitable with older version and be less wordy.
+                        item_path = ""
+                        item_type = ""
+                        target_name = target.name
+                        platform = target.platform.name.to_s
+                        
+                        if target.build_as_framework?
+                            item_type = "vendored_frameworks"
+                            item_path = target.framework_name
+                        else
+                            item_type = "vendored_libraries"
+                            item_path = target.static_library_name
                         end
-                    else
-                        item = spec.attributes_hash[plat] if plat != nil
-                        if item != nil
+
+    #                    Pod::UI.puts "Prebuilding injection target : #{target.name}, #{item_path}, #{target.pod_name}"
+
+                        item_path = target_name + "/" + item_path if targets.count > 1
+                        add_vendered_items(spec, platform, [item_path], item_type) #if not dependencies_specs.include?(spec.name)
+                        
+                        find_vendered_headers(target, target_name, platform, spec, self.sandbox)
+    #                    find_vendored_libraries(target, target_name, platform, spec, self.sandbox)
+    #                    find_vendored_frameworks(target, target_name, platform, spec, self.sandbox)
+    #                    find_vendored_resources(target, target_name, platform, spec, self.sandbox)
+
+                        empty_source_files(spec) if target.build_as_framework?
+                    end
+
+                    
+                    # Clean the source files
+                    # we just add the prebuilt framework to specific platform and set no source files
+                    # for all platform, so it doesn't support the sence that 'a pod perbuild for one
+                    # platform and not for another platform.'
+                    # empty_source_files(spec)
+
+                    # to remove the resurce bundle target.
+                    # When specify the "resource_bundles" in podspec, xcode will generate a bundle
+                    # target after pod install. But the bundle have already built when the prebuit
+                    # phase and saved in the framework folder. We will treat it as a normal resource
+                    # file.
+                    # https://github.com/leavez/cocoapods-binary/issues/29
+                    if spec.attributes_hash["resource_bundles"]
+                        bundle_names = spec.attributes_hash["resource_bundles"].keys
+                        spec.attributes_hash["resource_bundles"] = nil
+                        spec.attributes_hash["resources"] ||= []
+                        spec.attributes_hash["resources"] += bundle_names.map{|n| n+".bundle"}
+                    end
+
+                    
+                    # to avoid the warning of missing license
+                    root_spec = spec.root
+                    license = root_spec.attributes_hash["license"]
+                    spec.attributes_hash["license"] = license || {}
+
+                    
+                    # 这个位置是全量保存咱不用
+                    total_backup = false
+                    if total_backup
+                        prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(self.sandbox)
+                        generate_path = prebuild_sandbox.generate_framework_path.to_s
+                        build_name = spec.root.name
+                        builded = Podfile::DSL.builded_list.include?build_name
+                        if builded #and spec.root.name == spec.name
+                            rsync_server_url = Podfile::DSL.rsync_server_url
+                            Pod::PrebuildFetch.sync_prebuild_framework_to_server(build_name, spec_parent.version, generate_path, rsync_server_url)
+                            Podfile::DSL.builded_list.delete(build_name)
+                        end
+                    end
+                    
+                    
+                    def add_path_prefix_plat(spec, plat)
+                        item_keys = ["source_files", "public_header_files", "vendored_libraries", "vendored_frameworks", "resources", "resource_bundles", "exclude_files"]
+                        if plat == nil
                             item_keys.each do |key|
-                                path_list = add_path_prefix(item[key])
-                                spec.attributes_hash[plat][key] = path_list if path_list != nil
+                                path_list = add_path_prefix(spec.attributes_hash[key])
+                                spec.attributes_hash[key] = path_list if path_list != nil
+                            end
+                        else
+                            item = spec.attributes_hash[plat] if plat != nil
+                            if item != nil
+                                item_keys.each do |key|
+                                    path_list = add_path_prefix(item[key])
+                                    spec.attributes_hash[plat][key] = path_list if path_list != nil
+                                end
                             end
                         end
                     end
-                end
-                
+                    
 
-                def add_path_prefix(path_list)
-                    return if path_list == nil
-                    prefix = Pod::PrebuildSandbox.generate_name
-                    path_list = "#{prefix}/#{path_list}" if path_list.kind_of?(String)
-                    path_list = path_list.map{|n| "#{prefix}/#{n}"} if path_list.kind_of?(Array)
-                    path_list
-                end
-                
-                if self.sandbox.local? root_spec.name and Podfile::DSL.allow_local_pod
-                    ["ios", "watchos", "tvos", "osx"].each do |plat|
-                        add_path_prefix_plat(spec, plat)
+                    def add_path_prefix(path_list)
+                        return if path_list == nil
+                        prefix = Pod::PrebuildSandbox.generate_name
+                        path_list = "#{prefix}/#{path_list}" if path_list.kind_of?(String)
+                        path_list = path_list.map{|n| "#{prefix}/#{n}"} if path_list.kind_of?(Array)
+                        path_list
                     end
                     
-                    add_path_prefix_plat(spec, nil)
+                    if self.sandbox.local? root_spec.name and Podfile::DSL.allow_local_pod
+                        ["ios", "watchos", "tvos", "osx"].each do |plat|
+                            add_path_prefix_plat(spec, plat)
+                        end
+                        
+                        add_path_prefix_plat(spec, nil)
+                    end
+                    
+                    Pod::UI.puts "🍭  After change, #{spec.name}, [#{targets.count}], #{spec.to_json}\n"
                 end
-                
-#                Pod::UI.puts "Prebuilding injected spec : #{spec.to_json}"
             end
 
         end

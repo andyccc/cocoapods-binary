@@ -19,7 +19,7 @@ def rsync_file(type, spath, dpath)
     begin
         ret = `rsync -az #{spath} #{dpath}`
         
-        Pod::UI.puts "🚀  #{type} rsync => #{spath}, #{dpath}, #{ret}"
+        Pod::UI.puts "📡  #{type} rsync => #{spath}, #{dpath}, #{ret}"
 
         if ret.empty?
             return true
@@ -32,13 +32,13 @@ def rsync_file(type, spath, dpath)
 end
 
 def zip_file(spath, dpath, file_name)
-    Pod::UI.puts "🚀  zip_file => #{spath}, #{dpath}, #{file_name}"
+    Pod::UI.puts "📥  zip_file => #{spath}, #{dpath}, #{file_name}"
     
     `cd #{spath} && zip -qr #{dpath} #{file_name}`
 end
 
 def unzip_file(spath, dpath)
-    Pod::UI.puts "🚀  unzip_file => #{spath}, #{dpath}"
+    Pod::UI.puts "📤  unzip_file => #{spath}, #{dpath}"
 
     `unzip -oq #{spath} -d #{dpath}`
 end

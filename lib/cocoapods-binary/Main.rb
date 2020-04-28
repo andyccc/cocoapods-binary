@@ -5,7 +5,14 @@ require_relative 'tool/tool'
 module Pod    
     class Podfile
         module DSL
-
+            def set_verbose_log(t)
+                DSL.verbose_log = t
+            end
+            
+            def set_clean_build_dir(t)
+                DSL.clean_build_dir = t
+            end
+        
             def set_rsync_server_url(url)
                 DSL.rsync_server_url = url
             end
@@ -95,6 +102,12 @@ module Pod
             
             private
             
+            class_attr_accessor :verbose_log
+            verbose_log = false
+
+            class_attr_accessor :clean_build_dir
+            clean_build_dir = true
+
             class_attr_accessor :binary_cache
             binary_cache = true
             

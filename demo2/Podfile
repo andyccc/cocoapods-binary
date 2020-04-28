@@ -24,6 +24,7 @@ enable_binary_cache(true)
 set_rsync_server_url("rsync_backup@192.168.0.201::out")
 # 设置同步文件夹
 #set_rsync_path("/Users/yans/Desktop/ftp")
+set_clean_build_dir(false)
 
 target 'testpodFramework' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -36,22 +37,22 @@ target 'testpodFramework' do
     all_local_binary!
     
     # 保留源码，可能工程文件会很大
-    # keep_source_for_prebuilt!
+     keep_source_for_prebuilt!
     
     # 开放framework 的private header
     # public_headers_for_prebuilt!
     
-    pod 'FTPopOverMenu', :path => './FTPopOverMenu', :binary => true
-#    pod 'MPNotificationView'
-#    pod 'Masonry', :binary => true
+    pod 'FTPopOverMenu', :path => './FTPopOverMenu', :binary => true, :project_name => 'Dev'
+    pod 'MPNotificationView'
+    pod 'Masonry', :project_name => 'Github'
 
 
 #    pod 'YSBeeFramework', :path => './YSBeeFramework', :binary => true
 #    pod 'YSBeeFramework', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSBeeFramework.git', :tag => '1.3.1'#, branch: 'core-0.6.0'
 
-#    pod 'YSTableView/MouseHeader', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSTableView.git', :tag => '0.2.3'# 老鼠 MouseHeader
+    pod 'YSTableView/MouseHeader', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSTableView.git', :tag => '0.2.3'# 老鼠 MouseHeader
 
-#    pod 'TestEngineService', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7', :binary => false
+    pod 'TestEngineService', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7', :binary => false
 
 #    pod 'TestEngineService/Core', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
 #    pod 'TestEngineService/ST', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
@@ -59,9 +60,13 @@ target 'testpodFramework' do
 
 
     
-#    pod 'Bugly'
-#    pod 'PDBotKit' #智能客服
+    pod 'Bugly', :project_name => 'Framework'
+    pod 'PDBotKit', :project_name => 'Framework'
+    pod 'YSWCDBService', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSWCDBService.git', :tag => '1.0.6'
 
+    pod 'WCDBOptimizedSQLCipher'
+    pod 'SQLiteRepairKit'
+    pod 'WCDB'
 end
 
 

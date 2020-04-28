@@ -23,12 +23,12 @@ module Pod
             
             framework_url = "#{rsync_server_url}/#{zip_framework}"
             
-            Pod::UI.puts "☁️  Prebuilding Fetch remote fameworks, #{zip_framework}"
+            Pod::UI.puts "🚚  Fetch remote fameworks, #{zip_framework}"
             
             ret = rsync_file("Pull", framework_url, zip_framework_path)
             if not ret
-                Pod::UI.puts "☁️  Prebuilding Retry fetch remote fameworks, #{zip_framework}"
-                FileUtils.rm_rf zip_framework_path, :verbose => false
+                Pod::UI.puts "🚚  Retry fetch remote fameworks, #{zip_framework}"
+                FileUtils.rm_rf zip_framework_path, :verbose => Pod::Podfile::DSL.verbose_log
                 ret = rsync_file("Pull", framework_url, zip_framework_path)
             end
             
@@ -38,7 +38,7 @@ module Pod
             
             unzip_file(zip_framework_path, generate_path)
             
-            FileUtils.rm_rf zip_framework_path, :verbose => false
+            FileUtils.rm_rf zip_framework_path, :verbose => Pod::Podfile::DSL.verbose_log
             true
         end
         
@@ -52,23 +52,23 @@ module Pod
             # 本地 archive 失败
             return if !File.exist?(target_path) || Dir.empty?(target_path)
             
-            Pod::UI.puts "☁️  Prebuilding To Sync Once, #{zip_framework}, #{generate_path}"
+            Pod::UI.puts "🚚  To Sync Once, #{zip_framework}, #{generate_path}"
             
             zip_file(generate_path, zip_framework_path, name) unless File.exist?(zip_framework_path)
             
             ret = rsync_file("Push", zip_framework_path, rsync_server_url)
             if ret
-                FileUtils.rm_rf zip_framework_path, :verbose => false
+                FileUtils.rm_rf zip_framework_path, :verbose => Pod::Podfile::DSL.verbose_log
             else
-                Pod::UI.puts "☁️  Prebuilding ReTry To Sync Once, #{zip_framework}, #{generate_path}"
+                Pod::UI.puts "🚚  ReTry To Sync Once, #{zip_framework}, #{generate_path}"
                 
                 ret = rsync_file("Push", zip_framework_path, rsync_server_url)
             end
             
             if ret
-                Pod::UI.puts "☁️  Prebuilding To Sync Ok, #{zip_framework}, #{generate_path}"
+                Pod::UI.puts "🚚  To Sync Ok, #{zip_framework}, #{generate_path}"
             else
-                Pod::UI.puts "☁️  Prebuilding To Sync Fail, #{zip_framework}, #{generate_path}"
+                Pod::UI.puts "🚚  To Sync Fail, #{zip_framework}, #{generate_path}"
             end
         end
         

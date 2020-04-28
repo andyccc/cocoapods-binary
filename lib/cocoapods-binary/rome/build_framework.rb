@@ -24,7 +24,7 @@ def build_for_iosish_platform(sandbox,
   deployment_target = target.platform.deployment_target.to_s
   
   target_label = target.label # name with platform if it's used in multiple platforms
-  Pod::UI.puts "🚀  Prebuilding build -> #{target_label}...".blue
+  Pod::UI.puts "🚀  Build -> #{target_label}...".blue
   
   other_options = []
   # bitcode enabled
@@ -52,6 +52,8 @@ def build_for_iosish_platform(sandbox,
       simulator_binary = simulator_framework_path
   end
   
+  puts "🚀  Check binaries, name : #{target_name}, build_dir: #{build_dir}, device : #{device_binary}, exist : #{File.file?(device_binary)}, simulator : #{simulator_binary}, exist : #{File.file?(simulator_binary)}".blue
+  
   return unless File.file?(device_binary) && File.file?(simulator_binary)
   
   # copy header to first folder
@@ -60,7 +62,7 @@ def build_for_iosish_platform(sandbox,
 #  if ps.directory?
 #      ps.children.each do |child|
 #          Pod::UI.puts "Prebuilding copy header, #{child}, #{output_path}"
-#          FileUtils.cp_r(child, output_path, :remove_destination => false, :verbose => false)
+#          FileUtils.cp_r(child, output_path, :remove_destination => false, :verbose => true)
 #      end
 #  end
   
@@ -85,7 +87,7 @@ def build_for_iosish_platform(sandbox,
   
   # output
   output_path.mkpath unless output_path.exist?
-  FileUtils.mv device_framework_path, output_path, :force => true, :verbose => false
+  FileUtils.mv device_framework_path, output_path, :force => true, :verbose => Pod::Podfile::DSL.verbose_log
 
   
 end
@@ -99,10 +101,10 @@ def handle_the_dSYM(output_path, module_name, device_framework_path, simulator_f
             tmp_lipoed_binary_path = "#{output_path}/#{module_name}.draft"
             lipo_log = `lipo -create -output #{tmp_lipoed_binary_path} #{device_dsym}/Contents/Resources/DWARF/#{module_name} #{simulator_dsym}/Contents/Resources/DWARF/#{module_name}`
             Pod::UI.puts lipo_log unless File.exist?(tmp_lipoed_binary_path)
-            FileUtils.mv tmp_lipoed_binary_path, "#{device_framework_path}.dSYM/Contents/Resources/DWARF/#{module_name}", :force => true, :verbose => false
+            FileUtils.mv tmp_lipoed_binary_path, "#{device_framework_path}.dSYM/Contents/Resources/DWARF/#{module_name}", :force => true, :verbose => Pod::Podfile::DSL.verbose_log
         end
         # move
-        FileUtils.mv device_dsym, output_path, :force => true, :verbose => false
+        FileUtils.mv device_dsym, output_path, :force => true, :verbose => Pod::Podfile::DSL.verbose_log
     end
 end
 
@@ -137,7 +139,10 @@ def combine_the_binaries(build_dir, target_name, device_binary, simulator_binary
     tmp_lipoed_binary_path = "#{build_dir}/#{target_name}"
     lipo_log = `lipo -create -output #{tmp_lipoed_binary_path} #{device_binary} #{simulator_binary}`
     Pod::UI.puts lipo_log unless File.exist?(tmp_lipoed_binary_path)
-    FileUtils.mv tmp_lipoed_binary_path, device_binary, :force => true, :verbose => false
+    
+    puts "🚀  Combine binaries, name : #{target_name}, build_dir: #{build_dir}, device : #{device_binary}, exist : #{File.file?(device_binary)}, simulator : #{simulator_binary}, exist : #{File.file?(simulator_binary)}, binary_path : #{tmp_lipoed_binary_path}, exist : #{File.exist?(tmp_lipoed_binary_path)}".blue
+
+    FileUtils.mv tmp_lipoed_binary_path, device_binary, :force => true, :verbose => Pod::Podfile::DSL.verbose_log
 end
 
 def collect_swiftmodule(module_name, device_framework_path, simulator_framework_path)
@@ -159,7 +164,7 @@ def get_framework_name(target)
     if target.build_as_framework?
         framework_name = "#{module_name}.framework"
     else
-        framework_name = "lib#{module_name}.a"
+        framework_name = "lib#{target.name}.a"
     end
     
     # 待定
@@ -249,7 +254,7 @@ module Pod
     
       # frameworks.each do |framework|
       #   FileUtils.mkdir_p destination
-      #   FileUtils.cp_r framework, destination, :remove_destination => true, :verbose => false
+      #   FileUtils.cp_r framework, destination, :remove_destination => true, :verbose => true
       # end
       # build_dir.rmtree if build_dir.directory?
     end

@@ -154,125 +154,129 @@ module Pod
                 end
                 
                 target_name = target.name
-                output_path = sandbox.framework_folder_path_for_target_name(target_name)
-                output_path.mkpath unless output_path.exist?
                 
-                need_pull = Podfile::DSL.binary_cache
-                need_push = false
-                need_build = false
+                UI.section "🍭  Prebuild Ready to build #{target_name}".blue do
 
-                generate_path = sandbox.generate_framework_path.to_s
-                rsync_server_url = Podfile::DSL.rsync_server_url
-                spec = target.root_spec
-                
-                
-                loop do
-                    if not need_pull
-                        need_build = true
-                        break
-                    end
+                    output_path = sandbox.framework_folder_path_for_target_name(target_name)
+                    output_path.mkpath unless output_path.exist?
                     
-                    if sandbox.local?target_name and not Podfile::DSL.local_binary_cache
-                        need_build = true
-                        break
-                    end
+                    need_pull = Podfile::DSL.binary_cache
+                    need_push = false
+                    need_build = false
+
+                    generate_path = sandbox.generate_framework_path.to_s
+                    rsync_server_url = Podfile::DSL.rsync_server_url
+                    spec = target.root_spec
                     
-                    exist_remote_framework = Pod::PrebuildFetch.fetch_remote_framework_for_target(spec.name, spec.version, generate_path, rsync_server_url)
-                    if not exist_remote_framework
-                        
-                        Pod::UI.puts "Prebuilding non exist remote cache, #{target_name}".blue
-                        
-                        need_build = true
-                        need_push = true
-                        break
-                    end
                     
-                    Pod::UI.puts "Prebuilding exist remote cache, #{target_name}".green
-
-                    break
-                end
-
-                if need_build
-                    Pod::Prebuild.build(sandbox_path, target, output_path, bitcode_enabled, Podfile::DSL.custom_build_options, Podfile::DSL.custom_build_options_simulator)
-                end
-                
-                if need_push
-                    Podfile::DSL.builded_list.push(target_name)
-                    Pod::PrebuildFetch.sync_prebuild_framework_to_server(spec.name, spec.version, generate_path, rsync_server_url)
-                end
-                
-                
-                
-                # public private headers
-                if Podfile::DSL.allow_public_headers and target.build_as_framework?
-                    headers = []
-                    target.file_accessors.each do |fa|
-                        headers += fa.headers || []
-                    end
-
-                    config_umbrella_header(output_path, target_name, headers)
-                end
-
-                
-                #  ...
-                #target.static_framework
-                #target.build_as_dynamic_library
-                #target.build_as_static_framework
-                
-                # save the resource paths for later installing
-                if !target.resource_paths.empty? #and target.build_as_dynamic?
-                    framework_path = output_path
-                    framework_path = framework_path + target.framework_name if target.build_as_framework?
-                    
-                    standard_sandbox_path = sandbox.standard_sanbox_path
-
-                    resources = begin
-                        if Pod::VERSION.start_with? "1.5"
-                            target.resource_paths
-                        else
-                            # resource_paths is Hash{String=>Array<String>} on 1.6 and above
-                            # (use AFNetworking to generate a demo data)
-                            # https://github.com/leavez/cocoapods-binary/issues/50
-                            target.resource_paths.values.flatten
+                    loop do
+                        if not need_pull
+                            need_build = true
+                            break
                         end
-                    end
-                    raise "Wrong type: #{resources}" unless resources.kind_of? Array
+                        
+                        if sandbox.local?target_name and not Podfile::DSL.local_binary_cache
+                            need_build = true
+                            break
+                        end
+                        
+                        exist_remote_framework = Pod::PrebuildFetch.fetch_remote_framework_for_target(spec.name, spec.version, generate_path, rsync_server_url)
+                        if not exist_remote_framework
+                            Pod::UI.puts "💦  Non exist remote cache, #{target_name}".blue
+                            
+                            need_build = true
+                            need_push = true
+                            break
+                        end
+                        
+                        Pod::UI.puts "🎁  Exist remote cache, #{target_name}".green
 
-                    path_objects = resources.map do |path|
-                        object = Prebuild::Passer::ResourcePath.new
-                        #object.real_file_path = framework_path + File.basename(path)
-                        object.real_file_path = path.gsub('${PODS_ROOT}', sandbox.generate_framework_path.to_s) if path.start_with? '${PODS_ROOT}'
-                        
-                        object.target_file_path = path.gsub('${PODS_ROOT}', standard_sandbox_path.to_s) if path.start_with? '${PODS_ROOT}'
-                        object.target_file_path = path.gsub("${PODS_CONFIGURATION_BUILD_DIR}", standard_sandbox_path.to_s) if path.start_with? "${PODS_CONFIGURATION_BUILD_DIR}"
-                        
-                        object
+                        break
                     end
-                    # mark Generated files to Pods/xx
-                    Prebuild::Passer.resources_to_copy_for_static_framework[target_name] = path_objects
+
+                    if need_build
+                        Pod::Prebuild.build(sandbox_path, target, output_path, bitcode_enabled, Podfile::DSL.custom_build_options, Podfile::DSL.custom_build_options_simulator)
+                    end
                     
-#                    Logger(1000, "path_objects", path_objects)
-#                    Logger(1001, "target.name", target.name)
+                    if need_push
+                        Podfile::DSL.builded_list.push(target_name)
+                        Pod::PrebuildFetch.sync_prebuild_framework_to_server(spec.name, spec.version, generate_path, rsync_server_url)
+                    end
+                    
+                    
+                    
+                    # public private headers
+                    if Podfile::DSL.allow_public_headers and target.build_as_framework?
+                        headers = []
+                        target.file_accessors.each do |fa|
+                            headers += fa.headers || []
+                        end
 
+                        config_umbrella_header(output_path, target_name, headers)
+                    end
+
+                    
+                    #  ...
+                    #target.static_framework
+                    #target.build_as_dynamic_library
+                    #target.build_as_static_framework
+                    
+                    # save the resource paths for later installing
+                    if !target.resource_paths.empty? #and target.build_as_dynamic?
+                        framework_path = output_path
+                        framework_path = framework_path + target.framework_name if target.build_as_framework?
+                        
+                        standard_sandbox_path = sandbox.standard_sanbox_path
+
+                        resources = begin
+                            if Pod::VERSION.start_with? "1.5"
+                                target.resource_paths
+                            else
+                                # resource_paths is Hash{String=>Array<String>} on 1.6 and above
+                                # (use AFNetworking to generate a demo data)
+                                # https://github.com/leavez/cocoapods-binary/issues/50
+                                target.resource_paths.values.flatten
+                            end
+                        end
+                        raise "Wrong type: #{resources}" unless resources.kind_of? Array
+
+                        path_objects = resources.map do |path|
+                            object = Prebuild::Passer::ResourcePath.new
+                            #object.real_file_path = framework_path + File.basename(path)
+                            object.real_file_path = path.gsub('${PODS_ROOT}', sandbox.generate_framework_path.to_s) if path.start_with? '${PODS_ROOT}'
+                            
+                            object.target_file_path = path.gsub('${PODS_ROOT}', standard_sandbox_path.to_s) if path.start_with? '${PODS_ROOT}'
+                            object.target_file_path = path.gsub("${PODS_CONFIGURATION_BUILD_DIR}", standard_sandbox_path.to_s) if path.start_with? "${PODS_CONFIGURATION_BUILD_DIR}"
+                            
+                            object
+                        end
+                        # mark Generated files to Pods/xx
+                        Prebuild::Passer.resources_to_copy_for_static_framework[target_name] = path_objects
+                        
+    #                    Logger(1000, "path_objects", path_objects)
+    #                    Logger(1001, "target.name", target.name)
+
+                    end
+                
                 end
 
             end
             
             # remove build path
-            Pod::Prebuild.remove_build_dir(sandbox_path)
+            Pod::Prebuild.remove_build_dir(sandbox_path) if Podfile::DSL.clean_build_dir
             
             def copy_vendered_files(lib_paths, root_path, target_folder)
                 lib_paths.each do |lib_path|
                     relative = lib_path.relative_path_from(root_path)
                     destination = target_folder + relative
                     destination.dirname.mkpath unless destination.dirname.exist?
-                    FileUtils.cp_r(lib_path, destination, :remove_destination => true, :verbose => false)
+                    FileUtils.cp_r(lib_path, destination, :remove_destination => true, :verbose => Pod::Podfile::DSL.verbose_log)
                 end
             end
             
             def copy_vendered_headers(lib_paths, root_path)
                 lib_paths.each do |lib_path|
-                    FileUtils.cp_r(lib_path, root_path, :remove_destination => true, :verbose => false)
+                    FileUtils.cp_r(lib_path, root_path, :remove_destination => true, :verbose => Pod::Podfile::DSL.verbose_log)
                 end
             end
             
@@ -287,7 +291,7 @@ module Pod
                 if not target.should_build? 
                     Prebuild::Passer.target_names_to_skip_integration_framework << target.name
 
-                    FileUtils.cp_r(root_path, target_folder, :remove_destination => true, :verbose => false)
+                    FileUtils.cp_r(root_path, target_folder, :remove_destination => true, :verbose => Pod::Podfile::DSL.verbose_log)
                     next
                 end
                 
@@ -386,10 +390,9 @@ module Pod
             old_method2.bind(self).()
             if Pod::is_prebuild_stage
 
-                UI.section '🚀  Prebuild Pods begin ...' do
+                UI.section '🔨  Prebuild Pods begin ...' do
+                    self.prebuild_frameworks!
                 end
-    
-                self.prebuild_frameworks!
 
             end
         end

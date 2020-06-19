@@ -37,7 +37,8 @@ module Pod
                     local = (options[:path] != nil)
                 end
                 
-                if should_prebuild# and (not local)
+
+                if should_prebuild  # and (not local)
                     old_method.bind(self).(name, *args)
                 end
             end

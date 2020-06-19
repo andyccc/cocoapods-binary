@@ -316,11 +316,12 @@ module Pod
         
             dependencies_specs = dependencies_specs.flatten.uniq
 
-            UI.section '🔨  Integration spec ...' do
+            UI.section '🔨  Integration spec ... ' do
                 
                 prebuilt_specs.each do |spec|
                 
                     Pod::UI.puts "🎯  Before change, #{spec.name}, [#{self.pod_targets.count}], #{spec.to_json}"
+                    
 
                     # Use the prebuild framworks as vendered frameworks
                     # get_corresponding_targets

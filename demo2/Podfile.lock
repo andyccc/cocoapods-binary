@@ -1,96 +1,33 @@
 PODS:
-  - Bugly (2.5.2)
-  - FTPopOverMenu (2.0.9)
-  - Masonry (1.1.0)
-  - MJRefresh (3.0.8)
   - MPNotificationView (1.1.1)
-  - PDBotKit (2.7.0)
-  - SQLiteRepairKit (1.2.2):
-    - WCDBOptimizedSQLCipher (~> 1.2.0)
-  - TestEngineService (0.4.7):
-    - TestEngineService/Core (= 0.4.7)
-    - TestEngineService/CV (= 0.4.7)
-    - TestEngineService/ST (= 0.4.7)
-  - TestEngineService/Core (0.4.7)
-  - TestEngineService/CV (0.4.7):
-    - TestEngineService/Core
-  - TestEngineService/ST (0.4.7):
-    - TestEngineService/Core
-  - WCDB (1.0.7.5):
-    - SQLiteRepairKit (~> 1.2.0)
-    - WCDBOptimizedSQLCipher (~> 1.2.0)
-  - WCDBOptimizedSQLCipher (1.2.1)
-  - YSTableView/MouseHeader (0.2.3):
-    - YSTableView/PullPushRefresh
-  - YSTableView/PullPushRefresh (0.2.3):
-    - MJRefresh (~> 3.0.8)
-    - YSTableView/TableView
-  - YSTableView/TableView (0.2.3)
-  - YSWCDBService (1.0.6):
-    - WCDB
+  - NullSafe (2.0)
+  - YSNSObjectSafe (1.1.0):
+    - NullSafe
 
 DEPENDENCIES:
-  - Bugly
-  - FTPopOverMenu (from `./FTPopOverMenu`)
-  - Masonry
   - MPNotificationView
-  - PDBotKit
-  - SQLiteRepairKit
-  - TestEngineService (from `https://bitbucket.org/tytto/testengineservice.git`, tag `0.4.7`)
-  - WCDB
-  - WCDBOptimizedSQLCipher
-  - YSTableView/MouseHeader (from `http://192.168.3.31/TY_iOS_Librarys/YSTableView.git`, tag `0.2.3`)
-  - YSWCDBService (from `http://192.168.3.31/TY_iOS_Librarys/YSWCDBService.git`, tag `1.0.6`)
+  - YSNSObjectSafe (from `http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git`, tag `1.1.0`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - Bugly
-    - Masonry
-    - MJRefresh
     - MPNotificationView
-    - PDBotKit
-    - SQLiteRepairKit
-    - WCDB
-    - WCDBOptimizedSQLCipher
+    - NullSafe
 
 EXTERNAL SOURCES:
-  FTPopOverMenu:
-    :path: "./FTPopOverMenu"
-  TestEngineService:
-    :git: https://bitbucket.org/tytto/testengineservice.git
-    :tag: 0.4.7
-  YSTableView:
-    :git: http://192.168.3.31/TY_iOS_Librarys/YSTableView.git
-    :tag: 0.2.3
-  YSWCDBService:
-    :git: http://192.168.3.31/TY_iOS_Librarys/YSWCDBService.git
-    :tag: 1.0.6
+  YSNSObjectSafe:
+    :git: http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git
+    :tag: 1.1.0
 
 CHECKOUT OPTIONS:
-  TestEngineService:
-    :git: https://bitbucket.org/tytto/testengineservice.git
-    :tag: 0.4.7
-  YSTableView:
-    :git: http://192.168.3.31/TY_iOS_Librarys/YSTableView.git
-    :tag: 0.2.3
-  YSWCDBService:
-    :git: http://192.168.3.31/TY_iOS_Librarys/YSWCDBService.git
-    :tag: 1.0.6
+  YSNSObjectSafe:
+    :git: http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git
+    :tag: 1.1.0
 
 SPEC CHECKSUMS:
-  Bugly: dbac48b55ad469a97cc4321045cd50df8f63d44f
-  FTPopOverMenu: 82782ddb42712fcd7747d072afd8f5e8cb2303eb
-  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MJRefresh: fafde8f18f4afd66b434331a9beb67a6c0264056
   MPNotificationView: 0f342a4a5211f75ba9b395552af6c121b4730249
-  PDBotKit: a6b51f0386d13ab4aa92519668be8f34f79d3ceb
-  SQLiteRepairKit: 35aaae5a8838adb85f5b1eb4d796055be6060a4b
-  TestEngineService: 26bb56eee5f7d3eb864ea50eeaa07971d6c4b96f
-  WCDB: 8e90babdeb7784c569353a4bd22a66c0a175a882
-  WCDBOptimizedSQLCipher: baf44493b0c7a3d49e97bc5b64a3856f6428ddd1
-  YSTableView: 76bda381971fbced06135656c8e8824e51f8cedd
-  YSWCDBService: d45ff8de36423fbd815ea36b24b2c541052bcd3e
+  NullSafe: 948feba938f03abede5ed3758694a9fe5b3a65ce
+  YSNSObjectSafe: 2c98fc2aa9284fa8bd4e4047e3a9c56a1d206c3f
 
-PODFILE CHECKSUM: f95253b40a879167ca4c670b0bdf589f61d00ab9
+PODFILE CHECKSUM: d0c5461230294883ac02a09acf97501a0142cae7
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3

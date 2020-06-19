@@ -5,8 +5,16 @@ module Pod
 
         # [String] standard_sandbox_path
         def self.from_standard_sanbox_path(path)
-            prebuild_sandbox_path = Pathname.new(path).realpath + "_Prebuild"
-            self.new(prebuild_sandbox_path)
+            self.new(self.prebuild_sanbox_path(path))
+        end
+        
+        def self.prebuild_folder
+            return "_Prebuild"
+        end
+        
+        def self.prebuild_sanbox_path(path)
+            prebuild_sandbox_path = Pathname.new(path).realpath + self.prebuild_folder
+            prebuild_sandbox_path
         end
 
         def self.from_standard_sandbox(sandbox)

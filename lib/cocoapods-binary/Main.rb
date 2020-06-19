@@ -29,6 +29,13 @@ module Pod
                 DSL.local_binary_cache = t
             end
 
+            def set_binary_white_list(t)
+                DSL.binary_white_list = t
+            end
+            
+            def set_binary_cache_repo(t)
+                DSL.binary_cache_repo = t
+            end
         
             # Enable prebuiding for all pods
             # it has a lower priority to other binary settings
@@ -114,11 +121,18 @@ module Pod
             class_attr_accessor :local_binary_cache
             local_binary_cache = false
             
+            class_attr_accessor :binary_white_list
+            self.binary_white_list = []
+            
             class_attr_accessor :builded_list
             self.builded_list = []
             
             class_attr_accessor :rsync_server_url
             rsync_server_url = ""
+            
+            # 待实现
+            class_attr_accessor :binary_cache_repo
+            binary_cache_repo = ""
 
             class_attr_accessor :prebuild_all
             prebuild_all = false

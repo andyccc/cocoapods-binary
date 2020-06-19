@@ -3,11 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0A17400B8498C1A8A20864E0 /* libPods-testpodFramework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDC8C9B0576A1F75C1D1929 /* libPods-testpodFramework.a */; };
+		254360B6249C9849007D3174 /* code.rb in Resources */ = {isa = PBXBuildFile; fileRef = 254360A5249C9849007D3174 /* code.rb */; };
+		254360BC249C9849007D3174 /* bin.rb in Resources */ = {isa = PBXBuildFile; fileRef = 254360AD249C9849007D3174 /* bin.rb */; };
+		254360BD249C9849007D3174 /* command.rb in Resources */ = {isa = PBXBuildFile; fileRef = 254360AE249C9849007D3174 /* command.rb */; };
 		257C5E4A241673C700B0DC38 /* prebuild_sandbox_fetch.rb in Resources */ = {isa = PBXBuildFile; fileRef = 257C5E49241673C700B0DC38 /* prebuild_sandbox_fetch.rb */; };
 		25808C08244EDBC900066DBF /* ftp_sync.rb in Resources */ = {isa = PBXBuildFile; fileRef = 25808C07244EDBC900066DBF /* ftp_sync.rb */; };
 		25808C5C2456CE6A00066DBF /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 25808C5A2456C84600066DBF /* libc++.tbd */; };
@@ -36,6 +39,9 @@
 		250C552F23FA771400D1D606 /* prebuild_sandbox.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = prebuild_sandbox.rb; sourceTree = "<group>"; };
 		250C553023FA771400D1D606 /* feature_switches.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = feature_switches.rb; sourceTree = "<group>"; };
 		250C553223FA771400D1D606 /* tool.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = tool.rb; sourceTree = "<group>"; };
+		254360A5249C9849007D3174 /* code.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = code.rb; path = bin/code.rb; sourceTree = "<group>"; };
+		254360AD249C9849007D3174 /* bin.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = bin.rb; sourceTree = "<group>"; };
+		254360AE249C9849007D3174 /* command.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = command.rb; sourceTree = "<group>"; };
 		257C5E49241673C700B0DC38 /* prebuild_sandbox_fetch.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = prebuild_sandbox_fetch.rb; sourceTree = "<group>"; };
 		25808C07244EDBC900066DBF /* ftp_sync.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = ftp_sync.rb; sourceTree = "<group>"; };
 		25808C5A2456C84600066DBF /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -89,6 +95,8 @@
 				250C552523FA771400D1D606 /* Main.rb */,
 				250C552623FA771400D1D606 /* Prebuild.rb */,
 				250C552723FA771400D1D606 /* Integration.rb */,
+				2543609B249C9849007D3174 /* command */,
+				254360AE249C9849007D3174 /* command.rb */,
 				250C552823FA771400D1D606 /* rome */,
 				250C552A23FA771400D1D606 /* helper */,
 				250C553123FA771400D1D606 /* tool */,
@@ -107,12 +115,12 @@
 		250C552A23FA771400D1D606 /* helper */ = {
 			isa = PBXGroup;
 			children = (
+				250C553023FA771400D1D606 /* feature_switches.rb */,
+				250C552D23FA771400D1D606 /* names.rb */,
 				250C552B23FA771400D1D606 /* passer.rb */,
 				250C552C23FA771400D1D606 /* podfile_options.rb */,
-				250C552D23FA771400D1D606 /* names.rb */,
-				250C553023FA771400D1D606 /* feature_switches.rb */,
-				250C552F23FA771400D1D606 /* prebuild_sandbox.rb */,
 				257C5E49241673C700B0DC38 /* prebuild_sandbox_fetch.rb */,
+				250C552F23FA771400D1D606 /* prebuild_sandbox.rb */,
 				250C552E23FA771400D1D606 /* target_checker.rb */,
 			);
 			path = helper;
@@ -125,6 +133,23 @@
 				25808C07244EDBC900066DBF /* ftp_sync.rb */,
 			);
 			path = tool;
+			sourceTree = "<group>";
+		};
+		2543609B249C9849007D3174 /* command */ = {
+			isa = PBXGroup;
+			children = (
+				254360A5249C9849007D3174 /* code.rb */,
+				2543609C249C9849007D3174 /* bin */,
+				254360AD249C9849007D3174 /* bin.rb */,
+			);
+			path = command;
+			sourceTree = "<group>";
+		};
+		2543609C249C9849007D3174 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = bin;
 			sourceTree = "<group>";
 		};
 		25F05A69235EE76C003F4B9A = {
@@ -196,7 +221,6 @@
 				25F05A6E235EE76C003F4B9A /* Sources */,
 				25F05A6F235EE76C003F4B9A /* Frameworks */,
 				25F05A70235EE76C003F4B9A /* Resources */,
-				EE920D4B70F98FCB44E97C20 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -247,8 +271,11 @@
 				25F05A85235EE76F003F4B9A /* LaunchScreen.storyboard in Resources */,
 				25808C08244EDBC900066DBF /* ftp_sync.rb in Resources */,
 				257C5E4A241673C700B0DC38 /* prebuild_sandbox_fetch.rb in Resources */,
+				254360B6249C9849007D3174 /* code.rb in Resources */,
 				25F05A82235EE76F003F4B9A /* Assets.xcassets in Resources */,
 				25F05A80235EE76C003F4B9A /* Main.storyboard in Resources */,
+				254360BC249C9849007D3174 /* bin.rb in Resources */,
+				254360BD249C9849007D3174 /* command.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,23 +302,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EE920D4B70F98FCB44E97C20 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testpodFramework/Pods-testpodFramework-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testpodFramework/Pods-testpodFramework-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-testpodFramework/Pods-testpodFramework-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

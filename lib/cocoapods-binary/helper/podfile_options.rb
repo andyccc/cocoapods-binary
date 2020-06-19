@@ -74,19 +74,49 @@ module Pod
             aggregate_targets.each do |aggregate_target|
                 target_definition = aggregate_target.target_definition
                 targets = aggregate_target.pod_targets || []
-
+                
                 # filter prebuild
                 prebuild_names = target_definition.prebuild_framework_pod_names
                 if not Podfile::DSL.prebuild_all
-                    targets = targets.select { |pod_target| prebuild_names.include?(pod_target.pod_name) } 
+                    targets = targets.select { |pod_target| prebuild_names.include?(pod_target.pod_name) }
                 end
+                
                 dependency_targets = targets.map {|t| t.recursive_dependent_targets }.flatten.uniq || []
                 targets = (targets + dependency_targets).uniq
 
+
                 # filter should not prebuild
                 explict_should_not_names = target_definition.should_not_prebuild_framework_pod_names
-                targets = targets.reject { |pod_target| explict_should_not_names.include?(pod_target.pod_name) } 
+                targets = targets.reject { |pod_target| explict_should_not_names.include?(pod_target.pod_name) }
+                                       
+                clean_pods = []
+                targets = targets.reject { |pod_target|
+                    exist = Pod::Podfile::DSL.binary_white_list.include?(pod_target.pod_name)
+                    clean_pods.push(pod_target) if exist
+                    exist
+                }
+                                       
+                
 
+                clean_pods.each do |pod_target|
+                    target_name = pod_target.pod_name
+                    pods_path = self.sandbox.root
+                    
+                    target_path = pods_path + target_name
+                    target_path.rmtree if target_path.exist?
+                    
+                    prebuild_path = pods_path + PrebuildSandbox.prebuild_folder
+                    prebuild_pod_path = prebuild_path + target_name
+                    prebuild_pod_path.rmtree if prebuild_pod_path.exist?
+                                       
+                    generate_pod_path = prebuild_path + PrebuildSandbox.generate_name + target_name
+                    generate_pod_path.rmtree if generate_pod_path.exist?
+                    
+                    Pod::UI.puts "🏇  white list clean : #{target_path}"
+#                    Pod::UI.puts "🏇  prebuild_pod_path : #{prebuild_pod_path}"
+#                    Pod::UI.puts "🏇  generate_pod_path : #{generate_pod_path}"
+                end
+                                       
                 all += targets
 
             end

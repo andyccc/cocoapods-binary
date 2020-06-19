@@ -21,17 +21,24 @@ enable_binary_cache(true)
 # dev pod是否添加到cache
 # enable_local_binary_cache(true)
 # 设置同步服务器，rsync形式，需要设置目标机器密码: export RSYNC_PASSWORD=xxx
-set_rsync_server_url("rsync_backup@192.168.0.201::out")
+#set_rsync_server_url("rsync_backup@192.168.0.201::out")
 # 设置同步文件夹
-#set_rsync_path("/Users/yans/Desktop/ftp")
+set_rsync_path("/Users/yans/Desktop/ftp")
 set_clean_build_dir(false)
+
+set_binary_white_list([
+                      'YSNSObjectSafe',
+                      'NullSafe'
+                      ])
+# 开启调试日志
+set_verbose_log(true)
 
 target 'testpodFramework' do
   # Comment the next line if you don't want to use dynamic frameworks
 #    use_frameworks!
 
     # 所有都进行二进制编译，如果要忽略某个后面添加‘, :binary => false’
-    all_binary!
+#    all_binary!
 
     # 允许dev pod
     all_local_binary!
@@ -42,31 +49,32 @@ target 'testpodFramework' do
     # 开放framework 的private header
     # public_headers_for_prebuilt!
     
-    pod 'FTPopOverMenu', :path => './FTPopOverMenu', :binary => true, :project_name => 'Dev'
-    pod 'MPNotificationView'
-    pod 'Masonry', :project_name => 'Github'
+#    pod 'FTPopOverMenu', :path => './FTPopOverMenu', :binary => true, :project_name => 'Dev'
+    pod 'MPNotificationView', :binary => true
+#    pod 'Masonry', :project_name => 'Github'
 
 
 #    pod 'YSBeeFramework', :path => './YSBeeFramework', :binary => true
 #    pod 'YSBeeFramework', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSBeeFramework.git', :tag => '1.3.1'#, branch: 'core-0.6.0'
 
-    pod 'YSTableView/MouseHeader', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSTableView.git', :tag => '0.2.3'# 老鼠 MouseHeader
+#    pod 'YSTableView/MouseHeader', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSTableView.git', :tag => '0.2.3'# 老鼠 MouseHeader
 
-    pod 'TestEngineService', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7', :binary => false
+#    pod 'TestEngineService', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7', :binary => false
 
 #    pod 'TestEngineService/Core', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
 #    pod 'TestEngineService/ST', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
 #    pod 'TestEngineService/CV', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
 
 
-    
-    pod 'Bugly', :project_name => 'Framework'
-    pod 'PDBotKit', :project_name => 'Framework'
-    pod 'YSWCDBService', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSWCDBService.git', :tag => '1.0.6'
+     pod 'YSNSObjectSafe', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git', :tag => '1.1.0', :binary => true
 
-    pod 'WCDBOptimizedSQLCipher'
-    pod 'SQLiteRepairKit'
-    pod 'WCDB'
+#    pod 'Bugly', :project_name => 'Framework'
+#    pod 'PDBotKit', :project_name => 'Framework'
+#    pod 'YSWCDBService', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSWCDBService.git', :tag => '1.0.6'
+
+#    pod 'WCDBOptimizedSQLCipher'
+#    pod 'SQLiteRepairKit'
+#    pod 'WCDB'
 end
 
 
@@ -74,7 +82,7 @@ end
 
 # cd ./cocoapods-binary && gem build cocoapods-binary && sudo gem install cocoapods-binary && cd .. && rm -R -f ./Pods && clear && pod install --verbose
 
-# clear && gem build cocoapods-binary && sudo gem install cocoapods-binary
+# clear && sudo gem build cocoapods-binary && sudo gem install cocoapods-binary
 # rm -R -f ./Pods && clear && pod install --verbose
 # rm -R -f ./Pods && clear && pod update --verbose
 

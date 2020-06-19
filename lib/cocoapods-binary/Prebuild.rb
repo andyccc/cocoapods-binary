@@ -152,7 +152,7 @@ module Pod
                 target_name = target.name
 
                 UI.section "🍭  Prebuild Ready to build #{target_name}".blue do
-                    
+
                     if !target.should_build?
                         Pod::UI.puts "🏇  Skipping #{target.label}"
                         next

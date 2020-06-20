@@ -159,6 +159,7 @@ module Pod
               UI.puts "link successfully!"
               UI.puts "view linked source at path: #{target_path}"
               
+              # 参考 https://tech.meituan.com/2019/08/08/the-things-behind-the-ios-project-zsource-command.html
               #  dwarfdump /Users/yans/Documents/GitHub/cocoapods-binary/demo2/Pods/_Prebuild/Generated/MPNotificationView/libMPNotificationView.a | grep "AT_comp_dir"
               #   dwarfdump /Users/yans/Documents/GitHub/cocoapods-binary/demo2/Pods/_Prebuild/Generated/MPNotificationView/libMPNotificationView.a | grep "AT_name"
               

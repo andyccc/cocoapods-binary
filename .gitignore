@@ -32,3 +32,4 @@ test/Binary.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 test/Podfile
 test/Podfile.lock
 Pods
+*.gem

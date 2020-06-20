@@ -27,7 +27,7 @@ set_rsync_path("/Users/yans/Desktop/ftp")
 set_clean_build_dir(false)
 
 set_binary_white_list([
-                      'YSNSObjectSafe',
+#                      'YSNSObjectSafe',
                       'NullSafe'
                       ])
 # 开启调试日志
@@ -51,7 +51,7 @@ target 'testpodFramework' do
     
 #    pod 'FTPopOverMenu', :path => './FTPopOverMenu', :binary => true, :project_name => 'Dev'
     pod 'MPNotificationView', :binary => true
-#    pod 'Masonry', :project_name => 'Github'
+    pod 'Masonry', :project_name => 'Github', :binary => false
 
 
 #    pod 'YSBeeFramework', :path => './YSBeeFramework', :binary => true
@@ -66,7 +66,11 @@ target 'testpodFramework' do
 #    pod 'TestEngineService/CV', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
 
 
-     pod 'YSNSObjectSafe', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git', :tag => '1.1.0', :binary => true
+#     pod 'YSNSObjectSafe', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git', :tag => '1.1.0', :binary => true
+     
+     pod 'YSNSObjectSafe', :git => 'https://bitbucket.org/tytto/ysnsobjectsafe.git', :tag => '1.1.0', :binary => true
+
+     
 
 #    pod 'Bugly', :project_name => 'Framework'
 #    pod 'PDBotKit', :project_name => 'Framework'
@@ -94,10 +98,10 @@ end
 #https://github.com/CocoaPods/CocoaPods/blob/7b246db45e414ef05a38d7ff25a9e453fce12ffb/lib/cocoapods/sandbox/file_accessor.rb
 
 
-
-
 post_install do |installer|
-
+    
+    
+    # PodStatic
     installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
             config.build_settings['SWIFT_VERSION'] = '3.3'

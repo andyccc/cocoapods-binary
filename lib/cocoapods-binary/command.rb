@@ -1,2 +1,2 @@
+require 'cocoapods-binary/command/Code'
 
-require 'cocoapods-binary/command/bin'

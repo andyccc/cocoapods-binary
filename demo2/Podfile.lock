@@ -1,33 +1,37 @@
 PODS:
+  - Masonry (1.1.0)
   - MPNotificationView (1.1.1)
   - NullSafe (2.0)
   - YSNSObjectSafe (1.1.0):
     - NullSafe
 
 DEPENDENCIES:
+  - Masonry
   - MPNotificationView
-  - YSNSObjectSafe (from `http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git`, tag `1.1.0`)
+  - YSNSObjectSafe (from `https://bitbucket.org/tytto/ysnsobjectsafe.git`, tag `1.1.0`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - Masonry
     - MPNotificationView
     - NullSafe
 
 EXTERNAL SOURCES:
   YSNSObjectSafe:
-    :git: http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git
+    :git: https://bitbucket.org/tytto/ysnsobjectsafe.git
     :tag: 1.1.0
 
 CHECKOUT OPTIONS:
   YSNSObjectSafe:
-    :git: http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git
+    :git: https://bitbucket.org/tytto/ysnsobjectsafe.git
     :tag: 1.1.0
 
 SPEC CHECKSUMS:
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MPNotificationView: 0f342a4a5211f75ba9b395552af6c121b4730249
   NullSafe: 948feba938f03abede5ed3758694a9fe5b3a65ce
   YSNSObjectSafe: 2c98fc2aa9284fa8bd4e4047e3a9c56a1d206c3f
 
-PODFILE CHECKSUM: d0c5461230294883ac02a09acf97501a0142cae7
+PODFILE CHECKSUM: d01cfeac65bae8e57a641b4a7278d49bbf74c6db
 
 COCOAPODS: 1.9.3

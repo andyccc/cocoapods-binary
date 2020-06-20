@@ -261,7 +261,9 @@ module Pod
     
     def self.remove_build_dir(sandbox_root)
       path = build_dir(sandbox_root)
-      path.rmtree if path.exist?
+      #path.rmtree if path.exist?
+      FileUtils.rm_r(path.realpath, :verbose => Pod::Podfile::DSL.verbose_log) if path.exist?
+
     end
 
     private 

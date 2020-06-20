@@ -50,6 +50,7 @@ module Pod
                     
                     target.parent.mkpath unless target.parent.exist?
                     relative_source = source.relative_path_from(target.parent)
+#                    Pod::UI.puts "make_link #{relative_source}, #{target}"
 
                     FileUtils.ln_sf(relative_source, target, :verbose => Pod::Podfile::DSL.verbose_log)
                 end
@@ -82,9 +83,10 @@ module Pod
                         target_folder += Pod::PrebuildSandbox.generate_name
                     end
                     
-                    target_folder.rmtree if target_folder.exist?
+                    #target_folder.rmtree if target_folder.exist?
+                    FileUtils.rm_r(target_folder.realpath, :verbose => Pod::Podfile::DSL.verbose_log) if target_folder.exist?
                     target_folder.mkpath
-
+                    
                     
                     path = real_file_folder
                     walk(path) do |child|
@@ -146,7 +148,21 @@ module Pod
                 deleted = changes.deleted 
                 updated_names = added + changed + deleted
             end
+            
+            white_pods = Pod::Podfile::DSL.binary_white_list
+            pods_path = self.sandbox.root
+            prebuild_path = pods_path + PrebuildSandbox.prebuild_folder + "white_pods.txt"
+            if prebuild_path.exist?
+                old_white_pods = JSON.parse(File.read(prebuild_path.to_s)) if prebuild_path.exist?
+                updated_names += old_white_pods
+#                Pod::UI.puts "remove_target_files_if_needed old_white_pods #{old_white_pods}"
 
+            end
+
+            updated_names += white_pods
+
+#            Pod::UI.puts "remove_target_files_if_needed #{updated_names}"
+            
             updated_names.each do |name|
                 root_name = Specification.root_name(name)
                 if not Podfile::DSL.allow_local_pod
@@ -155,16 +171,19 @@ module Pod
                 
                 # delete the cached files
                 target_path = self.sandbox.pod_dir(root_name)
-                target_path.rmtree if target_path.exist?
+                #target_path.rmtree if target_patsh.exist?
+                FileUtils.rm_r(target_path.realpath, :verbose => Pod::Podfile::DSL.verbose_log) if target_path.exist?
+                
 #                Logger(10010, "rmtree path", target_path)
 
                 support_path = sandbox.target_support_files_dir(root_name)
-                support_path.rmtree if support_path.exist?
+                #support_path.rmtree if support_path.exist?
+                FileUtils.rm_r(support_path.realpath, :verbose => Pod::Podfile::DSL.verbose_log) if support_path.exist?
 #                Logger(10011, "rmtree path", support_path)
             end
 
+            File.write(prebuild_path.to_s, white_pods.to_json)
         end
-
 
         # Modify specification to use only the prebuild framework after analyzing
         old_method2 = instance_method(:resolve_dependencies)
@@ -316,6 +335,8 @@ module Pod
         
             dependencies_specs = dependencies_specs.flatten.uniq
 
+            #prebuilt_specs = prebuilt_specs.reject { |spec| Pod::Podfile::DSL.binary_white_list.include?(spec.name) }
+
             UI.section '🔨  Integration spec ... ' do
                 
                 prebuilt_specs.each do |spec|
@@ -326,6 +347,8 @@ module Pod
                     # Use the prebuild framworks as vendered frameworks
                     # get_corresponding_targets
                     targets = Pod.fast_get_targets_for_pod_name(spec.root.name, self.pod_targets, cache)
+                    
+
                     targets.each do |target|
                         # the item_path rule is decided when `install_for_prebuild`,
                         # as to compitable with older version and be less wordy.
@@ -447,7 +470,11 @@ module Pod
             pod_installer = create_pod_installer(pod_name)
             # \copy from original
 
-            if self.prebuild_pod_names.include? pod_name
+            #Pod::UI.puts "🍭 prebuild_pod_names -->  #{pod_name}, #{self.prebuild_pod_names}"
+
+            #exist_white = Pod::Podfile::DSL.binary_white_list.include?(pod_name)
+            
+            if self.prebuild_pod_names.include? pod_name# and not exist_white
                 pod_installer.install_for_prebuild!(self.sandbox)
             else
                 pod_installer.install!

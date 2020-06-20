@@ -1,0 +1,273 @@
+
+# 临时的Class,用来提取Class公共的方法列表和要手动过滤方法列表
+class TempClass
+    # 定义一下需要过滤的方法
+    def initialize
+    end
+
+    def to_yaml
+    end
+
+    def +(other)
+    end
+
+    def -(other)
+    end
+
+    def *(other)
+    end
+
+    def /(other)
+    end
+
+    def -@
+    end
+end
+# 这里创建了全局变量，来存储TempClass对象的方法列表
+# 这个全局变量是为了后面做方法列表滤用。
+$classPublicMethos = TempClass.new().public_methods
+
+# 定义一个方法，打印对象属性和方法列表，并递归打印对象的属性
+# param: instance 要打印的对象
+# param: name 对象的名称
+# param: currentLayer 当前对象距离顶层的层级
+# param: maxLayer 要打印的最大的层级
+def putsInstanceVariables(instance,name,currentLayer=0,maxLayer=3)
+    # 当前层级是否在最大层级内
+    if currentLayer < maxLayer
+        if instance.nil?
+            # instance是空值
+            # 一个字符串乘以一个�整数，就是对应整数个字符串拼接
+            # ' '*2 结果为 '    '
+            # "#{' '*(currentLayer+1)}╟ "作用就是方便查看层级，使用VSCode编辑器就可以折叠对应的层级来查看
+            puts "#{' '*(currentLayer+1)}╟ #{name} : nil"
+        elsif instance.instance_of? Numeric
+            # instance是数字
+            puts "#{' '*(currentLayer+1)}╟ #{name} : #{instance}"
+        elsif instance.instance_of? TrueClass
+            # instance是ture值
+            puts "#{' '*(currentLayer+1)}╟ #{name} : true"
+        elsif instance.instance_of? FalseClass
+            # instance是false值
+            puts "#{' '*(currentLayer+1)}╟ #{name} : false"
+        elsif instance.instance_of? Pathname
+            # instance是路径
+            puts "#{' '*(currentLayer+1)}╟ #{name} : #{instance.to_s}"
+        elsif instance.instance_of? Array
+            # instance为数组对象
+
+            puts "#{' '*(currentLayer+1)}╟ #{name} : Array(Length: #{instance.length})"
+            # 遍历数组
+            instance.each_index do |index|
+                item = instance.at(index)
+                # 递归调用,打印数组中的对象,名称为index，层级+1
+                putsInstanceVariables item, "#{index}", currentLayer+1
+            end
+        elsif instance.instance_of? Hash
+            # instance为Hash对象,为<Key,Value>形式的集合
+
+            puts "#{' '*(currentLayer+1)}╟ #{name} : Hash(Length: #{instance.length})"
+
+            # 遍历Hash,取出key,value
+            instance.each do |key,value|
+                # 递归调用,打印Hash中的对象,名称为key，层级+1
+                putsInstanceVariables value, "#{key}", currentLayer+1
+            end
+
+        else
+            # instance为普通对象
+
+            puts "#{' '*(currentLayer+1)}╟ #{name} : #{instance.to_s}"
+
+            # 遍历对象所有属性名称
+            instance.instance_variables.each do |variableName|
+                # 根据名称获取属性
+                variable = instance.instance_variable_get(variableName)
+                # 递归调用,打印属性对象信息,名称为属性名，层级+1
+                putsInstanceVariables variable, variableName, currentLayer+1
+            end
+
+            # 过滤掉通用方法
+            # 数组使用"-"号就可以进行过滤
+            publicMethods = (instance.public_methods - $classPublicMethos)
+            # 打印公开方法
+            puts "#{' '*(currentLayer+2)}╟ public_methods : Array(Length: #{publicMethods.length})"
+            # 过滤Class都有的公共的方法
+            publicMethods.each do |method|
+                puts "#{' '*(currentLayer+3)}┣ #{method}"
+            end
+
+        end
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+#http://guides.cocoapods.org/syntax/podfile.html#project
+source 'https://github.com/CocoaPods/Specs.git'
+# source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
+# git clone https://gitclub.cn/CocoaPods/Specs.git ~/.cocoapods/repos/master
+
+$LOAD_PATH << '.'
+require 'PodStatic'
+
+plugin 'cocoapods-binary'
+
+
+install! 'cocoapods', :deterministic_uuids => false
+
+
+# Uncomment the next line to define a global platform for your project
+platform :ios, '8.0'
+
+
+# 设置binary缓存
+enable_binary_cache(true)
+# dev pod是否添加到cache
+# enable_local_binary_cache(true)
+# 设置同步服务器，rsync形式，需要设置目标机器密码: export RSYNC_PASSWORD=xxx
+#set_rsync_server_url("rsync_backup@192.168.0.201::out")
+# 设置同步文件夹
+set_rsync_path("/Users/yans/Desktop/ftp")
+set_clean_build_dir(false)
+
+set_binary_white_list([
+                      'YSNSObjectSafe',
+#                      'NullSafe'
+                      ])
+# 开启调试日志
+set_verbose_log(true)
+
+target 'testpodFramework' do
+  # Comment the next line if you don't want to use dynamic frameworks
+#    use_frameworks!
+
+    # 所有都进行二进制编译，如果要忽略某个后面添加‘, :binary => false’
+#    all_binary!
+
+    # 允许dev pod
+    all_local_binary!
+    
+    # 保留源码，可能工程文件会很大
+     keep_source_for_prebuilt!
+    
+    # 开放framework 的private header
+    # public_headers_for_prebuilt!
+    
+#    pod 'FTPopOverMenu', :path => './FTPopOverMenu', :binary => true, :project_name => 'Dev'
+    pod 'MPNotificationView', :binary => true
+    pod 'Masonry', :project_name => 'Github', :binary => false
+
+
+#    pod 'YSBeeFramework', :path => './YSBeeFramework', :binary => true
+#    pod 'YSBeeFramework', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSBeeFramework.git', :tag => '1.3.1'#, branch: 'core-0.6.0'
+
+#    pod 'YSTableView/MouseHeader', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSTableView.git', :tag => '0.2.3'# 老鼠 MouseHeader
+
+#    pod 'TestEngineService', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7', :binary => false
+
+#    pod 'TestEngineService/Core', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
+#    pod 'TestEngineService/ST', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
+#    pod 'TestEngineService/CV', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
+
+
+#     pod 'YSNSObjectSafe', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git', :tag => '1.1.0', :binary => true
+     
+     pod 'YSNSObjectSafe', :git => 'https://bitbucket.org/tytto/ysnsobjectsafe.git', :tag => '1.1.0', :binary => true
+
+     
+
+#    pod 'Bugly', :project_name => 'Framework'
+#    pod 'PDBotKit', :project_name => 'Framework'
+#    pod 'YSWCDBService', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSWCDBService.git', :tag => '1.0.6'
+
+#    pod 'WCDBOptimizedSQLCipher'
+#    pod 'SQLiteRepairKit'
+#    pod 'WCDB'
+end
+
+
+# gem build ./cocoapods-binary/cocoapods-binary && sudo gem install ./cocoapods-binary/cocoapods-binary && rm -R -f ./Pods && clear && pod install --verbose
+
+# cd ./cocoapods-binary && gem build cocoapods-binary && sudo gem install cocoapods-binary && cd .. && rm -R -f ./Pods && clear && pod install --verbose
+
+# clear && sudo gem build cocoapods-binary && sudo gem install cocoapods-binary
+# rm -R -f ./Pods && clear && pod install --verbose
+# rm -R -f ./Pods && clear && pod update --verbose
+
+
+#https://www.rubydoc.info/github/CocoaPods/Core/master/Pod/Specification/Consumer
+#https://www.runoob.com/ruby/ruby-command-line-options.html
+#https://docs.fission.io/docs/spec/podspec/
+#https://rubydoc.info/gems/cocoapods/Pod/Sandbox/HeadersStore
+#https://github.com/CocoaPods/CocoaPods/blob/7b246db45e414ef05a38d7ff25a9e453fce12ffb/lib/cocoapods/sandbox/file_accessor.rb
+
+
+
+pre_install do |installer|
+    puts ""
+    puts ""
+    puts "##### pre_install start #####"
+
+    # 打印installer信息
+    putsInstanceVariables installer, "installer"
+
+    puts "##### pre_install end #####"
+    puts ""
+    puts ""
+end
+
+post_install do |installer|
+    # puts 为在终端打印方法
+    puts "##### post_install start #####"
+
+    # 为了打印的日志方便查看，使用╟符号修饰
+    puts "╟ installer"
+    # 获取属性名称列表，并遍历
+    installer.instance_variables.each do |variableName|
+        # 打印属性名称
+        puts "  ╟ #{variableName}"
+    end
+
+    puts "  ╟ installer.public_methods"
+    # 获取方法名称列表，并遍历
+    installer.public_methods.each do |method|
+        # 打印方法名称
+        puts "    ┣ #{method}"
+    end
+    puts "##### post_install end #####"
+
+    
+    
+    # PodStatic 方式
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['SWIFT_VERSION'] = '3.3'
+            config.build_settings['ENABLE_BITCODE'] = 'NO'
+            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '8.0'
+        end
+    end
+
+    PodStatic.enableStaticLib(false)
+    PodStatic.forceBuild(false)
+    PodStatic.simulatorSupport(true)
+    PodStatic.autoValidArchs(true)
+    # 和use_frameworks!对应起来
+    # PodStatic.useFrameworks(false)
+
+                            
+    PodStatic.run(installer, [
+                  'MPNotificationView',
+                  'FTPopOverMenu',
+                  ])
+end
+

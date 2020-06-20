@@ -147,12 +147,13 @@ module Pod
             Pod::UI.puts "🚀  Prebuild files (total #{targets.count})"
             Pod::Prebuild.remove_build_dir(sandbox_path)
             
+            targets = targets.reject { |pod_target| Pod::Podfile::DSL.binary_white_list.include?(pod_target.pod_name) }
+            
             targets.each do |target|
                 
                 target_name = target.name
 
                 UI.section "🍭  Prebuild Ready to build #{target_name}".blue do
-
                     if !target.should_build?
                         Pod::UI.puts "🏇  Skipping #{target.label}"
                         next
@@ -361,7 +362,8 @@ module Pod
             
             useless_target_names.each do |name|
                 path = sandbox.framework_folder_path_for_target_name(name)
-                path.rmtree if path.exist?
+                #path.rmtree if path.exist?
+                FileUtils.rm_r(path.realpath, :verbose => Pod::Podfile::DSL.verbose_log) if path.exist?
             end
             
             
@@ -373,12 +375,14 @@ module Pod
                     not to_remain_files.include?(filename)
                 end
                 to_delete_files.each do |path|
-                    path.rmtree if path.exist?
+                    #path.rmtree if path.exist?
+                    FileUtils.rm_r(path.realpath, :verbose => Pod::Podfile::DSL.verbose_log) if path.exist?
                 end
             else 
                 # just remove the tmp files
                 path = sandbox.root + 'Manifest.lock.tmp'
-                path.rmtree if path.exist?
+                #path.rmtree if path.exist?
+                FileUtils.rm_r(path.realpath, :verbose => Pod::Podfile::DSL.verbose_log) if path.exist?
             end
 
         end

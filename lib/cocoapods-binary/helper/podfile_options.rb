@@ -91,11 +91,10 @@ module Pod
                                        
                 clean_pods = []
                 targets = targets.reject { |pod_target|
-                    exist = Pod::Podfile::DSL.binary_white_list.include?(pod_target.pod_name)
-                    clean_pods.push(pod_target) if exist
-                    exist
+                    exist_white = Pod::Podfile::DSL.binary_white_list.include?(pod_target.pod_name)
+                    clean_pods.push(pod_target) if exist_white
+                    exist_white
                 }
-                                       
                 
 
                 clean_pods.each do |pod_target|
@@ -103,18 +102,16 @@ module Pod
                     pods_path = self.sandbox.root
                     
                     target_path = pods_path + target_name
-                    target_path.rmtree if target_path.exist?
+                    #target_path.rmtree if target_path.exist?
+                    #target_path.mkpath
                     
                     prebuild_path = pods_path + PrebuildSandbox.prebuild_folder
                     prebuild_pod_path = prebuild_path + target_name
-                    prebuild_pod_path.rmtree if prebuild_pod_path.exist?
+                    #prebuild_pod_path.rmtree if prebuild_pod_path.exist?
                                        
                     generate_pod_path = prebuild_path + PrebuildSandbox.generate_name + target_name
-                    generate_pod_path.rmtree if generate_pod_path.exist?
+                    #generate_pod_path.rmtree if generate_pod_path.exist?
                     
-                    Pod::UI.puts "🏇  white list clean : #{target_path}"
-#                    Pod::UI.puts "🏇  prebuild_pod_path : #{prebuild_pod_path}"
-#                    Pod::UI.puts "🏇  generate_pod_path : #{generate_pod_path}"
                 end
                                        
                 all += targets
@@ -125,6 +122,8 @@ module Pod
             if not Podfile::DSL.allow_local_pod
                 all = all.reject {|pod_target| sandbox.local?(pod_target.pod_name) }
             end
+                                    
+                                       
             all.uniq
             )
         end

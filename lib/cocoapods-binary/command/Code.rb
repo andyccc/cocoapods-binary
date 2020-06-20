@@ -1,7 +1,10 @@
+require_relative '../helper/prebuild_sandbox'
 
 module Pod
   class Command
+      
       class Code < Command
+          
           self.summary = '通过将二进制对应源码放置在临时目录中，让二进制出现断点时可以跳到对应的源码，方便调试。'
           
           self.description = <<-DESC
@@ -10,8 +13,10 @@ module Pod
           DESC
           
           self.arguments = [
-          CLAide::Argument.new('NAME', false)
+              CLAide::Argument.new('NAME', false)
           ]
+          
+          
           def self.options
               [
               ['--all-clean', '删除所有已经下载的源码'],
@@ -21,21 +26,22 @@ module Pod
               ]
           end
           
+          
           def initialize(argv)
-              @codeSource =  argv.option('source') || nil
+              @codeSource = argv.option('source') || nil
               @names = argv.arguments! unless argv.arguments.empty?
               @list = argv.flag?('list', false )
               @all_clean = argv.flag?('all-clean', false )
               @clean = argv.flag?('clean', false )
               
               @config = Pod::Config.instance
-              
+              @prebuild_folder = Pod::PrebuildSandbox.prebuild_folder
               super
           end
           
           
           def run
-              
+
               podfile_lock = File.join(Pathname.pwd,"Podfile.lock")
               raise "podfile.lock,不存在，请先pod install/update" unless File.exist?(podfile_lock)
               @lockfile ||= Lockfile.from_file(Pathname.new(podfile_lock) )
@@ -51,6 +57,8 @@ module Pod
               end
               
               if @list && @clean && @names
+                  UI.puts "请选择您要执行的命令。"
+
                   raise "请选择您要执行的命令。"
               end
           end
@@ -75,12 +83,26 @@ module Pod
               end
           end
           
+          
           #下载源码到本地
           def download_source(name)
+              
+              pods_path = @config.sandbox.root
+              prebuild_path = pods_path + @prebuild_folder + name
+              UI.puts "prebuild_path : #{prebuild_path}"
+              
+              FileUtils.rm_rf(prebuild_path.realpath, :verbose => true) if prebuild_path.exist? and not prebuild_path.directory?
+
+              return prebuild_path if prebuild_path.exist?
+              
               target_path =  File.join(source_root, name)
               UI.puts target_path
               FileUtils.rm_rf(target_path)
               
+              UI.puts "target_path : #{target_path}"
+              
+              
+              ##
               find_dependency = find_dependency(name)
               # 意义不大，需要可以使用--source参数 对 github-ios 仓库对做特殊处理
               # if find_dependency && find_dependency.external_source[:podspec].include?(http_gitlib_GitHub_iOS_path)
@@ -88,11 +110,24 @@ module Pod
               # find_dependency.external_source[:podspec] = github_ios.gsub(http_gitlib_GitHub_iOS_path,http_gitlib_iOS_path)
               # end
               
-              spec = fetch_external_source(find_dependency, @config.podfile,@config.lockfile, @config.sandbox,true )
+              standard_sandbox = @config.sandbox
+              prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(standard_sandbox)
+
               
-              download_request = Pod::Downloader::Request.new(:name => name, :spec => spec)
-              Downloader.download(download_request, Pathname.new(target_path), :can_cache => true)
+              spec = fetch_external_source(find_dependency, @config.podfile,@config.lockfile, prebuild_sandbox,true )
+              spec[:name] = name
+              UI.puts "spec : #{spec}"
+
+              spec = Pod::Specification.from_hash(spec)
+              UI.puts "spec2 :#{name}, #{spec.to_json}"
               
+              begin
+                  download_request = Pod::Downloader::Request.new(:spec => spec, :name => name)
+                  Downloader.download(download_request, Pathname.new(target_path), :can_cache => true)
+              rescue => ex
+                  UI.puts "ex : #{ex.message}\n" # 输出异常信息
+              end
+
               target_path
           end
           
@@ -112,8 +147,8 @@ module Pod
           # 获取external_source 下的仓库
           # @return spec
           def fetch_external_source(dependency ,podfile , lockfile, sandbox,use_lockfile_options)
-              source = ExternalSources.from_dependency(dependency, podfile.defined_in_file, true)
-              source.fetch(sandbox)
+              @subject = ExternalSources.from_dependency(dependency, podfile.defined_in_file, true)
+              @subject.fetch(sandbox)
           end
           
           
@@ -121,10 +156,23 @@ module Pod
           
           #链接，.a文件位置， 源码目录，工程名=IMYFoundation
           def link(lib_file,target_path,basename)
+              UI.puts "link successfully!"
+              UI.puts "view linked source at path: #{target_path}"
+              
+              #  dwarfdump /Users/yans/Documents/GitHub/cocoapods-binary/demo2/Pods/_Prebuild/Generated/MPNotificationView/libMPNotificationView.a | grep "AT_comp_dir"
+              #   dwarfdump /Users/yans/Documents/GitHub/cocoapods-binary/demo2/Pods/_Prebuild/Generated/MPNotificationView/libMPNotificationView.a | grep "AT_name"
+              
+              
+              # 只需要把源码放到对应目录即可
+              
+              return
+              
+              UI.puts "link : #{lib_file}, #{target_path}, #{basename}"
+
               dir = (`dwarfdump "#{lib_file}" | grep "AT_comp_dir" | head -1 | cut -d \\" -f2 `)
               sub_path = "#{basename}/bin-archive/#{basename}"
               dir = dir.gsub(sub_path, "").chomp
-              # UI.puts "dir = #{dir}"
+              UI.puts "dir = #{dir}"
               
               unless File.exist?(dir)
                   # UI.puts "不存在 = #{dir}"
@@ -144,10 +192,10 @@ module Pod
               
               if Pathname.new(lib_file).extname == ".a"
                   FileUtils.rm_rf(File.join(dir,basename))
-                  `ln -s #{target_path} #{dir}`
+                  UI.puts `ln -s #{target_path} #{dir}`
                   else
                   FileUtils.rm_rf(File.join(dir,basename))
-                  `ln -s #{target_path} #{dir}/#{basename}`
+                  UI.puts `ln -s #{target_path} #{dir}/#{basename}`
               end
               check(lib_file,dir,basename)
           end
@@ -162,14 +210,16 @@ module Pod
           end
           
           def get_lib_path(name)
-              dir = Pathname.new(File.join(Pathname.pwd,"Pods",name))
+              dir = Pathname.new(File.join(Pathname.pwd, "Pods",name))
               lib_name = "lib#{name}.a"
               lib_path = File.join(dir,lib_name)
-              
-              unless File.exist?(lib_path)
-                  lib_path = File.join(dir.children.first,lib_name)
-              end
-              
+              UI.puts "lib_path1 => #{lib_path}"
+
+#              unless File.exist?(lib_path)
+#                  lib_path = File.join(dir.children.first,lib_name)
+#              end
+#              UI.puts "lib_path2 => #{lib_path}"
+
               lib_path
           end
           

@@ -86,13 +86,12 @@ module Pod
           
           #下载源码到本地
           def download_source(name)
-              
               pods_path = @config.sandbox.root
               prebuild_path = pods_path + @prebuild_folder + name
               UI.puts "prebuild_path : #{prebuild_path}"
               
               FileUtils.rm_rf(prebuild_path.realpath, :verbose => true) if prebuild_path.exist? and not prebuild_path.directory?
-
+              
               return prebuild_path if prebuild_path.exist?
               
               target_path =  File.join(source_root, name)
@@ -101,27 +100,28 @@ module Pod
               
               UI.puts "target_path : #{target_path}"
               
-              
-              ##
-              find_dependency = find_dependency(name)
-              # 意义不大，需要可以使用--source参数 对 github-ios 仓库对做特殊处理
-              # if find_dependency && find_dependency.external_source[:podspec].include?(http_gitlib_GitHub_iOS_path)
-              #   github_ios = find_dependency.external_source[:podspec]
-              # find_dependency.external_source[:podspec] = github_ios.gsub(http_gitlib_GitHub_iOS_path,http_gitlib_iOS_path)
-              # end
-              
-              standard_sandbox = @config.sandbox
-              prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(standard_sandbox)
-
-              
-              spec = fetch_external_source(find_dependency, @config.podfile,@config.lockfile, prebuild_sandbox,true )
-              spec[:name] = name
-              UI.puts "spec : #{spec}"
-
-              spec = Pod::Specification.from_hash(spec)
-              UI.puts "spec2 :#{name}, #{spec.to_json}"
-              
               begin
+                  
+                  ##
+                  find_dependency = find_dependency(name)
+                  # 意义不大，需要可以使用--source参数 对 github-ios 仓库对做特殊处理
+                  # if find_dependency && find_dependency.external_source[:podspec].include?(http_gitlib_GitHub_iOS_path)
+                  #   github_ios = find_dependency.external_source[:podspec]
+                  # find_dependency.external_source[:podspec] = github_ios.gsub(http_gitlib_GitHub_iOS_path,http_gitlib_iOS_path)
+                  # end
+                  
+                  standard_sandbox = @config.sandbox
+                  prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(standard_sandbox)
+
+                  
+                  spec = fetch_external_source(find_dependency, @config.podfile,@config.lockfile, prebuild_sandbox,true )
+                  spec[:name] = name
+                  UI.puts "spec : #{spec}"
+
+                  spec = Pod::Specification.from_hash(spec)
+                  UI.puts "spec2 :#{name}, #{spec.to_json}"
+              
+              
                   download_request = Pod::Downloader::Request.new(:spec => spec, :name => name)
                   Downloader.download(download_request, Pathname.new(target_path), :can_cache => true)
               rescue => ex

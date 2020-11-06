@@ -1,4 +1,5 @@
 #http://guides.cocoapods.org/syntax/podfile.html#project
+source 'http://192.168.3.31/TY_iOS_Librarys/tyspecs.git'
 source 'https://github.com/CocoaPods/Specs.git'
 # source 'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git'
 # git clone https://gitclub.cn/CocoaPods/Specs.git ~/.cocoapods/repos/master
@@ -25,7 +26,8 @@ enable_binary_cache(true)
 # 设置同步文件夹
 set_rsync_path("/Users/yans/Desktop/ftp")
 set_clean_build_dir(false)
-
+# 是否只缓存 .a 文件不包含 .h 以及resource文件
+set_only_store_lib_file(false)
 set_binary_white_list([
 #                      'YSNSObjectSafe',
                       'NullSafe'
@@ -38,7 +40,7 @@ target 'testpodFramework' do
 #    use_frameworks!
 
     # 所有都进行二进制编译，如果要忽略某个后面添加‘, :binary => false’
-#    all_binary!
+    all_binary!
 
     # 允许dev pod
     all_local_binary!
@@ -50,8 +52,8 @@ target 'testpodFramework' do
     # public_headers_for_prebuilt!
     
 #    pod 'FTPopOverMenu', :path => './FTPopOverMenu', :binary => true, :project_name => 'Dev'
-    pod 'MPNotificationView', :binary => true
-    pod 'Masonry', :project_name => 'Github', :binary => false
+#    pod 'MPNotificationView', :binary => true
+#    pod 'Masonry', :project_name => 'Github', :binary => false
 
 
 #    pod 'YSBeeFramework', :path => './YSBeeFramework', :binary => true
@@ -68,7 +70,10 @@ target 'testpodFramework' do
 
 #     pod 'YSNSObjectSafe', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git', :tag => '1.1.0', :binary => true
      
-     pod 'YSNSObjectSafe', :git => 'https://bitbucket.org/tytto/ysnsobjectsafe.git', :tag => '1.1.0', :binary => true
+#     pod 'YSNSObjectSafe', :git => 'https://bitbucket.org/tytto/ysnsobjectsafe.git', :tag => '1.1.0', :binary => true
+
+     
+     pod 'YSTableView', '= 0.2.3', :subspecs => ['EyemanHeader', 'IndicatorFooter']
 
      
 

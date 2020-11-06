@@ -12,24 +12,28 @@ module Pod
             return "#{name}-#{version}.zip"
         end
         
+        def self.get_store_url(url, pack_name, version)
+            return url + "/" + self.zip_framework_name(pack_name, version)
+        end
+        
         # rsync type
         
-        def self.fetch_remote_framework_for_target(name, version, generate_path, rsync_server_url)
+        def self.fetch_remote_framework_for_target(name, pack_name, version, generate_path, rsync_server_url)
 
             out_path = generate_path + "/" + name
             
             zip_framework = self.zip_framework_name(name, version)
             zip_framework_path = generate_path + "/" + zip_framework
             
-            framework_url = "#{rsync_server_url}/#{zip_framework}"
-            
+            store_url = self.get_store_url(rsync_server_url, pack_name, version)
+
             Pod::UI.puts "🚚  Fetch remote fameworks, #{zip_framework}"
             
-            ret = rsync_file("Pull", framework_url, zip_framework_path)
+            ret = rsync_file("Pull", store_url, zip_framework_path)
             if not ret
                 Pod::UI.puts "🚚  Retry fetch remote fameworks, #{zip_framework}"
                 FileUtils.rm_rf zip_framework_path, :verbose => Pod::Podfile::DSL.verbose_log
-                ret = rsync_file("Pull", framework_url, zip_framework_path)
+                ret = rsync_file("Pull", store_url, zip_framework_path)
             end
             
             return false unless ret
@@ -42,27 +46,31 @@ module Pod
             true
         end
         
-        def self.sync_prebuild_framework_to_server(name, version, generate_path, rsync_server_url)
+        def self.sync_prebuild_framework_to_server(name, pack_name, version, generate_path, rsync_server_url)
 
-            zip_framework = self.zip_framework_name(name, version)
-            zip_framework_path = generate_path + "/" + zip_framework
-            
             target_path = generate_path + "/" + name
             
             # 本地 archive 失败
-            return if !File.exist?(target_path) || Dir.empty?(target_path)
+            not_exist_and_empty = !File.exist?(target_path) || Dir.empty?(target_path)
+            if not_exist_and_empty
+                Pod::UI.puts "❌  To Archive Failed, path: #{target_path}\n"
+                return
+            end
+            
+            zip_framework = self.zip_framework_name(name, version)
+            zip_framework_path = generate_path + "/" + zip_framework
             
             Pod::UI.puts "🚚  To Sync Once, #{zip_framework}, #{generate_path}"
-            
+
             zip_file(generate_path, zip_framework_path, name) unless File.exist?(zip_framework_path)
-            
-            ret = rsync_file("Push", zip_framework_path, rsync_server_url)
+            store_url = self.get_store_url(rsync_server_url, pack_name, version)
+            ret = rsync_file("Push", zip_framework_path, store_url)
             if ret
                 FileUtils.rm_rf zip_framework_path, :verbose => Pod::Podfile::DSL.verbose_log
             else
                 Pod::UI.puts "🚚  ReTry To Sync Once, #{zip_framework}, #{generate_path}"
                 
-                ret = rsync_file("Push", zip_framework_path, rsync_server_url)
+                ret = rsync_file("Push", zip_framework_path, store_url)
             end
             
             if ret

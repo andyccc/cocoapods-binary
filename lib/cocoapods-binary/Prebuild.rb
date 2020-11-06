@@ -135,6 +135,8 @@ module Pod
                 next if target_definition.prebuild_framework_pod_names.empty?
                 prebuild_framework_pod_names += target_definition.prebuild_framework_pod_names
             end
+            
+            
 
             
             # filter local pods
@@ -149,10 +151,28 @@ module Pod
             
             targets = targets.reject { |pod_target| Pod::Podfile::DSL.binary_white_list.include?(pod_target.pod_name) }
             
+            # 是否值缓存 .a 文件
+            only_store_lib_file = Podfile::DSL.only_store_lib_file
+            
+            # building check ...
             targets.each do |target|
                 
                 target_name = target.name
+#                Pod::UI.puts "🚀  000 #{target.specs.to_json} "
 
+                target_pod_specs = []
+                target.specs.each do |spec|
+                    name = spec.name
+                    root_name = "#{target_name}/"
+                    name = name.gsub(/#{root_name}/, '#{root_name}'=>'')
+                    
+                    target_pod_specs.push(name)
+                end
+                
+                target_pod_specs = target_pod_specs.push(target_name).reverse.uniq
+                specs_name = target_pod_specs.join("_")
+#                Pod::UI.puts "🚀  222 #{specs_name} "
+                
                 UI.section "🍭  Prebuild Ready to build #{target_name}".blue do
                     if !target.should_build?
                         Pod::UI.puts "🏇  Skipping #{target.label}"
@@ -170,7 +190,6 @@ module Pod
                     rsync_server_url = Podfile::DSL.rsync_server_url
                     spec = target.root_spec
                     
-                    
                     loop do
                         if not need_pull
                             need_build = true
@@ -182,7 +201,7 @@ module Pod
                             break
                         end
                         
-                        exist_remote_framework = Pod::PrebuildFetch.fetch_remote_framework_for_target(spec.name, spec.version, generate_path, rsync_server_url)
+                        exist_remote_framework = Pod::PrebuildFetch.fetch_remote_framework_for_target(spec.name, specs_name, spec.version, generate_path, rsync_server_url)
                         if not exist_remote_framework
                             Pod::UI.puts "💦  Non exist remote cache, #{target_name}".blue
                             
@@ -202,7 +221,20 @@ module Pod
                     
                     if need_push
                         Podfile::DSL.builded_list.push(target_name)
-                        Pod::PrebuildFetch.sync_prebuild_framework_to_server(spec.name, spec.version, generate_path, rsync_server_url)
+
+                        
+                        if only_store_lib_file
+                            Pod::PrebuildFetch.sync_prebuild_framework_to_server(spec.name, specs_name, spec.version, generate_path, rsync_server_url)
+                        else
+                            store_pack = {}
+                            store_pack["spec_name"] = spec.name
+                            store_pack["specs_name"] = specs_name
+                            store_pack["spec_version"] = "#{spec.version}"
+                            store_pack["generate_path"] = generate_path
+                            store_pack["server_url"] = rsync_server_url
+
+                            Podfile::DSL.builded_store_list.push(store_pack)
+                        end
                     end
                     
                     
@@ -366,7 +398,6 @@ module Pod
                 FileUtils.rm_r(path.realpath, :verbose => Pod::Podfile::DSL.verbose_log) if path.exist?
             end
             
-            
             if not Podfile::DSL.dont_remove_source_code
                 # only keep manifest.lock and framework folder in _Prebuild
                 to_remain_files = ["Manifest.lock", File.basename(existed_framework_folder)]
@@ -384,7 +415,21 @@ module Pod
                 #path.rmtree if path.exist?
                 FileUtils.rm_r(path.realpath, :verbose => Pod::Podfile::DSL.verbose_log) if path.exist?
             end
+            
+            
+            Pod::UI.puts "🚀 Push Store Info: #{Podfile::DSL.builded_store_list}"
 
+            Podfile::DSL.builded_store_list.each do |store_pack|
+                spec_name = store_pack["spec_name"]
+                specs_name = store_pack["specs_name"]
+                spec_version = store_pack["spec_version"]
+                generate_path = store_pack["generate_path"]
+                server_url = store_pack["server_url"]
+                
+                Pod::PrebuildFetch.sync_prebuild_framework_to_server(spec_name, specs_name, spec_version, generate_path, server_url)
+            end
+            
+            Podfile::DSL.builded_store_list = []
         end
         
         

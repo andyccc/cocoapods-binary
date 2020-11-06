@@ -1,37 +1,28 @@
 PODS:
-  - Masonry (1.1.0)
-  - MPNotificationView (1.1.1)
-  - NullSafe (2.0)
-  - YSNSObjectSafe (1.1.0):
-    - NullSafe
+  - MJRefresh (3.0.8)
+  - YSTableView/EyemanHeader (0.2.3):
+    - YSTableView/PullPushRefresh
+  - YSTableView/IndicatorFooter (0.2.3):
+    - YSTableView/PullPushRefresh
+  - YSTableView/PullPushRefresh (0.2.3):
+    - MJRefresh (~> 3.0.8)
+    - YSTableView/TableView
+  - YSTableView/TableView (0.2.3)
 
 DEPENDENCIES:
-  - Masonry
-  - MPNotificationView
-  - YSNSObjectSafe (from `https://bitbucket.org/tytto/ysnsobjectsafe.git`, tag `1.1.0`)
+  - YSTableView/EyemanHeader (= 0.2.3)
+  - YSTableView/IndicatorFooter (= 0.2.3)
 
 SPEC REPOS:
+  http://192.168.3.31/TY_iOS_Librarys/tyspecs.git:
+    - YSTableView
   https://github.com/CocoaPods/Specs.git:
-    - Masonry
-    - MPNotificationView
-    - NullSafe
-
-EXTERNAL SOURCES:
-  YSNSObjectSafe:
-    :git: https://bitbucket.org/tytto/ysnsobjectsafe.git
-    :tag: 1.1.0
-
-CHECKOUT OPTIONS:
-  YSNSObjectSafe:
-    :git: https://bitbucket.org/tytto/ysnsobjectsafe.git
-    :tag: 1.1.0
+    - MJRefresh
 
 SPEC CHECKSUMS:
-  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MPNotificationView: 0f342a4a5211f75ba9b395552af6c121b4730249
-  NullSafe: 948feba938f03abede5ed3758694a9fe5b3a65ce
-  YSNSObjectSafe: 2c98fc2aa9284fa8bd4e4047e3a9c56a1d206c3f
+  MJRefresh: fafde8f18f4afd66b434331a9beb67a6c0264056
+  YSTableView: 5e6993f9e08ebee26742967d4d48dcbcc7c4318d
 
-PODFILE CHECKSUM: d01cfeac65bae8e57a641b4a7278d49bbf74c6db
+PODFILE CHECKSUM: 57465e1ac167965cb6c323baa7c2ef46b7490275
 
 COCOAPODS: 1.9.3

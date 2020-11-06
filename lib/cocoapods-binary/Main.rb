@@ -36,6 +36,10 @@ module Pod
             def set_binary_cache_repo(t)
                 DSL.binary_cache_repo = t
             end
+            
+            def set_only_store_lib_file(t)
+                DSL.only_store_lib_file = t
+            end
         
             # Enable prebuiding for all pods
             # it has a lower priority to other binary settings
@@ -120,12 +124,20 @@ module Pod
             
             class_attr_accessor :local_binary_cache
             local_binary_cache = false
+
+            
+            class_attr_accessor :only_store_lib_file
+            only_store_lib_file = false
+
             
             class_attr_accessor :binary_white_list
             self.binary_white_list = []
             
             class_attr_accessor :builded_list
             self.builded_list = []
+            
+            class_attr_accessor :builded_store_list
+            self.builded_store_list = []
             
             class_attr_accessor :rsync_server_url
             rsync_server_url = ""

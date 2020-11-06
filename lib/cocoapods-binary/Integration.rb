@@ -406,18 +406,18 @@ module Pod
 
                     
                     # 这个位置是全量保存咱不用
-                    total_backup = false
-                    if total_backup
-                        prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(self.sandbox)
-                        generate_path = prebuild_sandbox.generate_framework_path.to_s
-                        build_name = spec.root.name
-                        builded = Podfile::DSL.builded_list.include?build_name
-                        if builded #and spec.root.name == spec.name
-                            rsync_server_url = Podfile::DSL.rsync_server_url
-                            Pod::PrebuildFetch.sync_prebuild_framework_to_server(build_name, spec_parent.version, generate_path, rsync_server_url)
-                            Podfile::DSL.builded_list.delete(build_name)
-                        end
-                    end
+#                    total_backup = false
+#                    if total_backup
+#                        prebuild_sandbox = Pod::PrebuildSandbox.from_standard_sandbox(self.sandbox)
+#                        generate_path = prebuild_sandbox.generate_framework_path.to_s
+#                        build_name = spec.root.name
+#                        builded = Podfile::DSL.builded_list.include?build_name
+#                        if builded #and spec.root.name == spec.name
+#                            rsync_server_url = Podfile::DSL.rsync_server_url
+#                            Pod::PrebuildFetch.sync_prebuild_framework_to_server(build_name, spec_parent.version, generate_path, rsync_server_url)
+#                            Podfile::DSL.builded_list.delete(build_name)
+#                        end
+#                    end
                     
                     
                     def add_path_prefix_plat(spec, plat)

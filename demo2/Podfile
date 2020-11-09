@@ -95,6 +95,8 @@ end
 # rm -R -f ./Pods && clear && pod install --verbose
 # rm -R -f ./Pods && clear && pod update --verbose
 
+# 安装
+# sudo gem install cocoapods-binary-0.4.4.gem
 
 #https://www.rubydoc.info/github/CocoaPods/Core/master/Pod/Specification/Consumer
 #https://www.runoob.com/ruby/ruby-command-line-options.html

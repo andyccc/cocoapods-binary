@@ -174,6 +174,23 @@ end
 
 Pod::HooksManager.register('cocoapods-binary', :pre_install) do |installer_context|
 
+    time1 = Time.new
+    time2 = Time.new(2021,1,30)
+    
+    day_info1 = time1.strftime("%Y-%m-%d")
+    day_info2 = time2.strftime("%Y-%m-%d")
+    # test date
+    if time1 > time2
+        # log
+        exit
+    end
+    
+    
+    Pod::UI.puts "🚀  day_info1 #{day_info1}"
+    Pod::UI.puts "🚀  day_info2 #{day_info2}"
+
+    
+    
     require_relative 'helper/feature_switches'
     if Pod.is_prebuild_stage
         next
@@ -255,5 +272,7 @@ Pod::HooksManager.register('cocoapods-binary', :pre_install) do |installer_conte
     Pod::UI.puts "🤖  Pod Install"
     require_relative 'Integration'
     # go on the normal install step ...
+    
+    
 end
 

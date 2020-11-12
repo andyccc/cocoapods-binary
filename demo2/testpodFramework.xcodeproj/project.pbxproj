@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -47,6 +47,7 @@
 		257C5E49241673C700B0DC38 /* prebuild_sandbox_fetch.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = prebuild_sandbox_fetch.rb; sourceTree = "<group>"; };
 		25808C07244EDBC900066DBF /* ftp_sync.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = ftp_sync.rb; sourceTree = "<group>"; };
 		25808C5A2456C84600066DBF /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		25A6E25B255CE18300EE0B0F /* cocoapods-binary.gemspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = "cocoapods-binary.gemspec"; path = "../cocoapods-binary.gemspec"; sourceTree = "<group>"; };
 		25A8C66E23617EDA007DEFA3 /* Podfile.lock */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile.lock; sourceTree = "<group>"; };
 		25F05A72235EE76C003F4B9A /* testpodFramework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testpodFramework.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25F05A75235EE76C003F4B9A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -166,6 +167,7 @@
 		25F05A69235EE76C003F4B9A = {
 			isa = PBXGroup;
 			children = (
+				25A6E25B255CE18300EE0B0F /* cocoapods-binary.gemspec */,
 				25158314249E358D00D04F59 /* spec */,
 				250C552023FA771400D1D606 /* lib */,
 				25F05A8E235F01DD003F4B9A /* Podfile */,

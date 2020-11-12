@@ -3,6 +3,7 @@ require_relative 'helper/target_checker'
 require_relative 'helper/prebuild_sandbox_fetch'
 require_relative 'rome/build_framework'
 
+require 'digest/md5'
 # patch prebuild ability
 module Pod
     class Installer
@@ -154,23 +155,45 @@ module Pod
             # 是否值缓存 .a 文件
             only_store_lib_file = Podfile::DSL.only_store_lib_file
             
+            # 是否开启md5 命名
+            md5_file_name = Podfile::DSL.md5_file_name
+            md5_file_name_list = []
+            
+            
             # building check ...
             targets.each do |target|
                 
                 target_name = target.name
+                root_name = "#{target_name}/"
+                spec = target.root_spec
+
 #                Pod::UI.puts "🚀  000 #{target.specs.to_json} "
 
                 target_pod_specs = []
                 target.specs.each do |spec|
                     name = spec.name
-                    root_name = "#{target_name}/"
-                    name = name.gsub(/#{root_name}/, '#{root_name}'=>'')
-                    
-                    target_pod_specs.push(name)
+#                    name = name.gsub(/#{root_name}/, '#{root_name}'=>'')
+                    name = name.gsub(/_/, '_'=>'/')
+                    target_pod_specs += name.split("/") || []
                 end
                 
-                target_pod_specs = target_pod_specs.push(target_name).reverse.uniq
+                target_pod_specs = target_pod_specs.reverse.uniq
+                target_pod_specs.delete(target_name)
+                target_pod_specs.insert(0, target_name)
                 specs_name = target_pod_specs.join("_")
+                
+                # 如果过长 采用md5 + 文件记录
+                if md5_file_name
+                    md5_str = Digest::MD5.hexdigest(specs_name)
+                    specs_name = "#{target_name}_#{md5_str}"
+                    item = {}
+                    item["md5_name"] = specs_name
+                    item["pod_name"] = target_name
+                    item["pod_version"] = "#{spec.version}"
+                    Pod::UI.puts "🚀  333 #{specs_name} "
+                    md5_file_name_list.push(item)
+                end
+                
 #                Pod::UI.puts "🚀  222 #{specs_name} "
                 
                 UI.section "🍭  Prebuild Ready to build #{target_name}".blue do
@@ -188,7 +211,6 @@ module Pod
 
                     generate_path = sandbox.generate_framework_path.to_s
                     rsync_server_url = Podfile::DSL.rsync_server_url
-                    spec = target.root_spec
                     
                     loop do
                         if not need_pull
@@ -295,6 +317,13 @@ module Pod
                 end
 
             end
+            
+            if md5_file_name
+                pods_path = self.sandbox.root
+                md5_file_name_path = pods_path + "md5_file_name.txt"
+                File.write(md5_file_name_path.to_s, md5_file_name_list.to_json)
+            end
+            
             
             # remove build path
             Pod::Prebuild.remove_build_dir(sandbox_path) if Podfile::DSL.clean_build_dir

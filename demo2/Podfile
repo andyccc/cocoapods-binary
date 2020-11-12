@@ -30,10 +30,18 @@ set_clean_build_dir(false)
 set_only_store_lib_file(false)
 set_binary_white_list([
 #                      'YSNSObjectSafe',
-                      'NullSafe'
+#                      'NullSafe',
+#                      'DACircularProgress',
+#                      'FMDB',
+#                      'Reachability',
+#                      'TouchXML',
+                      
                       ])
 # 开启调试日志
 set_verbose_log(true)
+
+# 开启subspec 的md5文件名区分
+set_md5_file_name(false)
 
 target 'testpodFramework' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -73,7 +81,8 @@ target 'testpodFramework' do
 #     pod 'YSNSObjectSafe', :git => 'https://bitbucket.org/tytto/ysnsobjectsafe.git', :tag => '1.1.0', :binary => true
 
      
-     pod 'YSTableView', '= 0.2.3', :subspecs => ['EyemanHeader', 'IndicatorFooter']
+#     pod 'YSTableView', '= 0.2.3', :subspecs => ['EyemanHeader', 'IndicatorFooter']
+     pod 'YSBeeFramework', '= 6.1.3'#, branch: 'core-0.6.0'
 
      
 

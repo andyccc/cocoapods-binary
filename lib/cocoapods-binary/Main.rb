@@ -40,6 +40,11 @@ module Pod
             def set_only_store_lib_file(t)
                 DSL.only_store_lib_file = t
             end
+            
+            def set_md5_file_name(t)
+                DSL.md5_file_name = t
+            end
+            
         
             # Enable prebuiding for all pods
             # it has a lower priority to other binary settings
@@ -128,6 +133,10 @@ module Pod
             
             class_attr_accessor :only_store_lib_file
             only_store_lib_file = false
+
+            
+            class_attr_accessor :md5_file_name
+            md5_file_name = false
 
             
             class_attr_accessor :binary_white_list

@@ -207,7 +207,8 @@ module Pod
 #                Pod::UI.puts "🚀  000 #{target.specs.to_json} "
 
                 specs_name = get_subspec_name(target)
-                    
+#                Pod::UI.puts "🚀  666 #{specs_name} "
+
                 
                 # 如果过长 采用md5 + 文件记录
                 if md5_file_name
@@ -218,7 +219,6 @@ module Pod
                 end
                 
 #                specs_name = spec.name
-                
 #                Pod::UI.puts "🚀  666 #{target.to_json} "
                 
                 UI.section "🍭  Prebuild Ready to build #{target_name} [#{target.label}]".blue do

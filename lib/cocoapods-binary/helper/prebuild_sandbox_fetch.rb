@@ -38,8 +38,8 @@ module Pod
             
             return false unless ret
             return false unless File.exist?(zip_framework_path)
-            return false unless File.exist?(out_path)
-            return false unless Dir.empty?(out_path)
+#            return false unless File.exist?(out_path)
+            return true unless Dir.empty?(out_path)
             
             unzip_file(zip_framework_path, generate_path)
             

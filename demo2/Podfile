@@ -35,7 +35,7 @@ set_binary_white_list([
 #                      'FMDB',
 #                      'Reachability',
 #                      'TouchXML',
-                      
+#                      'YSTableView'
                       ])
 # 开启调试日志
 set_verbose_log(true)
@@ -43,58 +43,69 @@ set_verbose_log(true)
 # 开启subspec 的md5文件名区分
 set_md5_file_name(false)
 
-target 'testpodFramework' do
-  # Comment the next line if you don't want to use dynamic frameworks
-#    use_frameworks!
 
+abstract_target 'base' do
     # 所有都进行二进制编译，如果要忽略某个后面添加‘, :binary => false’
     all_binary!
-
-    # 允许dev pod
-    all_local_binary!
     
-    # 保留源码，可能工程文件会很大
-     keep_source_for_prebuilt!
     
-    # 开放framework 的private header
-    # public_headers_for_prebuilt!
-    
-#    pod 'FTPopOverMenu', :path => './FTPopOverMenu', :binary => true, :project_name => 'Dev'
-#    pod 'MPNotificationView', :binary => true
-#    pod 'Masonry', :project_name => 'Github', :binary => false
+    pod 'YSTableView',   '= 0.2.3', :subspecs => ['EyemanHeader']
+#
+
+    target 'testpodFramework' do
+      # Comment the next line if you don't want to use dynamic frameworks
+    #    use_frameworks!
+
+        
+
+        # 允许dev pod
+        all_local_binary!
+        
+        # 保留源码，可能工程文件会很大
+         keep_source_for_prebuilt!
+        
+        # 开放framework 的private header
+        # public_headers_for_prebuilt!
+        
+    #    pod 'FTPopOverMenu', :path => './FTPopOverMenu', :binary => true, :project_name => 'Dev'
+    #    pod 'MPNotificationView', :binary => true
+    #    pod 'Masonry', :project_name => 'Github', :binary => false
 
 
-#    pod 'YSBeeFramework', :path => './YSBeeFramework', :binary => true
-#    pod 'YSBeeFramework', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSBeeFramework.git', :tag => '1.3.1'#, branch: 'core-0.6.0'
+    #    pod 'YSBeeFramework', :path => './YSBeeFramework', :binary => true
+    #    pod 'YSBeeFramework', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSBeeFramework.git', :tag => '1.3.1'#, branch: 'core-0.6.0'
 
-#    pod 'YSTableView/MouseHeader', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSTableView.git', :tag => '0.2.3'# 老鼠 MouseHeader
+    #    pod 'YSTableView/MouseHeader', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSTableView.git', :tag => '0.2.3'# 老鼠 MouseHeader
 
-#    pod 'TestEngineService', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7', :binary => false
+    #    pod 'TestEngineService', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7', :binary => false
 
-#    pod 'TestEngineService/Core', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
-#    pod 'TestEngineService/ST', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
-#    pod 'TestEngineService/CV', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
+    #    pod 'TestEngineService/Core', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
+    #    pod 'TestEngineService/ST', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
+    #    pod 'TestEngineService/CV', :git => 'https://bitbucket.org/tytto/testengineservice.git', :tag => '0.4.7'
 
 
-#     pod 'YSNSObjectSafe', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git', :tag => '1.1.0', :binary => true
-     
-#     pod 'YSNSObjectSafe', :git => 'https://bitbucket.org/tytto/ysnsobjectsafe.git', :tag => '1.1.0', :binary => true
+    #     pod 'YSNSObjectSafe', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSNSObjectSafe.git', :tag => '1.1.0', :binary => true
+         
+    #     pod 'YSNSObjectSafe', :git => 'https://bitbucket.org/tytto/ysnsobjectsafe.git', :tag => '1.1.0', :binary => true
 
-     
-#     pod 'YSTableView', '= 0.2.3', :subspecs => ['EyemanHeader', 'IndicatorFooter']
-     pod 'YSBeeFramework', '= 6.1.3'#, branch: 'core-0.6.0'
+         
+    #     pod 'YSTableView', '= 0.2.3', :subspecs => ['EyemanHeader', 'IndicatorFooter']
+    #     pod 'YSBeeFramework', '= 6.1.3'#, branch: 'core-0.6.0'
 
-     
 
-#    pod 'Bugly', :project_name => 'Framework'
-#    pod 'PDBotKit', :project_name => 'Framework'
-#    pod 'YSWCDBService', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSWCDBService.git', :tag => '1.0.6'
+#        pod 'YSTableView'#,  :subspecs => ['EyemanHeader']
 
-#    pod 'WCDBOptimizedSQLCipher'
-#    pod 'SQLiteRepairKit'
-#    pod 'WCDB'
+         
+
+    #    pod 'Bugly', :project_name => 'Framework'
+    #    pod 'PDBotKit', :project_name => 'Framework'
+    #    pod 'YSWCDBService', :git => 'http://192.168.3.31/TY_iOS_Librarys/YSWCDBService.git', :tag => '1.0.6'
+
+    #    pod 'WCDBOptimizedSQLCipher'
+    #    pod 'SQLiteRepairKit'
+    #    pod 'WCDB'
+    end
 end
-
 
 # gem build ./cocoapods-binary/cocoapods-binary && sudo gem install ./cocoapods-binary/cocoapods-binary && rm -R -f ./Pods && clear && pod install --verbose
 

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A17400B8498C1A8A20864E0 /* libPods-testpodFramework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDC8C9B0576A1F75C1D1929 /* libPods-testpodFramework.a */; };
 		25158313249E352E00D04F59 /* command.rb in Resources */ = {isa = PBXBuildFile; fileRef = 25158312249E352E00D04F59 /* command.rb */; };
 		25158316249E358D00D04F59 /* spec_helper.rb in Resources */ = {isa = PBXBuildFile; fileRef = 25158315249E358D00D04F59 /* spec_helper.rb */; };
 		25158319249E35BA00D04F59 /* binary_spec.rb in Resources */ = {isa = PBXBuildFile; fileRef = 25158318249E35BA00D04F59 /* binary_spec.rb */; };
@@ -22,9 +21,11 @@
 		25F05A82235EE76F003F4B9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 25F05A81235EE76F003F4B9A /* Assets.xcassets */; };
 		25F05A85235EE76F003F4B9A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25F05A83235EE76F003F4B9A /* LaunchScreen.storyboard */; };
 		25F05A88235EE76F003F4B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 25F05A87235EE76F003F4B9A /* main.m */; };
+		F376D49870C508A4F5A9A193 /* libPods-base-testpodFramework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA8A5DA76D15B4191B7E0A8 /* libPods-base-testpodFramework.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1FA8A5DA76D15B4191B7E0A8 /* libPods-base-testpodFramework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-base-testpodFramework.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2478178283C3739342B484BA /* Pods-testpodFramework.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testpodFramework.debug.xcconfig"; path = "Target Support Files/Pods-testpodFramework/Pods-testpodFramework.debug.xcconfig"; sourceTree = "<group>"; };
 		250C552123FA771400D1D606 /* cocoapods_plugin.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = cocoapods_plugin.rb; sourceTree = "<group>"; };
 		250C552223FA771400D1D606 /* cocoapods-binary.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = "cocoapods-binary.rb"; sourceTree = "<group>"; };
@@ -64,7 +65,8 @@
 		25F05A8E235F01DD003F4B9A /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		25F05A8F235F01DD003F4B9A /* PodStatic.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = PodStatic.rb; sourceTree = "<group>"; };
 		3392E63F7326970D490FB093 /* Pods-testpodFramework.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testpodFramework.release.xcconfig"; path = "Target Support Files/Pods-testpodFramework/Pods-testpodFramework.release.xcconfig"; sourceTree = "<group>"; };
-		6CDC8C9B0576A1F75C1D1929 /* libPods-testpodFramework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-testpodFramework.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6921742C3651F794451A7831 /* Pods-base-testpodFramework.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-base-testpodFramework.release.xcconfig"; path = "Target Support Files/Pods-base-testpodFramework/Pods-base-testpodFramework.release.xcconfig"; sourceTree = "<group>"; };
+		E7268F92486332EEC4346857 /* Pods-base-testpodFramework.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-base-testpodFramework.debug.xcconfig"; path = "Target Support Files/Pods-base-testpodFramework/Pods-base-testpodFramework.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,7 +75,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				25808C5C2456CE6A00066DBF /* libc++.tbd in Frameworks */,
-				0A17400B8498C1A8A20864E0 /* libPods-testpodFramework.a in Frameworks */,
+				F376D49870C508A4F5A9A193 /* libPods-base-testpodFramework.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,7 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				25808C5A2456C84600066DBF /* libc++.tbd */,
-				6CDC8C9B0576A1F75C1D1929 /* libPods-testpodFramework.a */,
+				1FA8A5DA76D15B4191B7E0A8 /* libPods-base-testpodFramework.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -220,6 +222,8 @@
 			children = (
 				2478178283C3739342B484BA /* Pods-testpodFramework.debug.xcconfig */,
 				3392E63F7326970D490FB093 /* Pods-testpodFramework.release.xcconfig */,
+				E7268F92486332EEC4346857 /* Pods-base-testpodFramework.debug.xcconfig */,
+				6921742C3651F794451A7831 /* Pods-base-testpodFramework.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -304,15 +308,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testpodFramework/Pods-testpodFramework-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-base-testpodFramework/Pods-base-testpodFramework-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-testpodFramework/Pods-testpodFramework-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-base-testpodFramework/Pods-base-testpodFramework-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-testpodFramework/Pods-testpodFramework-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-base-testpodFramework/Pods-base-testpodFramework-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B6C40E59D8D2983B99D26825 /* [CP] Check Pods Manifest.lock */ = {
@@ -330,7 +334,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-testpodFramework-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-base-testpodFramework-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -485,7 +489,7 @@
 		};
 		25F05A8C235EE76F003F4B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2478178283C3739342B484BA /* Pods-testpodFramework.debug.xcconfig */;
+			baseConfigurationReference = E7268F92486332EEC4346857 /* Pods-base-testpodFramework.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -507,7 +511,7 @@
 		};
 		25F05A8D235EE76F003F4B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3392E63F7326970D490FB093 /* Pods-testpodFramework.release.xcconfig */;
+			baseConfigurationReference = 6921742C3651F794451A7831 /* Pods-base-testpodFramework.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

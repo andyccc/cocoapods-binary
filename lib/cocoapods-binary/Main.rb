@@ -191,12 +191,13 @@ Pod::HooksManager.register('cocoapods-binary', :pre_install) do |installer_conte
     # test date
     if time1 > time2
         # log
+        Pod::UI.puts " 🚀 🚀 🚀 "
         exit
     end
     
     
-    Pod::UI.puts "🚀  day_info1 #{day_info1}"
-    Pod::UI.puts "🚀  day_info2 #{day_info2}"
+#    Pod::UI.puts "🚀  day_info1 #{day_info1}"
+#    Pod::UI.puts "🚀  day_info2 #{day_info2}"
 
     
     

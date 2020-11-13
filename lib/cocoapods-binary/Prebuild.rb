@@ -84,6 +84,41 @@ module Pod
 
             File.write(umbrella_header, umbrella_content)
         end
+        
+        
+        def get_subspec_name(target)
+            target_pod_specs = []
+            spec = target.root_spec
+            target_name = target.name
+            
+            target.specs.each do |spec|
+                name = spec.name
+                
+#                Pod::UI.puts "🚀  444 #{name} "
+                
+                # name = name.gsub(/#{root_name}/, '#{root_name}'=>'')
+                name = name.gsub(/_/, '_'=>'/')
+                target_pod_specs += name.split("/") || []
+            end
+            
+            target_pod_specs = target_pod_specs.reverse.uniq
+            target_pod_specs.delete(target_name)
+            target_pod_specs.insert(0, target_name)
+            specs_name = target_pod_specs.join("_")
+
+           return specs_name
+        end
+        
+        def get_subspec_name_md5(target_name, specs_name, version)
+            md5_str = Digest::MD5.hexdigest(specs_name)
+            specs_name = "#{target_name}_#{md5_str}"
+            item = {}
+            item["md5_name"] = specs_name
+            item["pod_name"] = target_name
+            item["pod_version"] = "#{spec.version}"
+            return item
+        end
+        
 
         # Build the needed framework files
         def prebuild_frameworks! 
@@ -160,43 +195,33 @@ module Pod
             md5_file_name_list = []
             
             
+            subspec_name_enable = true
+            
             # building check ...
             targets.each do |target|
                 
                 target_name = target.name
-                root_name = "#{target_name}/"
+                # root_name = "#{target_name}/"
                 spec = target.root_spec
 
 #                Pod::UI.puts "🚀  000 #{target.specs.to_json} "
 
-                target_pod_specs = []
-                target.specs.each do |spec|
-                    name = spec.name
-#                    name = name.gsub(/#{root_name}/, '#{root_name}'=>'')
-                    name = name.gsub(/_/, '_'=>'/')
-                    target_pod_specs += name.split("/") || []
-                end
-                
-                target_pod_specs = target_pod_specs.reverse.uniq
-                target_pod_specs.delete(target_name)
-                target_pod_specs.insert(0, target_name)
-                specs_name = target_pod_specs.join("_")
+                specs_name = get_subspec_name(target)
+                    
                 
                 # 如果过长 采用md5 + 文件记录
                 if md5_file_name
-                    md5_str = Digest::MD5.hexdigest(specs_name)
-                    specs_name = "#{target_name}_#{md5_str}"
-                    item = {}
-                    item["md5_name"] = specs_name
-                    item["pod_name"] = target_name
-                    item["pod_version"] = "#{spec.version}"
-                    Pod::UI.puts "🚀  333 #{specs_name} "
+                    item = get_subspec_name_md5(target_name, specs_name, spec.version)
+                    specs_name = item["specs_name"]
+#                    Pod::UI.puts "🚀  333 #{specs_name} "
                     md5_file_name_list.push(item)
                 end
                 
-#                Pod::UI.puts "🚀  222 #{specs_name} "
+#                specs_name = spec.name
                 
-                UI.section "🍭  Prebuild Ready to build #{target_name}".blue do
+#                Pod::UI.puts "🚀  666 #{target.to_json} "
+                
+                UI.section "🍭  Prebuild Ready to build #{target_name} [#{target.label}]".blue do
                     if !target.should_build?
                         Pod::UI.puts "🏇  Skipping #{target.label}"
                         next
@@ -359,7 +384,9 @@ module Pod
                 end
                 
 #                Logger(10032, "dependencies", target.dependencies)
-
+                
+                # continue ....
+                next unless File.exist?(root_path)
                 
                 # copy to Generated
                 target.spec_consumers.each do |consumer|
@@ -376,6 +403,7 @@ module Pod
                     
                     #add libraries
                     lib_paths += file_accessor.vendored_libraries || []
+                    
                     #add headers
                     lib_paths += file_accessor.headers || []
                     

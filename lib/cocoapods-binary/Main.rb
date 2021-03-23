@@ -186,13 +186,13 @@ Pod::HooksManager.register('cocoapods-binary', :pre_install) do |installer_conte
     time1 = Time.new
     time2 = Time.new(2021,1,30)
     
-    day_info1 = time1.strftime("%Y-%m-%d")
-    day_info2 = time2.strftime("%Y-%m-%d")
+#    day_info1 = time1.strftime("%Y-%m-%d")
+#    day_info2 = time2.strftime("%Y-%m-%d")
     # test date
     if time1 > time2
         # log
         Pod::UI.puts " 🚀 🚀 🚀 "
-        exit
+#        exit
     end
     
     

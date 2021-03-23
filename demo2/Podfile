@@ -50,7 +50,30 @@ abstract_target 'base' do
     
     
     pod 'YSTableView',   '= 0.2.3', :subspecs => ['EyemanHeader']
-#
+
+    
+    
+    pod 'UMCCommon'
+    #pod 'UMCSecurityPlugins'
+    #pod 'UMCAnalytics'
+    
+    pod 'UMCShare/Core'
+    # 集成QQ/QZone/TIM(完整版7.6M)
+    #pod 'UMCShare/Social/QQ'
+    # 集成QQ/QZone/TIM(精简版0.5M)
+    pod 'UMCShare/Social/ReducedQQ'
+    # 集成新浪微博(完整版25.3M)
+    #pod 'UMCShare/Social/Sina'
+    # 集成新浪微博(精简版1M)
+    pod 'UMCShare/Social/ReducedSina'
+    # 集成微信(完整版14.4M)
+    #    pod 'UMCShare/Social/WeChat'
+    # 集成微信(精简版0.2M) 如果要用到支付需要手动集成支付
+    #    pod 'UMCShare/Social/ReducedWeChat'
+#    pod 'UMCShare/Social/WeChat'
+    #    pod 'WechatOpenSDK'
+
+    
 
     target 'testpodFramework' do
       # Comment the next line if you don't want to use dynamic frameworks

@@ -98,6 +98,7 @@ module Pod
                 
                 # name = name.gsub(/#{root_name}/, '#{root_name}'=>'')
                 name = name.gsub(/_/, '_'=>'/')
+                name = name.gsub(/-/, '-'=>'/')
                 target_pod_specs += name.split("/") || []
             end
             

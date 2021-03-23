@@ -1,5 +1,18 @@
 PODS:
   - MJRefresh (3.0.8)
+  - UMAPM (1.1.1)
+  - UMCCommon (7.2.5):
+    - UMAPM
+    - UMDevice
+  - UMCShare/Core (6.10.2):
+    - UMCCommon
+  - UMCShare/Social/ReducedQQ (6.10.2):
+    - UMCCommon
+    - UMCShare/Core
+  - UMCShare/Social/ReducedSina (6.10.2):
+    - UMCCommon
+    - UMCShare/Core
+  - UMDevice (1.1.0)
   - YSTableView/EyemanHeader (0.2.3):
     - YSTableView/PullPushRefresh
   - YSTableView/PullPushRefresh (0.2.3):
@@ -8,6 +21,10 @@ PODS:
   - YSTableView/TableView (0.2.3)
 
 DEPENDENCIES:
+  - UMCCommon
+  - UMCShare/Core
+  - UMCShare/Social/ReducedQQ
+  - UMCShare/Social/ReducedSina
   - YSTableView/EyemanHeader (= 0.2.3)
 
 SPEC REPOS:
@@ -15,11 +32,19 @@ SPEC REPOS:
     - YSTableView
   https://github.com/CocoaPods/Specs.git:
     - MJRefresh
+    - UMAPM
+    - UMCCommon
+    - UMCShare
+    - UMDevice
 
 SPEC CHECKSUMS:
   MJRefresh: fafde8f18f4afd66b434331a9beb67a6c0264056
+  UMAPM: d0623e0b3ca8b1a1df855e0bddb91b5c002d097d
+  UMCCommon: f7480d316381612f90cdde3a3c0f39a7e2c0a788
+  UMCShare: e14e1399673fa361cddbde3a05b3743e10f673f7
+  UMDevice: 28d21a568c8e8322e5a03bbd53b138d0c098d3b3
   YSTableView: 5e6993f9e08ebee26742967d4d48dcbcc7c4318d
 
-PODFILE CHECKSUM: a9ba4ffac95df3ffd23bd05d8795bfe421600bb7
+PODFILE CHECKSUM: dfc241cdd4528101b1c28ec4be64d7d2ee5498d8
 
 COCOAPODS: 1.9.3

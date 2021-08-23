@@ -33,3 +33,5 @@ test/Podfile
 test/Podfile.lock
 Pods
 *.gem
+.bundler_cache
+.bundler

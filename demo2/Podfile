@@ -79,7 +79,8 @@ abstract_target 'base' do
       # Comment the next line if you don't want to use dynamic frameworks
     #    use_frameworks!
 
-        
+    pod 'UMCShare/Core'
+
 
         # 允许dev pod
         all_local_binary!
@@ -128,6 +129,11 @@ abstract_target 'base' do
     #    pod 'SQLiteRepairKit'
     #    pod 'WCDB'
     end
+    
+    target 'test2' do
+
+    end
+
 end
 
 # gem build ./cocoapods-binary/cocoapods-binary && sudo gem install ./cocoapods-binary/cocoapods-binary && rm -R -f ./Pods && clear && pod install --verbose
